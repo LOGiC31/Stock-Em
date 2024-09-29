@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  note_id: MyString
+  item: one
+  msg: MyString
+  creator: one
+  image: MyString
+  date_created: 2024-09-29 00:04:20
+
+two:
+  note_id: MyString
+  item: two
+  msg: MyString
+  creator: two
+  image: MyString
+  date_created: 2024-09-29 00:04:20
