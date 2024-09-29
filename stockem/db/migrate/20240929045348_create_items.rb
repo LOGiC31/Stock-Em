@@ -8,6 +8,7 @@ class CreateItems < ActiveRecord::Migration[7.2]
       t.integer :quality_score
       t.boolean :currently_available
       t.string :image
+      t.string :details
 
       t.timestamps
     end

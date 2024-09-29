@@ -6,7 +6,6 @@ class CreateNotes < ActiveRecord::Migration[7.2]
       t.string :msg
       t.references :user, null: false, foreign_key: true
       t.string :image
-      t.datetime :date_created
 
       t.timestamps
     end
