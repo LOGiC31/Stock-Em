@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  event_id: MyString
+  item: one
+  event_type: MyString
+  associated_user: one
+  associated_student: one
+  location: MyString
+  details: MyString
+
+two:
+  event_id: MyString
+  item: two
+  event_type: MyString
+  associated_user: two
+  associated_student: two
+  location: MyString
+  details: MyString

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  item_id: MyString
+  serial_number: MyString
+  item_name: MyString
+  category: MyString
+  quality_score: 1
+  currently_available: false
+  image: MyString
+
+two:
+  item_id: MyString
+  serial_number: MyString
+  item_name: MyString
+  category: MyString
+  quality_score: 1
+  currently_available: false
+  image: MyString
