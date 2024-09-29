@@ -2,11 +2,7 @@
 
 Capstone Inventory Management System
 
-Clone the repository.
-Move to stockem folder.
-Run bundle install.
-
-What I followed :
+**What I followed :**
 
 create item model :
 
@@ -28,16 +24,16 @@ rails db:migrate -> to generate schema
 
 rails db:seed -> to seed all the data (to check table)
 
-Clone the project.
+**You don't need to generate models.**
 
-Run bundle install
+_Clone the project._
 
-You don't need to generate models.
+_Run bundle install_
 
-run rails db:migrate to generate schema
+run _rails db:migrate_ to generate schema
 
-run rails db:seed to insert seed data for dev env
+run _rails db:seed_ to insert seed data for dev env
 
-run rails console to go into console mode.
+run _rails console_ to go into console mode.
 
-run Item.all, Note.all, Event.all to verify data is seeded properly.
+run _Item.all, Note.all, Event.all_ to verify data is seeded properly.
