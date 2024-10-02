@@ -40,6 +40,9 @@ run _Item.all, Note.all, Event.all_ to verify data is seeded properly.
 
 ----------------------------------------------------------------------
 Google OAuth Feature Added. Changes are merged in dev-branch. Run below mentioned commands after taking latest pull.
+
 bundle install
+
 rails db:migrate
+
 rails server
