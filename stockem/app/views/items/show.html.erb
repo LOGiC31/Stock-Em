@@ -1,0 +1,13 @@
+<h1>Item: <%= @item.item_name %></h1>
+
+<p><strong>Item ID:</strong> <%= @item.item_id %></p>
+<p><strong>Serial Number:</strong> <%= @item.serial_number %></p>
+<p><strong>Category:</strong> <%= @item.category %></p>
+<p><strong>Quality Score:</strong> <%= @item.quality_score %></p>
+<p><strong>Available:</strong> <%= @item.currently_available ? 'Yes' : 'No' %></p>
+<p><strong>Details:</strong> <%= @item.details %></p>
+
+<%= image_tag(@item.image) if @item.image.present? %>
+
+<%= link_to 'Edit', edit_item_path(@item) %> |
+<%= link_to 'Back to Items', items_path %>
