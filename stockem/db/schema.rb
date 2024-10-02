@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_29_051902) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_02_063008) do
   create_table "events", force: :cascade do |t|
     t.string "event_id"
     t.integer "item_id", null: false
@@ -21,9 +21,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_051902) do
     t.string "details"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index [ "associated_student_id" ], name: "index_events_on_associated_student_id"
-    t.index [ "associated_user_id" ], name: "index_events_on_associated_user_id"
-    t.index [ "item_id" ], name: "index_events_on_item_id"
+    t.index ["associated_student_id"], name: "index_events_on_associated_student_id"
+    t.index ["associated_user_id"], name: "index_events_on_associated_user_id"
+    t.index ["item_id"], name: "index_events_on_item_id"
   end
 
   create_table "items", force: :cascade do |t|
@@ -47,8 +47,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_051902) do
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index [ "item_id" ], name: "index_notes_on_item_id"
-    t.index [ "user_id" ], name: "index_notes_on_user_id"
+    t.index ["item_id"], name: "index_notes_on_item_id"
+    t.index ["user_id"], name: "index_notes_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -62,6 +62,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_051902) do
     t.integer "auth_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "provider"
+    t.string "first_name"
+    t.string "last_name"
   end
 
   add_foreign_key "events", "items"
