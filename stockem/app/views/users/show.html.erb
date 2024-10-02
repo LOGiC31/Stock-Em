@@ -14,5 +14,11 @@
     <strong>Last name:</strong>
     <%= @current_user.last_name %>
   </p>
+
+  <!-- Add a link to view the items page -->
+  <p>
+    <%= link_to "View Items", items_path %>
+  </p>
+  
   <%= link_to "Logout", logout_path %>
 </div>
