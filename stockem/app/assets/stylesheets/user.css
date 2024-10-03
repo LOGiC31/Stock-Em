@@ -1,0 +1,167 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
+    background-color: #f7f7f7; 
+  }
+  
+  .notice {
+    color: white;
+    background-color: #500000; 
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  h1 {
+    color: #500000;
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    position: relative;
+  }
+  
+  .styled-hr {
+    border: 0;
+    height: 3px;
+    width: 80%;
+    margin: 0 auto 20px auto;
+    background: #500000;
+    border-radius: 2px;
+  }
+  
+  #users {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .user-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    text-align: left;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out; 
+  }
+  
+  .user-card:hover {
+    transform: translateY(-8px); 
+    background-color: rgba(255, 255, 255, 0.9); 
+  }
+  
+  .user-info {
+    margin-bottom: 10px;
+  }
+  
+  .user-card p {
+    margin: 10px 0;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #500000; 
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #3b0000;
+  }
+  
+  .new-user-btn {
+    margin-top: 20px;
+    display: block;
+    text-align: center;
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+.user-details {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px; 
+    margin: 15px auto;
+    width: 400px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease; 
+  }
+  
+  .user-details:hover {
+    transform: translateY(-5px); 
+  }
+  
+  .user-image {
+    text-align: center; 
+    margin-bottom: 10px; 
+  }
+  
+  .profile-pic {
+    width: 150px;
+    height: 150px; 
+    border: 2px solid #500000;
+    object-fit: cover; 
+  }
+  
+  .user-field {
+    display: flex;
+    width: 100%;
+    margin-bottom: 5px; 
+    justify-content: center;
+  }
+  
+  .user-field strong {
+    text-align: left;
+    margin-right: 10px;
+    flex-basis: 23%;
+  }
+  
+  .user-value {
+    text-align: left;
+    font-weight: normal;
+    color: #333;
+    flex-basis: 60%;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .user-field {
+    align-items: left;
+    margin-left: 120px;
+  }
+
+  .user-field strong {
+    text-align: left;
+  }
+
+  .user-value {
+    flex: 1; 
+    text-align: left; 
+    margin-right: 10px; 
+  }
+  
+  
+  
+  
+  
+  
+  

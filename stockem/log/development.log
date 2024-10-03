@@ -1,0 +1,1559 @@
+  [1m[35m (3.8ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (1.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2024-10-02 20:03:19.896322', '2024-10-02 20:03:19.896324') RETURNING "key"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateItems (20240929045348)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE TABLE "items" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "item_id" varchar, "serial_number" varchar, "item_name" varchar, "category" varchar, "quality_score" integer, "currently_available" boolean, "image" varchar, "details" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240929045348') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateNotes (20240929050420)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE TABLE "notes" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "note_id" varchar, "item_id" integer NOT NULL, "msg" varchar, "user_id" integer NOT NULL, "image" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_722087f58f"
+FOREIGN KEY ("item_id")
+  REFERENCES "items" ("id")
+, CONSTRAINT "fk_rails_7f2323ad43"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_notes_on_item_id" ON "notes" ("item_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_notes_on_user_id" ON "notes" ("user_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240929050420') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.7ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateUsers (20240929050855)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (3.2ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" varchar, "name" varchar, "uin" varchar, "email" varchar, "contact_no" varchar, "role" varchar, "details" varchar, "auth_level" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240929050855') RETURNING "version"[0m
+  [1m[36mTRANSACTION (3.3ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateEvents (20240929051902)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (2.8ms)[0m  [1m[35mCREATE TABLE "events" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "event_id" varchar, "item_id" integer NOT NULL, "event_type" varchar, "associated_user_id" integer NOT NULL, "associated_student_id" integer, "location" varchar, "details" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_a975f9d7df"
+FOREIGN KEY ("item_id")
+  REFERENCES "items" ("id")
+, CONSTRAINT "fk_rails_9c71536d41"
+FOREIGN KEY ("associated_user_id")
+  REFERENCES "users" ("id")
+, CONSTRAINT "fk_rails_37dc0be738"
+FOREIGN KEY ("associated_student_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_events_on_item_id" ON "events" ("item_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_events_on_associated_user_id" ON "events" ("associated_user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_events_on_associated_student_id" ON "events" ("associated_student_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240929051902') RETURNING "version"[0m
+  [1m[36mTRANSACTION (3.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mItem Load (0.8ms)[0m  [1m[34mSELECT "items".* FROM "items"[0m
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[36mNote Load (0.8ms)[0m  [1m[34mSELECT "notes".* FROM "notes"[0m
+  [1m[36mEvent Load (0.6ms)[0m  [1m[34mSELECT "events".* FROM "events"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (3.6ms)[0m  [1m[32mINSERT INTO "users" ("user_id", "name", "uin", "email", "contact_no", "role", "details", "auth_level", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", "USR001"], ["name", "Philip Ritchey"], ["uin", "123456"], ["email", "[FILTERED]"], ["contact_no", "555-1234"], ["role", "professor_admin"], ["details", nil], ["auth_level", 2], ["created_at", "2024-10-02 20:03:33.287600"], ["updated_at", "2024-10-02 20:03:33.287600"]]
+  [1m[36mTRANSACTION (12.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (8.3ms)[0m  [1m[32mINSERT INTO "users" ("user_id", "name", "uin", "email", "contact_no", "role", "details", "auth_level", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", "USR002"], ["name", "Paul Taele"], ["uin", "654321"], ["email", "[FILTERED]"], ["contact_no", "555-5678"], ["role", "professor_admin"], ["details", nil], ["auth_level", 1], ["created_at", "2024-10-02 20:03:33.309360"], ["updated_at", "2024-10-02 20:03:33.309360"]]
+  [1m[36mTRANSACTION (2.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Create (6.4ms)[0m  [1m[32mINSERT INTO "users" ("user_id", "name", "uin", "email", "contact_no", "role", "details", "auth_level", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", "USR003"], ["name", "random TA"], ["uin", "987654"], ["email", "[FILTERED]"], ["contact_no", "555-9876"], ["role", "assistants"], ["details", nil], ["auth_level", 0], ["created_at", "2024-10-02 20:03:33.323959"], ["updated_at", "2024-10-02 20:03:33.323959"]]
+  [1m[36mTRANSACTION (4.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mItem Create (3.3ms)[0m  [1m[32mINSERT INTO "items" ("item_id", "serial_number", "item_name", "category", "quality_score", "currently_available", "image", "details", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["item_id", "ITM001"], ["serial_number", "SN12345"], ["item_name", "ipad"], ["category", "Electronics"], ["quality_score", 90], ["currently_available", 1], ["image", nil], ["details", "some desc about the ipad."], ["created_at", "2024-10-02 20:03:33.376467"], ["updated_at", "2024-10-02 20:03:33.376467"]]
+  [1m[36mTRANSACTION (2.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mItem Create (5.7ms)[0m  [1m[32mINSERT INTO "items" ("item_id", "serial_number", "item_name", "category", "quality_score", "currently_available", "image", "details", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["item_id", "ITM002"], ["serial_number", "SN54321"], ["item_name", "mobilePhonePixel"], ["category", "Electronics"], ["quality_score", 85], ["currently_available", 1], ["image", nil], ["details", nil], ["created_at", "2024-10-02 20:03:33.385960"], ["updated_at", "2024-10-02 20:03:33.385960"]]
+  [1m[36mTRANSACTION (2.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mItem Create (3.8ms)[0m  [1m[32mINSERT INTO "items" ("item_id", "serial_number", "item_name", "category", "quality_score", "currently_available", "image", "details", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["item_id", "ITM003"], ["serial_number", "SN67890"], ["item_name", "Desk Chair"], ["category", "Furniture"], ["quality_score", 75], ["currently_available", 0], ["image", nil], ["details", "comfy chair indeed!"], ["created_at", "2024-10-02 20:03:33.397932"], ["updated_at", "2024-10-02 20:03:33.397932"]]
+  [1m[36mTRANSACTION (2.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mItem Load (3.2ms)[0m  [1m[34mSELECT "items".* FROM "items" ORDER BY "items"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mItem Load (0.6ms)[0m  [1m[34mSELECT "items".* FROM "items" ORDER BY "items"."id" ASC LIMIT ? OFFSET ?[0m  [["LIMIT", 1], ["OFFSET", 1]]
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT ? OFFSET ?[0m  [["LIMIT", 1], ["OFFSET", 1]]
+  [1m[36mItem Load (0.6ms)[0m  [1m[34mSELECT "items".* FROM "items" ORDER BY "items"."id" ASC LIMIT ? OFFSET ?[0m  [["LIMIT", 1], ["OFFSET", 2]]
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT ? OFFSET ?[0m  [["LIMIT", 1], ["OFFSET", 2]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mNote Create (1.4ms)[0m  [1m[32mINSERT INTO "notes" ("note_id", "item_id", "msg", "user_id", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["note_id", "NOTE001"], ["item_id", 1], ["msg", "ipad in good condition, used for monitoring and cataloging."], ["user_id", 1], ["image", nil], ["created_at", "2024-10-02 20:03:33.488501"], ["updated_at", "2024-10-02 20:03:33.488501"]]
+  [1m[36mTRANSACTION (1.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mNote Create (2.5ms)[0m  [1m[32mINSERT INTO "notes" ("note_id", "item_id", "msg", "user_id", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["note_id", "NOTE002"], ["item_id", 2], ["msg", "android version recently updated."], ["user_id", 2], ["image", nil], ["created_at", "2024-10-02 20:03:33.493452"], ["updated_at", "2024-10-02 20:03:33.493452"]]
+  [1m[36mTRANSACTION (3.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mNote Create (2.3ms)[0m  [1m[32mINSERT INTO "notes" ("note_id", "item_id", "msg", "user_id", "image", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["note_id", "NOTE003"], ["item_id", 3], ["msg", "Chair needs replacement, worn out fabric."], ["user_id", 3], ["image", nil], ["created_at", "2024-10-02 20:03:33.501513"], ["updated_at", "2024-10-02 20:03:33.501513"]]
+  [1m[36mTRANSACTION (3.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mItem Load (2.2ms)[0m  [1m[34mSELECT "items".* FROM "items" ORDER BY "items"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mItem Load (0.6ms)[0m  [1m[34mSELECT "items".* FROM "items" ORDER BY "items"."id" ASC LIMIT ? OFFSET ?[0m  [["LIMIT", 1], ["OFFSET", 1]]
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT ? OFFSET ?[0m  [["LIMIT", 1], ["OFFSET", 1]]
+  [1m[36mItem Load (0.4ms)[0m  [1m[34mSELECT "items".* FROM "items" ORDER BY "items"."id" ASC LIMIT ? OFFSET ?[0m  [["LIMIT", 1], ["OFFSET", 2]]
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" ORDER BY "users"."id" ASC LIMIT ? OFFSET ?[0m  [["LIMIT", 1], ["OFFSET", 2]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (2.2ms)[0m  [1m[32mINSERT INTO "events" ("event_id", "item_id", "event_type", "associated_user_id", "associated_student_id", "location", "details", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["event_id", nil], ["item_id", 1], ["event_type", "checkedIn"], ["associated_user_id", 1], ["associated_student_id", nil], ["location", nil], ["details", nil], ["created_at", "2024-10-02 20:03:33.514178"], ["updated_at", "2024-10-02 20:03:33.514190"]]
+  [1m[36mTRANSACTION (3.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (3.7ms)[0m  [1m[32mINSERT INTO "events" ("event_id", "item_id", "event_type", "associated_user_id", "associated_student_id", "location", "details", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["event_id", nil], ["item_id", 2], ["event_type", "checkedIn"], ["associated_user_id", 2], ["associated_student_id", nil], ["location", nil], ["details", nil], ["created_at", "2024-09-29 20:03:33.517903"], ["updated_at", "2024-09-29 20:03:33.517998"]]
+  [1m[36mTRANSACTION (3.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mEvent Create (3.7ms)[0m  [1m[32mINSERT INTO "events" ("event_id", "item_id", "event_type", "associated_user_id", "associated_student_id", "location", "details", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["event_id", nil], ["item_id", 3], ["event_type", "relocated"], ["associated_user_id", 3], ["associated_student_id", nil], ["location", nil], ["details", nil], ["created_at", "2024-09-27 20:03:33.520634"], ["updated_at", "2024-09-27 20:03:33.520670"]]
+  [1m[36mTRANSACTION (4.4ms)[0m  [1m[36mcommit transaction[0m
+Started GET "/" for ::1 at 2024-10-02 15:27:23 -0500
+  [1m[36mActiveRecord::SchemaMigration Load (1.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /home/tanny/.rbenv/versions/3.3.4/lib/ruby/gems/3.3.0/gems/railties-7.2.1/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /home/tanny/.rbenv/versions/3.3.4/lib/ruby/gems/3.3.0/gems/railties-7.2.1/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.8ms | GC: 0.0ms)
+Completed 200 OK in 245ms (Views: 45.8ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/" for ::1 at 2024-10-02 15:29:01 -0500
+Redirected to http://localhost:3000/user
+Completed 301 Moved Permanently in 0ms
+
+
+Started GET "/user" for ::1 at 2024-10-02 15:29:01 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/user"):
+  
+Started GET "/favicon.ico" for ::1 at 2024-10-02 15:29:02 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/user" for ::1 at 2024-10-02 15:29:28 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/user"):
+  
+Started GET "/users" for ::1 at 2024-10-02 15:29:32 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (29.5ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:8
+  Rendered users/_user.html.erb (Duration: 3.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 101.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1260.2ms | GC: 45.3ms)
+Completed 200 OK in 2182ms (Views: 1258.4ms | ActiveRecord: 34.5ms (1 query, 0 cached) | GC: 45.3ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 15:29:35 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users/1" for ::1 at 2024-10-02 15:35:16 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 86.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 114.4ms | GC: 0.0ms)
+Completed 200 OK in 163ms (Views: 115.4ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/users/1" for ::1 at 2024-10-02 15:35:18 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 1.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 27.1ms | GC: 0.0ms)
+Completed 200 OK in 38ms (Views: 27.8ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/1/edit" for ::1 at 2024-10-02 15:35:21 -0500
+Processing by UsersController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/edit.html.erb within layouts/application
+  Rendered users/_form.html.erb (Duration: 26.7ms | GC: 0.0ms)
+  Rendered users/edit.html.erb within layouts/application (Duration: 34.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 63.9ms | GC: 0.1ms)
+Completed 200 OK in 81ms (Views: 64.6ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/" for ::1 at 2024-10-02 23:15:42 -0500
+Redirected to http://localhost:3000/users
+Completed 301 Moved Permanently in 0ms
+
+
+Started GET "/users" for ::1 at 2024-10-02 23:15:43 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (35.2ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:9
+  Rendered users/_user.html.erb (Duration: 4.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 1002.6ms | GC: 5.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1112.7ms | GC: 5.4ms)
+Completed 200 OK in 1242ms (Views: 1127.1ms | ActiveRecord: 35.2ms (1 query, 0 cached) | GC: 5.4ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:15:45 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users/1" for ::1 at 2024-10-02 23:15:52 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 5.3ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 29.4ms | GC: 0.3ms)
+Completed 200 OK in 47ms (Views: 30.0ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/users" for ::1 at 2024-10-02 23:17:20 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:9
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 138.8ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 264.8ms | GC: 0.2ms)
+Completed 200 OK in 272ms (Views: 265.2ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:17:21 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users/1" for ::1 at 2024-10-02 23:17:24 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 1.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 20.7ms | GC: 0.0ms)
+Completed 200 OK in 29ms (Views: 21.2ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/users/1" for ::1 at 2024-10-02 23:17:26 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 1.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 27.5ms | GC: 0.0ms)
+Completed 200 OK in 39ms (Views: 28.1ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/1" for ::1 at 2024-10-02 23:17:27 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 2.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 22.1ms | GC: 0.0ms)
+Completed 200 OK in 30ms (Views: 22.7ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/new" for ::1 at 2024-10-02 23:17:36 -0500
+Processing by UsersController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/new.html.erb within layouts/application
+  Rendered users/_form.html.erb (Duration: 3.2ms | GC: 0.0ms)
+  Rendered users/new.html.erb within layouts/application (Duration: 13.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 40.9ms | GC: 0.0ms)
+Completed 200 OK in 62ms (Views: 41.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users" for ::1 at 2024-10-02 23:19:46 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (47.0ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:10
+  Rendered users/index.html.erb within layouts/application (Duration: 66.2ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 412.7ms | GC: 0.4ms)
+Completed 200 OK in 509ms (Views: 398.5ms | ActiveRecord: 53.7ms (1 query, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:19:47 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:20:50 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (28.8ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:9
+  Rendered users/_user.html.erb (Duration: 3.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 90.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 223.4ms | GC: 3.2ms)
+Completed 200 OK in 256ms (Views: 200.4ms | ActiveRecord: 30.5ms (1 query, 0 cached) | GC: 3.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:20:51 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:22:51 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (27.1ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 3.8ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 115.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 259.0ms | GC: 3.2ms)
+Completed 200 OK in 353ms (Views: 263.9ms | ActiveRecord: 29.6ms (1 query, 0 cached) | GC: 3.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:22:52 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users/1" for ::1 at 2024-10-02 23:22:57 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 4.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 37.4ms | GC: 0.2ms)
+Completed 200 OK in 58ms (Views: 38.0ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/users/1" for ::1 at 2024-10-02 23:23:01 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 1.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 42.1ms | GC: 0.2ms)
+Completed 200 OK in 53ms (Views: 42.7ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/users/2" for ::1 at 2024-10-02 23:23:02 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (1.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 2.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 78.1ms | GC: 0.0ms)
+Completed 200 OK in 116ms (Views: 78.7ms | ActiveRecord: 1.9ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users" for ::1 at 2024-10-02 23:25:06 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (19.8ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 2.5ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 224.7ms | GC: 2.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 478.7ms | GC: 3.2ms)
+Completed 200 OK in 526ms (Views: 467.7ms | ActiveRecord: 21.3ms (1 query, 0 cached) | GC: 3.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:25:07 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:26:53 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 144.9ms | GC: 0.5ms)
+  Rendered layout layouts/application.html.erb (Duration: 278.3ms | GC: 0.7ms)
+Completed 200 OK in 288ms (Views: 278.5ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:26:54 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:28:09 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 163.2ms | GC: 1.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 319.1ms | GC: 1.4ms)
+Completed 200 OK in 330ms (Views: 319.2ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 1.4ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:28:10 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:29:26 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 193.3ms | GC: 6.9ms)
+  Rendered layout layouts/application.html.erb (Duration: 343.9ms | GC: 7.7ms)
+Completed 200 OK in 353ms (Views: 345.0ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 8.6ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:29:27 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users/1" for ::1 at 2024-10-02 23:29:35 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 4.5ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 29.6ms | GC: 0.1ms)
+Completed 200 OK in 56ms (Views: 30.2ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/users/2" for ::1 at 2024-10-02 23:29:37 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 1.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 27.0ms | GC: 0.1ms)
+Completed 200 OK in 37ms (Views: 27.7ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/users" for ::1 at 2024-10-02 23:30:59 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (30.6ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 8.7ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 403.0ms | GC: 2.7ms)
+  Rendered layout layouts/application.html.erb (Duration: 712.0ms | GC: 3.9ms)
+Completed 200 OK in 779ms (Views: 689.0ms | ActiveRecord: 33.9ms (1 query, 0 cached) | GC: 3.9ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:31:01 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:31:31 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 184.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 315.5ms | GC: 0.2ms)
+Completed 200 OK in 329ms (Views: 315.5ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:31:32 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users/1" for ::1 at 2024-10-02 23:31:36 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 3.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 32.4ms | GC: 0.6ms)
+Completed 200 OK in 50ms (Views: 33.1ms | ActiveRecord: 1.0ms (1 query, 0 cached) | GC: 0.6ms)
+
+
+Started GET "/users/1" for ::1 at 2024-10-02 23:31:36 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 1.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 26.0ms | GC: 0.3ms)
+Completed 200 OK in 35ms (Views: 27.1ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/users/1" for ::1 at 2024-10-02 23:31:37 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 1.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 22.7ms | GC: 0.2ms)
+Completed 200 OK in 34ms (Views: 23.3ms | ActiveRecord: 0.9ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/users/2" for ::1 at 2024-10-02 23:31:40 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 1.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 25.9ms | GC: 0.0ms)
+Completed 200 OK in 36ms (Views: 26.6ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users/2" for ::1 at 2024-10-02 23:31:40 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.0ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 1.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 21.5ms | GC: 0.0ms)
+Completed 200 OK in 31ms (Views: 22.1ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.9ms)
+
+
+Started GET "/users/3" for ::1 at 2024-10-02 23:31:42 -0500
+Processing by UsersController#show as HTML
+  Parameters: {"id"=>"3"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:63:in `set_user'
+  Rendering layout layouts/application.html.erb
+  Rendering users/show.html.erb within layouts/application
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/show.html.erb within layouts/application (Duration: 1.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 22.7ms | GC: 0.0ms)
+Completed 200 OK in 33ms (Views: 23.5ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users" for ::1 at 2024-10-02 23:33:58 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (23.2ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 11.2ms | GC: 3.3ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 220.0ms | GC: 10.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 221.2ms | GC: 10.2ms)
+Completed 500 Internal Server Error in 314ms (ActiveRecord: 25.3ms (1 query, 0 cached) | GC: 10.2ms)
+
+
+  
+ActionView::Template::Error (undefined method `profile_image_url' for an instance of User):
+
+Causes:
+NoMethodError (undefined method `profile_image_url' for an instance of User)
+    1: <div id="<%= dom_id user %>" class="user-details">
+    2:   <div class="user-image">
+    3:     <%= image_tag user.profile_image_url || 'default_user.png', alt: "#{user.name}'s profile image", class: "profile-pic" %>
+    4:   </div>
+    5: 
+    6:   <p>
+  
+app/views/users/_user.html.erb:3
+app/views/users/index.html.erb:13
+app/views/users/index.html.erb:11
+Started GET "/users" for ::1 at 2024-10-02 23:34:20 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (29.7ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 6.4ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 82.7ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 83.7ms | GC: 0.1ms)
+Completed 500 Internal Server Error in 118ms (ActiveRecord: 32.7ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+  
+ActionView::SyntaxErrorInTemplate (Encountered a syntax error while rendering template: check <div id="<%= dom_id user %>" class="user-details">
+  <div class="user-image">
+    <%= 'default_user.png', alt: "#{user.name}'s profile image", class: "profile-pic" %>
+  </div>
+
+  <p>
+    <strong>User ID:</strong>
+    <span class="user-value"><%= user.user_id %></span>
+  </p>
+
+  <p>
+    <strong>Name:</strong>
+    <span class="user-value"><%= user.name %></span>
+  </p>
+
+  <p>
+    <strong>UIN:</strong>
+    <span class="user-value"><%= user.uin %></span>
+  </p>
+
+  <p>
+    <strong>Email:</strong>
+    <span class="user-value"><%= user.email %></span>
+  </p>
+
+  <p>
+    <strong>Contact No:</strong>
+    <span class="user-value"><%= user.contact_no %></span>
+  </p>
+
+  <p>
+    <strong>Role:</strong>
+    <span class="user-value"><%= user.role %></span>
+  </p>
+
+  <p>
+    <strong>Details:</strong>
+    <span class="user-value"><%= user.details %></span>
+  </p>
+
+  <p>
+    <strong>Auth Level:</strong>
+    <span class="user-value"><%= user.auth_level %></span>
+  </p>
+</div>
+
+):
+
+Causes:
+ActiveSupport::SyntaxErrorProxy (/mnt/c/Users/tanis/Desktop/StockEm/stockem/app/views/users/_user.html.erb:3: syntax error, unexpected ',', expecting ')'
+...er.append=( 'default_user.png', alt: "#{user.name}'s profile...
+...                              ^
+)
+1:    <div id="<%= dom_id user %>" class="user-details">
+2:      <div class="user-image">
+3:        <%= 'default_user.png', alt: "#{user.name}'s profile image", class: "profile-pic" %>
+4:      </div>
+5:    
+6:      <p>
+7:        <strong>User ID:</strong>
+8:        <span class="user-value"><%= user.user_id %></span>
+9:      </p>
+10:    
+11:      <p>
+12:        <strong>Name:</strong>
+13:        <span class="user-value"><%= user.name %></span>
+14:      </p>
+15:    
+16:      <p>
+17:        <strong>UIN:</strong>
+18:        <span class="user-value"><%= user.uin %></span>
+19:      </p>
+20:    
+21:      <p>
+22:        <strong>Email:</strong>
+23:        <span class="user-value"><%= user.email %></span>
+24:      </p>
+25:    
+26:      <p>
+27:        <strong>Contact No:</strong>
+28:        <span class="user-value"><%= user.contact_no %></span>
+29:      </p>
+30:    
+31:      <p>
+32:        <strong>Role:</strong>
+33:        <span class="user-value"><%= user.role %></span>
+34:      </p>
+35:    
+36:      <p>
+37:        <strong>Details:</strong>
+38:        <span class="user-value"><%= user.details %></span>
+39:      </p>
+40:    
+41:      <p>
+42:        <strong>Auth Level:</strong>
+43:        <span class="user-value"><%= user.auth_level %></span>
+44:      </p>
+45:    </div>
+  
+app/views/users/_user.html.erb:3: syntax error, unexpected ',', expecting ')'
+app/views/users/index.html.erb:13
+app/views/users/index.html.erb:11
+Started GET "/users" for ::1 at 2024-10-02 23:36:47 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (30.6ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 9.1ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 96.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 97.4ms | GC: 0.0ms)
+Completed 500 Internal Server Error in 138ms (ActiveRecord: 33.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+  
+ActionView::SyntaxErrorInTemplate (Encountered a syntax error while rendering template: check <div id="<%= dom_id user %>" class="user-details">
+  <div class="user-image">
+    <%= 'default_user.png', alt: "#{user.name}'s profile image", class: "profile-pic" %>
+  </div>
+
+  <p>
+    <strong>User ID:</strong>
+    <span class="user-value"><%= user.user_id %></span>
+  </p>
+
+  <p>
+    <strong>Name:</strong>
+    <span class="user-value"><%= user.name %></span>
+  </p>
+
+  <p>
+    <strong>UIN:</strong>
+    <span class="user-value"><%= user.uin %></span>
+  </p>
+
+  <p>
+    <strong>Email:</strong>
+    <span class="user-value"><%= user.email %></span>
+  </p>
+
+  <p>
+    <strong>Contact No:</strong>
+    <span class="user-value"><%= user.contact_no %></span>
+  </p>
+
+  <p>
+    <strong>Role:</strong>
+    <span class="user-value"><%= user.role %></span>
+  </p>
+
+  <p>
+    <strong>Details:</strong>
+    <span class="user-value"><%= user.details %></span>
+  </p>
+
+  <p>
+    <strong>Auth Level:</strong>
+    <span class="user-value"><%= user.auth_level %></span>
+  </p>
+</div>
+
+):
+
+Causes:
+ActiveSupport::SyntaxErrorProxy (/mnt/c/Users/tanis/Desktop/StockEm/stockem/app/views/users/_user.html.erb:3: syntax error, unexpected ',', expecting ')'
+...er.append=( 'default_user.png', alt: "#{user.name}'s profile...
+...                              ^
+)
+1:    <div id="<%= dom_id user %>" class="user-details">
+2:      <div class="user-image">
+3:        <%= 'default_user.png', alt: "#{user.name}'s profile image", class: "profile-pic" %>
+4:      </div>
+5:    
+6:      <p>
+7:        <strong>User ID:</strong>
+8:        <span class="user-value"><%= user.user_id %></span>
+9:      </p>
+10:    
+11:      <p>
+12:        <strong>Name:</strong>
+13:        <span class="user-value"><%= user.name %></span>
+14:      </p>
+15:    
+16:      <p>
+17:        <strong>UIN:</strong>
+18:        <span class="user-value"><%= user.uin %></span>
+19:      </p>
+20:    
+21:      <p>
+22:        <strong>Email:</strong>
+23:        <span class="user-value"><%= user.email %></span>
+24:      </p>
+25:    
+26:      <p>
+27:        <strong>Contact No:</strong>
+28:        <span class="user-value"><%= user.contact_no %></span>
+29:      </p>
+30:    
+31:      <p>
+32:        <strong>Role:</strong>
+33:        <span class="user-value"><%= user.role %></span>
+34:      </p>
+35:    
+36:      <p>
+37:        <strong>Details:</strong>
+38:        <span class="user-value"><%= user.details %></span>
+39:      </p>
+40:    
+41:      <p>
+42:        <strong>Auth Level:</strong>
+43:        <span class="user-value"><%= user.auth_level %></span>
+44:      </p>
+45:    </div>
+  
+app/views/users/_user.html.erb:3: syntax error, unexpected ',', expecting ')'
+app/views/users/index.html.erb:13
+app/views/users/index.html.erb:11
+Started GET "/users" for ::1 at 2024-10-02 23:37:37 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (20.5ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 480.7ms | GC: 0.7ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 558.2ms | GC: 0.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 684.3ms | GC: 2.9ms)
+Completed 200 OK in 715ms (Views: 667.9ms | ActiveRecord: 23.5ms (1 query, 0 cached) | GC: 2.9ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:37:38 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:38:03 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (43.2ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 12.6ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.4ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 118.2ms | GC: 0.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 217.2ms | GC: 0.7ms)
+Completed 200 OK in 281ms (Views: 185.0ms | ActiveRecord: 46.7ms (1 query, 0 cached) | GC: 1.1ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:38:04 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:38:12 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (24.8ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 12.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 71.3ms | GC: 0.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 194.8ms | GC: 0.8ms)
+Completed 200 OK in 264ms (Views: 186.4ms | ActiveRecord: 26.4ms (1 query, 0 cached) | GC: 0.8ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:38:13 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:38:17 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 11.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.4ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 39.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 53.3ms | GC: 0.0ms)
+Completed 200 OK in 62ms (Views: 53.6ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:38:18 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:38:23 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 11.6ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 37.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 53.2ms | GC: 0.0ms)
+Completed 200 OK in 62ms (Views: 53.2ms | ActiveRecord: 0.5ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:38:23 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users/new" for ::1 at 2024-10-02 23:38:29 -0500
+Processing by UsersController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/new.html.erb within layouts/application
+  Rendered users/_form.html.erb (Duration: 9.9ms | GC: 0.0ms)
+  Rendered users/new.html.erb within layouts/application (Duration: 73.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 142.6ms | GC: 0.0ms)
+Completed 200 OK in 167ms (Views: 143.4ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/users" for ::1 at 2024-10-02 23:39:18 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 12.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 152.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 258.7ms | GC: 2.0ms)
+Completed 200 OK in 270ms (Views: 259.0ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 2.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:39:19 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:40:00 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 8.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 119.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 224.2ms | GC: 1.8ms)
+Completed 200 OK in 235ms (Views: 224.5ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 1.8ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:40:00 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:41:01 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 9.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 139.7ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 251.7ms | GC: 0.3ms)
+Completed 200 OK in 260ms (Views: 251.8ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.3ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:41:01 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:42:28 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (14.8ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 12.8ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 179.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 381.1ms | GC: 3.4ms)
+Completed 200 OK in 421ms (Views: 371.4ms | ActiveRecord: 16.4ms (1 query, 0 cached) | GC: 3.4ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:42:29 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:43:40 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (17.8ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 10.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 171.3ms | GC: 0.9ms)
+  Rendered layout layouts/application.html.erb (Duration: 372.4ms | GC: 3.3ms)
+Completed 200 OK in 413ms (Views: 359.8ms | ActiveRecord: 19.1ms (1 query, 0 cached) | GC: 3.3ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:43:41 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:44:59 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 10.5ms | GC: 0.7ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 142.2ms | GC: 0.7ms)
+  Rendered layout layouts/application.html.erb (Duration: 254.6ms | GC: 1.2ms)
+Completed 200 OK in 270ms (Views: 254.9ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 1.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:45:00 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users/new" for ::1 at 2024-10-02 23:45:15 -0500
+Processing by UsersController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/new.html.erb within layouts/application
+  Rendered users/_form.html.erb (Duration: 6.5ms | GC: 1.6ms)
+  Rendered users/new.html.erb within layouts/application (Duration: 16.5ms | GC: 1.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 55.9ms | GC: 1.6ms)
+Completed 200 OK in 78ms (Views: 56.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 1.6ms)
+
+
+Started GET "/users" for ::1 at 2024-10-02 23:46:51 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 9.6ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.4ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.6ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 150.2ms | GC: 1.4ms)
+  Rendered layout layouts/application.html.erb (Duration: 257.8ms | GC: 1.4ms)
+Completed 200 OK in 266ms (Views: 258.2ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 1.4ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:46:51 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:48:15 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 11.6ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 160.2ms | GC: 0.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 286.3ms | GC: 1.0ms)
+Completed 200 OK in 307ms (Views: 286.6ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 1.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:48:15 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:51:15 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 10.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.5ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 144.5ms | GC: 0.5ms)
+  Rendered layout layouts/application.html.erb (Duration: 250.7ms | GC: 0.7ms)
+Completed 200 OK in 261ms (Views: 250.9ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.7ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:51:15 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:51:28 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 14.7ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.1ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 62.6ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 76.5ms | GC: 0.2ms)
+Completed 200 OK in 85ms (Views: 76.6ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:51:28 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:52:30 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 9.9ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.7ms | GC: 0.3ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 147.1ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 271.8ms | GC: 0.3ms)
+Completed 200 OK in 280ms (Views: 272.3ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:52:31 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:53:40 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 10.8ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 141.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 270.1ms | GC: 0.0ms)
+Completed 200 OK in 279ms (Views: 270.2ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:53:40 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:53:43 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 16.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.7ms | GC: 0.1ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 49.2ms | GC: 0.2ms)
+  Rendered layout layouts/application.html.erb (Duration: 74.8ms | GC: 0.2ms)
+Completed 200 OK in 87ms (Views: 74.8ms | ActiveRecord: 0.7ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:53:43 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:54:14 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 8.1ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 170.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 288.8ms | GC: 0.0ms)
+Completed 200 OK in 302ms (Views: 289.1ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:54:15 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:54:45 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 9.4ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 158.0ms | GC: 0.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 257.9ms | GC: 1.1ms)
+Completed 200 OK in 265ms (Views: 258.1ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 1.1ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:54:46 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:55:54 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 13.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.4ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 302.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 412.9ms | GC: 0.0ms)
+Completed 200 OK in 452ms (Views: 413.4ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:55:56 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:56:49 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 10.5ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 170.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 273.7ms | GC: 0.0ms)
+Completed 200 OK in 285ms (Views: 273.9ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:56:49 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-02 23:57:48 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 7.8ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 160.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 296.2ms | GC: 0.0ms)
+Completed 200 OK in 306ms (Views: 296.6ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:57:49 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2024-10-02 23:57:56 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:02:47 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 10.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 136.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 252.9ms | GC: 0.0ms)
+Completed 200 OK in 264ms (Views: 253.3ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:02:48 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:04:08 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 9.7ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 122.5ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 209.8ms | GC: 0.2ms)
+Completed 200 OK in 218ms (Views: 209.9ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:04:09 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:06:15 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 9.5ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 140.5ms | GC: 0.1ms)
+  Rendered layout layouts/application.html.erb (Duration: 239.8ms | GC: 0.2ms)
+Completed 200 OK in 250ms (Views: 240.0ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:06:16 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:06:31 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:13:27 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (16.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 10.0ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 153.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 258.0ms | GC: 0.0ms)
+Completed 200 OK in 266ms (Views: 242.1ms | ActiveRecord: 16.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:13:28 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:14:21 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:16:09 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 10.8ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 191.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 301.8ms | GC: 0.0ms)
+Completed 200 OK in 315ms (Views: 302.6ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:16:09 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:16:34 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 11.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.4ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 155.1ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 262.6ms | GC: 0.0ms)
+Completed 200 OK in 280ms (Views: 262.6ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:16:35 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:16:52 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 10.6ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 138.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 269.1ms | GC: 0.0ms)
+Completed 200 OK in 279ms (Views: 269.5ms | ActiveRecord: 0.3ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:16:52 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:17:01 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 9.8ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 135.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 236.0ms | GC: 0.0ms)
+Completed 200 OK in 245ms (Views: 236.2ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:17:01 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:17:37 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 19.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 160.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 277.7ms | GC: 0.4ms)
+Completed 200 OK in 287ms (Views: 277.8ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.4ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:17:38 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:17:43 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 10.8ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 129.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 241.0ms | GC: 0.0ms)
+Completed 200 OK in 249ms (Views: 241.2ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:17:43 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:18:04 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 13.4ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 38.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 57.8ms | GC: 0.0ms)
+Completed 200 OK in 67ms (Views: 57.6ms | ActiveRecord: 0.8ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:18:04 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:18:10 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 12.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 135.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 240.5ms | GC: 0.0ms)
+Completed 200 OK in 252ms (Views: 240.7ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:18:11 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:18:44 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (24.0ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 16.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 71.9ms | GC: 0.6ms)
+  Rendered layout layouts/application.html.erb (Duration: 169.3ms | GC: 2.4ms)
+Completed 200 OK in 230ms (Views: 152.1ms | ActiveRecord: 25.4ms (1 query, 0 cached) | GC: 3.2ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:18:44 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:22:44 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 9.9ms | GC: 0.3ms)
+  Rendered users/_user.html.erb (Duration: 0.4ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.2ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 159.3ms | GC: 0.3ms)
+  Rendered layout layouts/application.html.erb (Duration: 305.2ms | GC: 0.3ms)
+Completed 200 OK in 316ms (Views: 305.9ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.5ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:22:44 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
+Started GET "/users" for ::1 at 2024-10-03 00:22:47 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/views/users/index.html.erb:11
+  Rendered users/_user.html.erb (Duration: 12.7ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/_user.html.erb (Duration: 0.3ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 55.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 87.8ms | GC: 0.0ms)
+Completed 200 OK in 99ms (Views: 88.0ms | ActiveRecord: 0.6ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/manifest.json" for ::1 at 2024-10-03 00:22:47 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
