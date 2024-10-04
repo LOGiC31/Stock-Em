@@ -2041,3 +2041,27 @@ Started GET "/manifest.json" for 127.0.0.1 at 2024-10-04 01:15:23 -0500
   
 ActionController::RoutingError (No route matches [GET] "/manifest.json"):
   
+Started GET "/" for 127.0.0.1 at 2024-10-04 16:29:41 -0500
+  [1m[36mActiveRecord::SchemaMigration Load (1.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Redirected to http://127.0.0.1:3000/users
+Completed 301 Moved Permanently in 6ms
+
+
+Started GET "/users" for 127.0.0.1 at 2024-10-04 16:29:42 -0500
+Processing by UsersController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering users/index.html.erb within layouts/application
+  [1m[36mUser Load (1.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."name" = ? ORDER BY "users"."id" ASC LIMIT ?[0m  [["name", "Paul Taele"], ["LIMIT", 1]]
+  ↳ app/views/users/index.html.erb:5
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."name" = ?[0m  [["name", "Paul Taele"]]
+  ↳ app/views/users/index.html.erb:21
+  Rendered users/_user.html.erb (Duration: 15.1ms | GC: 0.0ms)
+  Rendered users/index.html.erb within layouts/application (Duration: 1447.4ms | GC: 49.8ms)
+  Rendered layout layouts/application.html.erb (Duration: 1575.2ms | GC: 49.8ms)
+Completed 200 OK in 1746ms (Views: 1588.3ms | ActiveRecord: 17.8ms (2 queries, 0 cached) | GC: 49.8ms)
+
+
+Started GET "/manifest.json" for 127.0.0.1 at 2024-10-04 16:29:44 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/manifest.json"):
+  
