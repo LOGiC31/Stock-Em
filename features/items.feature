@@ -9,3 +9,9 @@ Feature: Item Database
       | Resistor      | 54321         | Electronics | 10            | true                |
     When I check the item database
     Then I should see that "Oscilloscope" and "Resistor" are present
+
+  Scenario: Verify that items are created successfully
+    Given the following items exist:
+      | item_name     | serial_number | category    | quality_score | currently_available |
+      | Multimeter    | 67890         | Electronics | 8             | true                |
+    Then there should be 1 item with serial number "67890"
