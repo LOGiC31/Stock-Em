@@ -1,0 +1,13 @@
+!/log/.keep
+/log/*
+/tmp
+/*.pid
+/*.pid.lock
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/node_modules
+/yarn-error.log
+/config/master.key
+/.env
+/.env.*
+/config/master.key
