@@ -10,6 +10,8 @@ class SessionsController < ApplicationController
   # GET /auth/google_oauth2/callback
   def omniauth
     auth = request.env['omniauth.auth']
+    puts("asdfasdfasdfadf ================+>>>>>>")
+    puts(auth)
     @user = User.find_or_create_by(user_id: auth['user_id'], provider: auth['provider']) do |u|
       u.email = auth['info']['email']
       names = auth['info']['name'].split
