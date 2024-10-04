@@ -4,13 +4,13 @@ class ApplicationController < ActionController::Base
   private
 
   def current_user
+    return @current_user if defined?(@current_user)
+  
     if session[:user_id]
-      @current_user ||= User.find_by(id: session[:user_id])
+      @current_user = User.find_by(id: session[:user_id])
+    else
+      @current_user = nil
     end
-  rescue ActiveRecord::RecordNotFound
-    # Handle the case where the user is no longer in the database
-    session[:user_id] = nil
-    nil
   end
 
   def logged_in?
