@@ -1,0 +1,35 @@
+<h1>Items</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Item ID</th>
+      <th>Serial Number</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Quality Score</th>
+      <th>Available</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @items.each do |item| %>
+      <tr>
+        <td><%= item.item_id %></td>
+        <td><%= item.serial_number %></td>
+        <td><%= item.item_name %></td>
+        <td><%= item.category %></td>
+        <td><%= item.quality_score %></td>
+        <td><%= item.currently_available ? 'Yes' : 'No' %></td>
+        <td>
+          <%= link_to 'Show', item_path(item) %> |
+          <%= link_to 'Edit', edit_item_path(item) %> |
+          <%= link_to 'Delete', item_path(item), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New Item', new_item_path %>
+  
