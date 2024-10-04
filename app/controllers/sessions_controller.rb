@@ -2,6 +2,7 @@ class SessionsController < ApplicationController
   # GET /logout
   def logout
     reset_session
+    @current_user = nil
     redirect_to welcome_path, notice: 'You are logged out.'
   end
 
