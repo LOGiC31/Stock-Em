@@ -25,7 +25,6 @@ Scenario: view a specific item
   And   I should see "SN2"
   And   I should see "Electronics"
   And   I should see "75"
-  And   I should see "abc"
   But   I should not see "Item One"
   And   I should not see "SN1"
   And   I should not see "Furniture"

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 
-Given(/the following items exist/) do |items_table|
-  items_table.hashes.each do |item|
-    Item.create item
-  end
-end
+#Given(/the following items exist/) do |items_table|
+#  items_table.hashes.each do |item|
+#    Item.create item
+#  end
+#end
 
 Then(/I should see all the items/) do
   # Make sure that all the movies in the app are visible in the table
