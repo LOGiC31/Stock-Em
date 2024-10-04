@@ -1,0 +1,46 @@
+Stock'Em Capstone Inventory Management
+Team Working Agreement
+
+====
+
+Time and Location of Scrum Events
+- We will have three official SCRUM meeting times:
+  - Monday, after SWE class  (in person)
+  - Wednesday, after SWE class  (in person)
+  - Friday, around 5:00 pm  (virtual)
+
+Definition of Done
+- A SCRUM is considered done once we have met the following requirements:
+  - All stories assigned to the current sprint have been made
+  - All feature branches in GitHub have been merged into the production branch
+  - All Quality Checks pass, i.e. Rubocop, Code Coverage, etc.
+
+Communication Guidelines
+- We will communicate primarily through slack. All team members will be required to
+  setup phone notifications and Slack mobile.  If this is not possible, then team
+  members will give other means of contact in the case of emergencies
+
+Tools
+- We will stick only with standard Ruby on Rails constructs, runnable from command line.
+  - Teammates may choose to use advanced IDEs such as RubyMine; however, it will be
+    their responsibility to ensure they don't brick the service for command line users
+- For ticket tracking and organization, we will use the built-in one within GitHub.
+
+Team Approach to Work Assignment
+- Notably, this project has many isolated (independent) components, and some interacting components.
+  - Prior to each sprint, we will list out all tasks to-do, mainly focusing on independent, isolated components
+  - For tasks that involve other tasks, assigned persons will pair up to collaborate on implementation
+  - At the end of the sprint, all team members will come together to ensure merging of work works well
+
+Team Philosophy
+- Ruby on Rails is a tough language in that it's very outdated and strays away from the practices of useful 
+  web development languages.
+  - Given that most of us are all still learning the language and therefore have slight experience boosts in
+    certain areas, we will always reach out if we're stuck on a bug for > 1 hour, and will be happy to assist
+    our peers with debugging / implementation in the case that a story is more challenging than expected.
+
+Documentation and Artifacts
+- We will store relevant documentation such as Sprint Plans and other related items in the documentation/Fall2024 folder
+  in the GitHub
+- Relevant tickets will be stored on GitHub as well withing the GitHub backlog
+- The GitHub backlog will be publicly available to the professor, T.A., and customer
