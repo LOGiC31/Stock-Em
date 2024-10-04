@@ -44,6 +44,8 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem 'sqlite3'
+
+  gem 'simplecov', require: false
 end
 
 group :development do
