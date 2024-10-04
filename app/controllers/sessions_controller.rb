@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
     auth = request.env['omniauth.auth']
     puts("asdfasdfasdfadf ================+>>>>>>")
     puts(auth)
-    @user = User.find_or_create_by(user_id: auth['user_id'], provider: auth['provider']) do |u|
+    @user = User.find_or_create_by(user_id: auth['uid'], provider: auth['provider']) do |u|
       u.email = auth['info']['email']
       names = auth['info']['name'].split
       u.first_name = names[0]
