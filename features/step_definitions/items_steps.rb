@@ -19,3 +19,8 @@ Given('the following items exist:') do |table|
     expect(item_names).to include(item1)
     expect(item_names).to include(item2)
   end
+
+  Then('there should be 1 item with serial number {string}') do |serial_number|
+    item_count = Item.where(serial_number: serial_number).count
+    expect(item_count).to eq(1)
+  end
