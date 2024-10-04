@@ -54,3 +54,24 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 
 require 'rspec/expectations'
 World(RSpec::Matchers)
+
+Capybara.javascript_driver = :selenium
+
+require 'omniauth'
+
+# Set OmniAuth to test mode
+OmniAuth.config.test_mode = true
+
+# Set up mock authentication for Google
+OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new({
+  provider: 'google_oauth2',
+  uid: '123456',
+  info: {
+    email: 'user@example.com',
+    name: 'John Doe',
+  },
+  credentials: {
+    token: 'mock_token',
+    refresh_token: 'mock_refresh_token',
+  }
+})
