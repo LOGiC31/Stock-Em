@@ -4,10 +4,13 @@ class ApplicationController < ActionController::Base
   private
 
   def current_user
-    # if @current _user is undefined or falsy, evaluate the RHS
-    #   RHS := look up user by id only if user id is in the session hash
-    # question: what happens if session has user_id but DB does not?
-    @current_user ||= User.find(id: session[:user_id]) if session[:user_id]
+    if session[:user_id]
+      @current_user ||= User.find_by(id: session[:user_id])
+    end
+  rescue ActiveRecord::RecordNotFound
+    # Handle the case where the user is no longer in the database
+    session[:user_id] = nil
+    nil
   end
 
   def logged_in?
