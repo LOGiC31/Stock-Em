@@ -5,8 +5,6 @@ module ItemsHelper
         'fa-mobile-alt' # Mobile icon for electronics
       when 'Furniture'
         'fa-chair' # Chair icon for furniture
-      when 'Hardware'
-        'fa-cogs' # Cogs icon for hardware
       else
         'fa-box' # Default icon
       end
