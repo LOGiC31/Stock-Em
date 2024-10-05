@@ -1,5 +1,4 @@
 class SessionsController < ApplicationController
-  # GET /logout
   def logout
     reset_session
     @current_user = nil
@@ -7,7 +6,6 @@ class SessionsController < ApplicationController
   end
 
   skip_before_action :require_login, only: [:omniauth]
-  # GET /auth/google_oauth2/callback
   def omniauth
     auth = request.env['omniauth.auth']
     puts("asdfasdfasdfadf ================+>>>>>>")
