@@ -60,6 +60,7 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'database_cleaner-active_record'
   gem 'rspec-rails'
+  gem 'shoulda-matchers', '~> 4.0'
 end
 
 group :production do
