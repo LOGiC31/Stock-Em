@@ -60,6 +60,7 @@ group :test do
   gem 'database_cleaner-active_record'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
+  gem 'shoulda-matchers', '~> 4.0'
   gem 'selenium-webdriver'
 end
 
