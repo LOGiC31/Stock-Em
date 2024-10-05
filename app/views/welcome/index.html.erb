@@ -1,1 +1,15 @@
-<p><%= button_to "Login with Google", "/auth/google_oauth2", data: {turbo: "false"} %></p>
+<%= stylesheet_link_tag 'users', media: 'all', 'data-turbolinks-track': 'reload' %>
+<header>
+  <div class="header-title">Stock'Em</div>
+  <div>
+    <button class="icon-button user-icon">
+      <i class="fas fa-user"></i>
+    </button>
+  </div>
+</header>
+<div class="center-button">
+  <%= button_to "Login with Google", "/auth/google_oauth2", data: { turbo: "false" }, class: "btn" %>
+</div>
+<footer>
+  <div>The Stock'Em Team, 2024</div>
+</footer>

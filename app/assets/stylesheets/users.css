@@ -1,0 +1,113 @@
+.greetings {
+    text-align: center;
+    color: #500000; 
+    margin-bottom: 20px;
+    font-size: 2.5em; 
+  }
+  
+  .user-details-card {
+    background-color: #fff; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    padding: 30px; 
+    max-width: 800px; 
+    margin: 0 auto; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .user-detail {
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 15px; 
+  }
+  
+  .detail-value {
+    font-weight: normal; 
+    color: #555; 
+  }
+  
+  .user-action-links {
+    display: flex; 
+    justify-content: space-between; 
+    margin-top: 20px; 
+  }
+  
+  .btn-view-items, .btn-logout, .btn-profile {
+    background-color: #500000; 
+    color: #fff; 
+    padding: 12px 18px; 
+    border: none; 
+    border-radius: 5px; 
+    text-decoration: none; 
+    transition: background-color 0.3s; 
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  
+  .btn-view-items:hover, .btn-logout:hover {
+    background-color: #7a0000; 
+  }
+  
+  
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #500000;
+    color: white;
+    padding: 15px 20px;
+    margin-top: auto; 
+    bottom: 0; 
+    position: relative;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #500000;
+    color: white;
+    padding: 15px 20px;
+  }
+
+  .header-title {
+    font-size: 30px; 
+    font-weight: bold; 
+  }
+
+  .icon {
+    font-size: 40px; 
+    margin-right: 10px; 
+    color: #500000;
+  }
+
+  .user-icon {
+    font-size: 20px;
+    color: white;
+  }
+
+  .greeting {
+    font-size: 20px; 
+    margin-right: 10px; 
+  }
+
+  .icon-button {
+    background-color: #500000; 
+    color: white; 
+    border: none; 
+    border-radius: 2px;
+    padding: 0px; 
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+  }     
+
+  .user-icon i {
+    margin-right: 5px;
+  }
+
+  .center-button {
+    text-align: center; 
+    margin: 20px 0; 
+  }
+  
