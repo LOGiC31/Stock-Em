@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   get 'users/show'
   get 'welcome/index'
 
-
   resources :items
   resources :user_profiles
 

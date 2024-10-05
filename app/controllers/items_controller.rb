@@ -5,6 +5,7 @@ class ItemsController < ApplicationController
   # get all the items
   def index
     @items = Item.all
+    puts(@items.inspect)
   end
 
   # get specific item
@@ -23,12 +24,10 @@ class ItemsController < ApplicationController
   #   end
   # end
 
-
   # edit item
   # def edit
   #   @item = Item.find(params[:id])
   # end
-
 
   # def item_params
   #   params.require(:item).permit(:item_id, :serial_number, :item_name,

@@ -1,0 +1,22 @@
+version: '2'
+plugins:
+  rubocop:
+    enabled: true
+
+checks:
+  argument-count:
+    config:
+      max: 5 # Set a maximum number of arguments for methods
+  complexity:
+    config:
+      max: 10 # Set the maximum complexity for methods
+  duplication:
+    enabled: true
+  lines-of-code:
+    enabled: true
+  method-length:
+    config:
+      max: 10 # Set the maximum number of lines for methods
+  nested-modules:
+    config:
+      max: 2 # Set maximum nesting of modules/classes
