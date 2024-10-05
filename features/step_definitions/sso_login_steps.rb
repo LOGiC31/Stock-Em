@@ -2,9 +2,16 @@ Given('I am on the home page') do
     visit '/'
   end
 
-  When('I click on {string}') do |button_text|
-    click_button button_text
+  When('I click on {string}') do |text|
+    if has_button?(text)
+      click_button text
+    elsif has_link?(text)
+      click_link text
+    else
+      raise "No button or link found with text '#{text}'"
+    end
   end
+  
 
   When('I successfully authenticate via Google') do
     visit '/auth/google_oauth2/callback'
@@ -22,4 +29,16 @@ Given('I am on the home page') do
 
   Then('I should see {string}') do |message|
     expect(page).to have_content(message)
+  end
+  
+  Then('I should be redirected to the welcome page') do
+    expect(page).to have_current_path(welcome_path)
+  end
+
+  When('I visit the home page') do
+    visit root_path # Adjust this if your home path is different
+  end
+
+  When('I visit the items page') do
+    visit '/items'
   end

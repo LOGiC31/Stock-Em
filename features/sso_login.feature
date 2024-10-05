@@ -9,3 +9,26 @@ Feature: SSO Login
     And I successfully authenticate via Google
     Then I should be redirected to my user page
     And I should see "You are logged in."
+
+  Scenario: Logout after login
+    Given I am on the home page
+    When I click on "Login with Google"
+    And I successfully authenticate via Google
+    Then I should be redirected to my user page
+    And I should see "You are logged in."
+    When I click on "Logout"
+    Then I should be redirected to the welcome page
+    And I should see "You are logged out."
+
+  Scenario: Redirect to user page with welcome notice
+    Given I am on the home page
+    When I click on "Login with Google"
+    And I successfully authenticate via Google
+    Then I click on "View Items"
+    When I visit the home page
+    And I should see "Welcome, back!"
+
+  Scenario: Failed access when i access items page without login
+    Given I am on the home page
+    When I visit the items page
+    And I should see "You must be logged in to access this section."
