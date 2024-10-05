@@ -8,7 +8,6 @@
 #end
 
 Then(/I should see all the items/) do
-  # Make sure that all the movies in the app are visible in the table
   Item.all.find_each do |item|
     step %(I should see "#{item.title}")
   end

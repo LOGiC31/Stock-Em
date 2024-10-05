@@ -16,7 +16,7 @@ Background: items in database
 Scenario: view all items
   Given I am logged in
   And   I am on the items home page
-  Then  I should see "Items"
+  Then  I should see "Only show available items"
 
 Scenario: view a specific item
   Given I am logged in
