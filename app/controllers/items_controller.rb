@@ -2,6 +2,7 @@ class ItemsController < ApplicationController
   # get all the items
   def index
     @items = Item.all
+    puts(@items.inspect)
   end
 
   # get specific item
