@@ -1,0 +1,105 @@
+.greetings {
+    text-align: center;
+    color: #500000; /* Maroon color */
+    margin-bottom: 20px;
+    font-size: 2.5em; /* Increase font size */
+  }
+  
+  .user-details-card {
+    background-color: #fff; /* White background */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 30px; /* Increased padding */
+    max-width: 800px; /* Increased max width for the card */
+    margin: 0 auto; /* Center the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  .user-detail {
+    display: flex; /* Flexbox for alignment */
+    justify-content: space-between; /* Space between label and value */
+    margin-bottom: 15px; /* Space between details */
+  }
+  
+  .detail-value {
+    font-weight: normal; /* Normal weight for values */
+    color: #555; /* Darker text for values */
+  }
+  
+  .user-action-links {
+    display: flex; /* Flexbox for buttons */
+    justify-content: space-between; /* Space between buttons */
+    margin-top: 20px; /* Margin above buttons */
+  }
+  
+  .btn-view-items, .btn-logout {
+    background-color: #500000; /* Maroon button color */
+    color: #fff; /* White text */
+    padding: 12px 18px; /* Increased padding for buttons */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners for buttons */
+    text-decoration: none; /* No underline */
+    transition: background-color 0.3s; /* Smooth transition */
+  }
+  
+  .btn-view-items:hover, .btn-logout:hover {
+    background-color: #7a0000; /* Lighter maroon on hover */
+  }
+  
+  
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #500000;
+    color: white;
+    padding: 15px 20px;
+    margin-top: auto; 
+    bottom: 0; 
+    position: relative;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #500000;
+    color: white;
+    padding: 15px 20px;
+  }
+
+  .header-title {
+    font-size: 30px; 
+    font-weight: bold; 
+  }
+
+  .icon {
+    font-size: 40px; 
+    margin-right: 10px; 
+    color: #500000;
+  }
+
+  .user-icon {
+    font-size: 20px;
+    color: white;
+  }
+
+  .greeting {
+    font-size: 20px; 
+    margin-right: 10px; 
+  }
+
+  .icon-button {
+    background-color: #500000; 
+    color: white; 
+    border: none; 
+    border-radius: 2px;
+    padding: 0px; 
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+  }     
+
+  .user-icon i {
+    margin-right: 5px;
+  }

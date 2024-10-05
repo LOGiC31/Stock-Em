@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock'Em</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #f8f8f8; /* Light background color */
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #500000;
+      color: white;
+      padding: 15px 20px;
+    }
+    .header-title {
+      font-size: 30px; /* Adjust size as needed */
+      font-weight: bold; /* Make it bold */
+    }
+    .greeting {
+      font-size: 20px; /* Increase size of greeting text */
+      margin-right: 10px; /* Space before icon */
+    }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #500000;
+      color: white;
+      padding: 15px 20px;
+      margin-top: auto; /* Ensure footer stays at the bottom */
+    }
+    .search-container {
+      margin: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .search-container input[type="text"] {
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+      flex: 1; /* Allow search bar to grow */
+      transition: border-color 0.3s; /* Smooth transition */
+    }
+    .search-container input[type="text"]:focus {
+      border-color: #500000; /* Change border color on focus */
+      outline: none; /* Remove default outline */
+    }
+    .filter {
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+      font-size: 16px; /* Adjust checkbox text size */
+    }
+    .filter input {
+      margin-right: 5px; /* Space between checkbox and text */
+      transform: scale(1.2); /* Increase checkbox size */
+    }
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Two columns */
+      gap: 20px; /* Space between cards */
+      margin: 20px 200px; /* Left and right margins */
+    }
+    .card {
+      background-color: #f5f5f5;
+      border-radius: 10px;
+      padding: 30px;
+      display: flex; /* Flexbox for alignment */
+      align-items: center; /* Center items vertically */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+      transition: transform 0.2s, background-color 0.3s; /* Animation for hover effect */
+    }
+    .card:hover {
+      transform: translateY(-5px); /* Lift effect on hover */
+      background-color: #e0e0e0; /* Darker background on hover */
+    }
+    .icon {
+      font-size: 40px; /* Larger icon */
+      margin-right: 10px; /* Space between icon and text */
+      color: #500000; /* Icon color */
+    }
+    .user-icon {
+      font-size: 20px; /* Icon size */
+      color: white; /* Make user icon visible */
+    }
+    .card-content {
+      display: flex;
+      flex-direction: column; /* Stack name and subheader */
+    }
+    h3 {
+      margin: 10px 0 5px 0; /* Margin adjustments */
+      font-size: 18px; /* Heading size */
+      color: #500000; /* Heading color */
+    }
+    p {
+      margin: 0; /* Reset paragraph margin */
+      color: #666; /* Subheader color */
+    }
+    .availability {
+      font-weight: bold; /* Make availability text bold */
+      margin-top: 5px; /* Space above availability */
+    }
+    .available {
+      color: green; /* Green for available */
+    }
+    .not-available {
+      color: red; /* Red for not available */
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">Stock'Em</div>
+  <div>
+    <span class="greeting">Hello, <span id="username">User</span></span>
+    <span class="icon user-icon"><i class="fas fa-user"></i></span>
+  </div>
+</header>
+
+<div class="search-container">
+  <input type="text" placeholder="Search..." />
+  <label class="filter">
+    <input type="checkbox" /> Only show available items
+  </label>
+</div>
+
+<div class="card-container">
+  <% @items.each do |item| %>
+    <div class="card">
+      <div class="icon"><i class="fas <%= icon_for_category(item.category) %>"></i></div>
+      <div class="card-content">
+        <h3><%= item.item_name %></h3>
+        <p><%= item.category %></p>
+        <span class="availability <%= item.currently_available ? 'available' : 'not-available' %>">
+          <%= item.currently_available ? 'Available' : 'Not Available' %>
+        </span>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<footer>
+  <div>The Stock'Em Team, 2024</div>
+</footer>
+
+</body>
+</html>

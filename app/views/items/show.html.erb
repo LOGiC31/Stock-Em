@@ -1,0 +1,23 @@
+<h1>Item: <%= @item.item_name %></h1>
+
+<p><strong>Item ID:</strong> <%= @item.item_id %></p>
+<p><strong>Serial Number:</strong> <%= @item.serial_number %></p>
+<p><strong>Category:</strong> <%= @item.category %></p>
+<p><strong>Quality Score:</strong> <%= @item.quality_score %></p>
+<p><strong>Available:</strong> <%= @item.currently_available ? 'Yes' : 'No' %></p>
+<p><strong>Details:</strong> <%= @item.details %></p>
+
+<%= image_tag(@item.image) if @item.image.present? %>
+
+<h2>Item History</h1>
+<p>Checkin on 8/21/2024</p>
+<p>Returned by Mark Sturtevant</p>
+<p>Item given to Professor Wade</p>
+<p>New Approximate Location: Wade's Attic</p>
+<p>Details: Now has water damage :(</p>
+
+<h2>Notes</h1>
+<p>Mark Sturtevant (06/23/2019): Item sustained major damage</p>
+
+<%= link_to 'Edit', edit_item_path(@item) %> |
+<%= link_to 'Back to Items', items_path %>
