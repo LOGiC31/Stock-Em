@@ -1,0 +1,37 @@
+# Ignore bundler config.
+/.bundle
+
+# Ignore log files and temp files.
+/log/*
+!/log/.keep
+/tmp
+!/tmp/.keep
+
+# Ignore PID files and sockets.
+/*.pid
+/*.pid.lock
+
+# Ignore database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore node modules
+/node_modules
+/yarn-error.log
+
+# Ignore compiled assets.
+/public/assets
+/public/packs
+
+# Ignore secrets and environment files.
+/.env
+/.env.*
+/config/master.key
+
+# Ignore coverage reports.
+/coverage/*
+/spec/examples.txt
+
+# Ignore IDE-specific files
+/.vscode
+.idea

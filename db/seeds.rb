@@ -6,8 +6,6 @@
 # Clear existing data to avoid duplication
 Item.destroy_all
 User.destroy_all
-Note.destroy_all
-Event.destroy_all
 
 # Create Users
 users = [
@@ -27,22 +25,22 @@ items = [
 
 items.each { |item| Item.create!(item) }
 
-# Create Notes
-notes = [
-  { note_id: 'NOTE001', item: Item.first, msg: 'ipad in good condition, used for monitoring and cataloging.', user: User.first },
-  { note_id: 'NOTE002', item: Item.second, msg: 'android version recently updated.', user: User.second },
-  { note_id: 'NOTE003', item: Item.third, msg: 'Chair needs replacement, worn out fabric.', user: User.third }
-]
+# # Create Notes
+# notes = [
+#   { note_id: 'NOTE001', item: Item.first, msg: 'ipad in good condition, used for monitoring and cataloging.', user: User.first },
+#   { note_id: 'NOTE002', item: Item.second, msg: 'android version recently updated.', user: User.second },
+#   { note_id: 'NOTE003', item: Item.third, msg: 'Chair needs replacement, worn out fabric.', user: User.third }
+# ]
 
-notes.each { |note| Note.create!(note) }
+# notes.each { |note| Note.create!(note) }
 
-# Create Events
-events = [
-  { item: Item.first, associated_user: User.first, associated_student: nil, created_at: DateTime.now, updated_at: DateTime.now, event_type: 'checkedIn' },
-  { item: Item.second, associated_user: User.second, associated_student: nil, created_at: DateTime.now - 3.days, updated_at: DateTime.now - 3.days, event_type: 'checkedIn' },
-  { item: Item.third, associated_user: User.third, associated_student: nil, created_at: DateTime.now - 5.days, updated_at: DateTime.now - 5.days, event_type: 'relocated' }
-]
+# # Create Events
+# events = [
+#   { item: Item.first, associated_user: User.first, associated_student: nil, created_at: DateTime.now, updated_at: DateTime.now, event_type: 'checkedIn' },
+#   { item: Item.second, associated_user: User.second, associated_student: nil, created_at: DateTime.now - 3.days, updated_at: DateTime.now - 3.days, event_type: 'checkedIn' },
+#   { item: Item.third, associated_user: User.third, associated_student: nil, created_at: DateTime.now - 5.days, updated_at: DateTime.now - 5.days, event_type: 'relocated' }
+# ]
 
-events.each { |event| Event.create!(event) }
+# events.each { |event| Event.create!(event) }
 
 puts "Seed data loaded successfully!"
