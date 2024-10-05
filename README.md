@@ -37,3 +37,12 @@ run _rails db:seed_ to insert seed data for dev env
 run _rails console_ to go into console mode.
 
 run _Item.all, Note.all, Event.all_ to verify data is seeded properly.
+
+----------------------------------------------------------------------
+Google OAuth Feature Added. Changes are merged in dev-branch. Run below mentioned commands after taking latest pull.
+
+bundle install
+
+rails db:migrate
+
+rails server
