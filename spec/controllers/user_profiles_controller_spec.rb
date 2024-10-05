@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe UserProfilesController, type: :controller do
@@ -48,5 +50,4 @@ RSpec.describe UserProfilesController, type: :controller do
       expect(response).to be_successful
     end
   end
-
 end

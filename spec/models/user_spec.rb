@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # spec/models/user_spec.rb
 
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
   describe 'validations' do
-    subject { User.new(email: email) } 
+    subject { User.new(email:) }
 
     context 'when email is present' do
       let(:email) { 'simran@tamu.edu' }
@@ -20,7 +22,6 @@ RSpec.describe User, type: :model do
       it 'is not valid' do
         expect(subject).not_to be_valid
       end
-
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ApplicationController, type: :controller do
@@ -5,7 +7,7 @@ RSpec.describe ApplicationController, type: :controller do
     before_action :require_login
 
     def index
-      render plain: "This is a test action."
+      render plain: 'This is a test action.'
     end
   end
 
