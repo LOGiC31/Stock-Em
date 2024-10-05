@@ -3,7 +3,7 @@
 HEROKU LIVE LINK: https://stockem-0caaa6588e50.herokuapp.com/welcome/index
 
 Code Climate Report : ./codeclimate_report.json
-Ruby Critic : overview.html
+Ruby Critic : [View the HTML file](overview.html)
 
 Capstone Inventory Management System
 
