@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
+# This controller is used for anything profile-related, such as viewing a profile or editing yours.
 class UserProfilesController < ApplicationController
-  # before_action :set_user_profile, only: %i[ show edit update destroy ]
+  # before_action :set_user_profile, only: %i[show edit update destroy]
 
   # GET /user_profiles or /user_profiles.json
   def index
@@ -7,14 +10,15 @@ class UserProfilesController < ApplicationController
   end
 
   # GET /user_profiles/1 or /user_profiles/1.json
-  def show
-  end
+  def show; end
 
   # # GET /user_profiles/new
   # def new
   #   @user_profile = User.new
   # end
 
+  # GET /user_profiles/1/edit
+  def edit; end
   # # GET /user_profiles/1/edit
   # def edit
   # end
@@ -52,7 +56,7 @@ class UserProfilesController < ApplicationController
   #   @user_profile.destroy!
 
   #   respond_to do |format|
-  #     format.html { redirect_to user_profiles_path, status: :see_other, notice: "User profile was successfully destroyed." }
+  #     format.html { redirect_to user_profiles_path, status: :see_other, notice: "User profile destroyed." }
   #     format.json { head :no_content }
   #   end
   # end

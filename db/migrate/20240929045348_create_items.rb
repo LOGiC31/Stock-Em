@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Creates the items database.
 class CreateItems < ActiveRecord::Migration[7.2]
   def change
     create_table :items do |t|
@@ -9,7 +12,6 @@ class CreateItems < ActiveRecord::Migration[7.2]
       t.boolean :currently_available
       t.string :image
       t.string :details
-
       t.timestamps
     end
   end

@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Creates the users database
 class CreateUsers < ActiveRecord::Migration[7.2]
   def change
     create_table :users do |t|
@@ -9,7 +12,6 @@ class CreateUsers < ActiveRecord::Migration[7.2]
       t.string :role
       t.string :details
       t.integer :auth_level
-
       t.timestamps
     end
   end
