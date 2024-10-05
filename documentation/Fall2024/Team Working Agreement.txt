@@ -33,7 +33,7 @@ Team Approach to Work Assignment
   - At the end of the sprint, all team members will come together to ensure merging of work works well
 
 Team Philosophy
-- Since Ruby on Rails is  outdated and strays away from the practices of useful web development languages,
+- Since Ruby on Rails is outdated and strays away from the practices of useful web development languages,
   most of us are back to ground zero in terms of learning the tech stacks / language.
   - Given that most of us are all still learning the language and therefore have different experience boosts in
     certain areas, we will always reach out if we're stuck on a bug for > 1 hour, and will be happy to assist
