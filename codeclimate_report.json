@@ -1,0 +1,232 @@
+Starting analysis
+
+== Gemfile (5 issues) ==
+8: Line is too long. [82/80] [rubocop]
+23: Line is too long. [86/80] [rubocop]
+26: Line is too long. [111/80] [rubocop]
+35: Line is too long. [111/80] [rubocop]
+59: Line is too long. [83/80] [rubocop]
+
+== Rakefile (1 issue) ==
+4: Line is too long. [90/80] [rubocop]
+
+== app/controllers/application_controller.rb (1 issue) ==
+22: Line is too long. [84/80] [rubocop]
+
+== app/controllers/items_controller.rb (1 issue) ==
+34: Line is too long. [103/80] [rubocop]
+
+== app/controllers/sessions_controller.rb (1 issue) ==
+18: unexpected token tRBRACK
+(Using Ruby 2.1 parser; configure using `TargetRubyVersion` parameter, under `AllCops`) [rubocop]
+
+== app/controllers/user_profiles_controller.rb (8 issues) ==
+3: Line is too long. [99/80] [rubocop]
+32: Line is too long. [101/80] [rubocop]
+33: Line is too long. [81/80] [rubocop]
+36: Line is too long. [90/80] [rubocop]
+45: Line is too long. [101/80] [rubocop]
+49: Line is too long. [90/80] [rubocop]
+59: Line is too long. [109/80] [rubocop]
+72: Line is too long. [118/80] [rubocop]
+
+== app/jobs/application_job.rb (1 issue) ==
+7: Line is too long. [82/80] [rubocop]
+
+== app/models/event.rb (2 issues) ==
+6: Line is too long. [84/80] [rubocop]
+7: Line is too long. [106/80] [rubocop]
+
+== app/views/user_profiles/_user_profile.json.jbuilder (1 issue) ==
+3: Line is too long. [119/80] [rubocop]
+
+== app/views/user_profiles/index.json.jbuilder (1 issue) ==
+3: Line is too long. [84/80] [rubocop]
+
+== bin/bundle (13 issues) ==
+13-109: Block has too many lines. [74/25] [rubocop]
+14: Indent access modifiers like `module_function`. [rubocop]
+24-38: Cyclomatic complexity for cli_arg_version is too high. [8/6] [rubocop]
+24-38: Perceived complexity for cli_arg_version is too high. [8/7] [rubocop]
+24-38: Method has too many lines. [11/10] [rubocop]
+26: Line is too long. [91/80] [rubocop]
+31: Line is too long. [119/80] [rubocop]
+32: Line is too long. [81/80] [rubocop]
+60: Line is too long. [101/80] [rubocop]
+86-101: Assignment Branch Condition size for activate_bundler is too high. [16.4/15] [rubocop]
+86-101: Method has too many lines. [12/10] [rubocop]
+95: Line is too long. [120/80] [rubocop]
+99: Line is too long. [198/80] [rubocop]
+
+== bin/rubocop (1 issue) ==
+7: Line is too long. [89/80] [rubocop]
+
+== bin/setup (3 issues) ==
+7: Freeze mutable objects assigned to constants. [rubocop]
+14: Line is too long. [88/80] [rubocop]
+15: Line is too long. [96/80] [rubocop]
+
+== config/application.rb (1 issue) ==
+12: Missing top-level class documentation comment. [rubocop]
+
+== config/environments/development.rb (5 issues) ==
+5-83: Block has too many lines. [26/25] [rubocop]
+6: Line is too long. [85/80] [rubocop]
+29: Line is too long. [95/80] [rubocop]
+36: Line is too long. [87/80] [rubocop]
+78: Line is too long. [85/80] [rubocop]
+
+== config/environments/production.rb (17 issues) ==
+6: Line is too long. [85/80] [rubocop]
+21: Line is too long. [118/80] [rubocop]
+22: Line is too long. [119/80] [rubocop]
+25: Line is too long. [90/80] [rubocop]
+41: Line is too long. [87/80] [rubocop]
+47: Line is too long. [96/80] [rubocop]
+49: Line is too long. [86/80] [rubocop]
+50: Line is too long. [96/80] [rubocop]
+53: Line is too long. [96/80] [rubocop]
+57: Line is too long. [89/80] [rubocop]
+61: Line is too long. [100/80] [rubocop]
+62: Line is too long. [98/80] [rubocop]
+67: Line is too long. [102/80] [rubocop]
+68: Line is too long. [98/80] [rubocop]
+75: Line is too long. [84/80] [rubocop]
+84: Line is too long. [100/80] [rubocop]
+103: Line is too long. [82/80] [rubocop]
+
+== config/environments/test.rb (7 issues) ==
+11: Line is too long. [85/80] [rubocop]
+16: Line is too long. [84/80] [rubocop]
+17: Line is too long. [83/80] [rubocop]
+18: Line is too long. [84/80] [rubocop]
+23: Line is too long. [93/80] [rubocop]
+30: Line is too long. [87/80] [rubocop]
+67: Line is too long. [85/80] [rubocop]
+
+== config/initializers/content_security_policy.rb (2 issues) ==
+21: Line is too long. [89/80] [rubocop]
+22: Line is too long. [92/80] [rubocop]
+
+== config/initializers/filter_parameter_logging.rb (2 issues) ==
+5: Line is too long. [108/80] [rubocop]
+7: Line is too long. [93/80] [rubocop]
+
+== config/initializers/omniauth.rb (2 issues) ==
+6: Line is too long. [96/80] [rubocop]
+6-11: Redundant curly braces around a hash parameter. [rubocop]
+
+== config/puma.rb (1 issue) ==
+28: Line is too long. [85/80] [rubocop]
+
+== db/migrate/20230929050855_create_users.rb (2 issues) ==
+5-15: Similar blocks of code found in 2 locations. Consider refactoring. [duplication]
+5-17: Method has too many lines. [11/10] [rubocop]
+
+== db/migrate/20240929045348_create_items.rb (2 issues) ==
+5-15: Similar blocks of code found in 2 locations. Consider refactoring. [duplication]
+5-17: Method has too many lines. [11/10] [rubocop]
+
+== db/migrate/20240929051902_create_events.rb (2 issues) ==
+10: Line is too long. [83/80] [rubocop]
+11: Line is too long. [120/80] [rubocop]
+
+== db/schema.rb (6 issues) ==
+5: Line is too long. [81/80] [rubocop]
+7: Line is too long. [82/80] [rubocop]
+8: Line is too long. [84/80] [rubocop]
+13: Line is too long. [86/80] [rubocop]
+15-77: Block has too many lines. [57/25] [rubocop]
+26: Line is too long. [84/80] [rubocop]
+
+== db/seeds.rb (14 issues) ==
+3: Line is too long. [116/80] [rubocop]
+4: Line is too long. [118/80] [rubocop]
+5: Line is too long. [115/80] [rubocop]
+14: Line is too long. [114/80] [rubocop]
+16: Line is too long. [108/80] [rubocop]
+18: Line is too long. [111/80] [rubocop]
+26: Line is too long. [111/80] [rubocop]
+28: Line is too long. [104/80] [rubocop]
+30: Line is too long. [115/80] [rubocop]
+40: Line is too long. [107/80] [rubocop]
+41: Line is too long. [112/80] [rubocop]
+48: Line is too long. [103/80] [rubocop]
+50: Line is too long. [114/80] [rubocop]
+52: Line is too long. [112/80] [rubocop]
+
+== features/step_definitions/items_nav_steps.rb (1 issue) ==
+20: unexpected token tRPAREN
+(Using Ruby 2.1 parser; configure using `TargetRubyVersion` parameter, under `AllCops`) [rubocop]
+
+== features/step_definitions/items_steps.rb (1 issue) ==
+26: unexpected token tRPAREN
+(Using Ruby 2.1 parser; configure using `TargetRubyVersion` parameter, under `AllCops`) [rubocop]
+
+== features/step_definitions/show_item_steps.rb (1 issue) ==
+25: Line is too long. [89/80] [rubocop]
+
+== features/step_definitions/user_profiles_steps.rb (3 issues) ==
+10: unexpected token error
+(Using Ruby 2.1 parser; configure using `TargetRubyVersion` parameter, under `AllCops`) [rubocop]
+13: unexpected token kELSE
+(Using Ruby 2.1 parser; configure using `TargetRubyVersion` parameter, under `AllCops`) [rubocop]
+16: unexpected token kEND
+(Using Ruby 2.1 parser; configure using `TargetRubyVersion` parameter, under `AllCops`) [rubocop]
+
+== features/support/env.rb (15 issues) ==
+6: Line is too long. [84/80] [rubocop]
+13: Line is too long. [82/80] [rubocop]
+17: Line is too long. [89/80] [rubocop]
+29: Line is too long. [88/80] [rubocop]
+33: Line is too long. [102/80] [rubocop]
+36: Line is too long. [112/80] [rubocop]
+46: Line is too long. [98/80] [rubocop]
+67-78: Redundant curly braces around a hash parameter. [rubocop]
+68: Line is too long. [95/80] [rubocop]
+69: Line is too long. [83/80] [rubocop]
+71: Line is too long. [99/80] [rubocop]
+72: Line is too long. [89/80] [rubocop]
+74: Line is too long. [83/80] [rubocop]
+75: Line is too long. [91/80] [rubocop]
+76: Line is too long. [106/80] [rubocop]
+
+== spec/controllers/application_controller_spec.rb (2 issues) ==
+5-64: Block has too many lines. [47/25] [rubocop]
+42: Line is too long. [84/80] [rubocop]
+
+== spec/controllers/items_controller_spec.rb (5 issues) ==
+7-67: Block has too many lines. [49/25] [rubocop]
+9: Line is too long. [109/80] [rubocop]
+10: Line is too long. [96/80] [rubocop]
+15: Line is too long. [109/80] [rubocop]
+16: Line is too long. [96/80] [rubocop]
+
+== spec/controllers/sessions_controller_spec.rb (2 issues) ==
+5-61: Block has too many lines. [48/25] [rubocop]
+6-60: Block has too many lines. [46/25] [rubocop]
+
+== spec/controllers/user_profiles_controller_spec.rb (2 issues) ==
+5-53: Block has too many lines. [41/25] [rubocop]
+6: Line is too long. [96/80] [rubocop]
+
+== spec/controllers/users_controller_spec.rb (1 issue) ==
+6: Line is too long. [90/80] [rubocop]
+
+== spec/models/user_spec.rb (2 issues) ==
+9: unexpected token tRPAREN
+(Using Ruby 2.1 parser; configure using `TargetRubyVersion` parameter, under `AllCops`) [rubocop]
+26: unexpected token kEND
+(Using Ruby 2.1 parser; configure using `TargetRubyVersion` parameter, under `AllCops`) [rubocop]
+
+== spec/rails_helper.rb (3 issues) ==
+8: Line is too long. [86/80] [rubocop]
+9: Line is too long. [89/80] [rubocop]
+10: Line is too long. [83/80] [rubocop]
+
+== spec/spec_helper.rb (3 issues) ==
+3: Line is too long. [92/80] [rubocop]
+84: Line is too long. [81/80] [rubocop]
+91: Line is too long. [81/80] [rubocop]
+
+Analysis complete! Found 143 issues.

@@ -1,4 +1,8 @@
-version: v2
+version: '2'
+plugins:
+  rubocop:
+    enabled: true
+
 checks:
   argument-count:
     config:
