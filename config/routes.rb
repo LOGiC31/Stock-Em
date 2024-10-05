@@ -1,9 +1,10 @@
-Rails.application.routes.draw do
-  get "sessions/logout"
-  get "sessions/omniauth"
-  get "users/show"
-  get "welcome/index"
+# frozen_string_literal: true
 
+Rails.application.routes.draw do
+  get 'sessions/logout'
+  get 'sessions/omniauth'
+  get 'users/show'
+  get 'welcome/index'
 
   resources :items
   resources :user_profiles
@@ -14,5 +15,4 @@ Rails.application.routes.draw do
 
   get '/logout', to: 'sessions#logout', as: 'logout'
   get '/auth/google_oauth2/callback', to: 'sessions#omniauth'
-
 end
