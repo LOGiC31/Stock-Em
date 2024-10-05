@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Adds first and last name to users database.
 class AddFirstAndLastNameToUsers < ActiveRecord::Migration[7.2]
   def change
     add_column :users, :first_name, :string
