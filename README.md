@@ -1,5 +1,7 @@
 # Stock-Em
 
+HEROKU LIVE LINK: https://stockem-0caaa6588e50.herokuapp.com/welcome/index
+
 Capstone Inventory Management System
 
 **What I followed :**
