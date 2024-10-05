@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  resources :users
-  root :to => redirect('/users')
+  resources :user_profiles
+  root :to => redirect('/user_profiles')
 end
