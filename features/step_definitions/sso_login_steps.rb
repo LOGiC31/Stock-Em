@@ -43,6 +43,3 @@ end
 When('I visit the items page') do
   visit '/items'
 end
-Then('I should see {string}') do |message|
-  expect(page).to have_content(message)
-end
