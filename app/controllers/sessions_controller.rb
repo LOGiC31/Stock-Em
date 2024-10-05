@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# This controller handles login authentication using google.
 class SessionsController < ApplicationController
   def logout
     reset_session
@@ -8,7 +11,7 @@ class SessionsController < ApplicationController
   skip_before_action :require_login, only: [:omniauth]
   def omniauth
     auth = request.env['omniauth.auth']
-    puts("asdfasdfasdfadf ================+>>>>>>")
+    puts('asdfasdfasdfadf ================+>>>>>>')
     puts(auth)
     @user = User.find_or_create_by(user_id: auth['uid'], provider: auth['provider']) do |u|
       u.email = auth['info']['email']

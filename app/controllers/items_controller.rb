@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Contains logic for web pages which display item(s)
 class ItemsController < ApplicationController
   # get all the items
   def index
@@ -10,7 +13,7 @@ class ItemsController < ApplicationController
   end
 
   # create new item
-  
+
   # def create
   #   @item = Item.new(item_params)
   #   if @item.save
@@ -19,16 +22,16 @@ class ItemsController < ApplicationController
   #     render :new
   #   end
   # end
-  
+
 
   # edit item
   # def edit
   #   @item = Item.find(params[:id])
   # end
 
-  private
 
   # def item_params
-  #   params.require(:item).permit(:item_id, :serial_number, :item_name, :category, :quality_score, :currently_available, :image, :details)
+  #   params.require(:item).permit(:item_id, :serial_number, :item_name,
+  #                                  :category, :quality_score, :currently_available, :image, :details)
   # end
 end
