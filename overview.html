@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ruby Critic - Home</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- StyleSheets -->
+    <link href="assets/vendor/stylesheets/bootstrap.min.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="assets/vendor/stylesheets/font-awesome.min.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="assets/vendor/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <header class="navbar navbar-default navbar-fixed-top">
+      <a href="#menu-toggle" class="btn btn-default hidden-lg visible-sm-* hidden-md visible-xs-* pull-left" id="menu-toggle"><i class="fa fa-bars" aria-hidden="true"></i></a>
+      <a href="overview.html"><img src="assets/images/logo.png" alt="Ruby Critic Logo" title="Ruby Critic Logo" width="55"><span class="logo">RUBYCRITIC</span></a>
+      
+    </header>
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <aside id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+          <li class="sidebar-item">
+            <a href="overview.html" class="project-nav-item overview-nav"><i class="fa fa-dashboard"></i>Overview</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="code_index.html" class="project-nav-item code-index-nav"><i class="fa fa-code"></i>Code</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="smells_index.html" class="project-nav-item smells-index-nav"><i class="fa fa-warning"></i>Smells</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="simple_cov_index.html" class="project-nav-item coverage-index-nav"><i class="fa fa-umbrella"></i>Coverage</a>
+          </li>
+        </ul>
+      </aside>
+      <!-- /#sidebar-wrapper -->
+      <div id="page-content-wrapper">
+        <div class="container-fluid">
+          <!-- Page Content -->
+<div id="page-content-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <!--Page Title -->
+      <div class="Page_Title">
+       <h3>Overview</h3>
+      </div>
+      <!--End Page Title -->
+      <div class="Content_Wrapper">
+        <!--Grade Wrapper-->
+        <div class="col-xs-12 col-sm-4 col-md-6 col-lg-4">
+          <div class="Graph_Cards fadeIn">
+          <div id="gpa-chart" class="chart-container"></div>
+          <div id="addText" ></div>
+          </div>
+        </div>
+        <!--End Grade Wrapper-->
+
+        <!--Churn vs Complexity graph-->
+        <div class="col-xs-12 col-sm-7 col-md-6 col-lg-8">
+          <div class="Graph_Cards fadeIn">
+            
+              <div id="churn-vs-complexity-graph-container" class="chart-container"></div>
+            
+
+            <script>
+             var turbulenceData = [{"name":"Channel","x":8,"y":0.0,"rating":"A"},{"name":"Connection","x":8,"y":0.0,"rating":"A"},{"name":"ApplicationController","x":12,"y":10.85,"rating":"A"},{"name":"ItemsController","x":8,"y":7.09,"rating":"A"},{"name":"SessionsController","x":10,"y":32.93,"rating":"A"},{"name":"UserProfilesController","x":5,"y":2.42,"rating":"A"},{"name":"UsersController","x":6,"y":3.74,"rating":"A"},{"name":"WelcomeController","x":5,"y":3.35,"rating":"A"},{"name":"ApplicationHelper","x":6,"y":0.0,"rating":"A"},{"name":"ItemHelper","x":5,"y":0.0,"rating":"A"},{"name":"ItemsHelper","x":5,"y":3.2,"rating":"A"},{"name":"UserProfilesHelper","x":3,"y":0.0,"rating":"A"},{"name":"ApplicationJob","x":8,"y":0.0,"rating":"A"},{"name":"ApplicationMailer","x":8,"y":0.0,"rating":"A"},{"name":"ApplicationRecord","x":6,"y":0.0,"rating":"A"},{"name":"Event","x":7,"y":0.0,"rating":"A"},{"name":"Item","x":5,"y":0.0,"rating":"A"},{"name":"Note","x":7,"y":0.0,"rating":"A"},{"name":"User","x":6,"y":0.0,"rating":"A"},{"name":"Application","x":6,"y":0.0,"rating":"A"},{"name":"Boot","x":6,"y":0.0,"rating":"A"},{"name":"Environment","x":6,"y":0.0,"rating":"A"},{"name":"Development","x":6,"y":0.0,"rating":"A"},{"name":"Production","x":7,"y":0.0,"rating":"A"},{"name":"Test","x":6,"y":0.0,"rating":"A"},{"name":"Importmap","x":6,"y":0.0,"rating":"A"},{"name":"Assets","x":6,"y":0.0,"rating":"A"},{"name":"ContentSecurityPolicy","x":6,"y":0.0,"rating":"A"},{"name":"FilterParameterLogging","x":6,"y":0.0,"rating":"A"},{"name":"Inflections","x":6,"y":0.0,"rating":"A"},{"name":"Omniauth","x":6,"y":0.0,"rating":"A"},{"name":"PermissionsPolicy","x":6,"y":0.0,"rating":"A"},{"name":"Puma","x":6,"y":0.0,"rating":"A"},{"name":"Routes","x":10,"y":0.0,"rating":"A"},{"name":"20230929050855CreateUsers","x":4,"y":11.84,"rating":"B"},{"name":"20240929045348CreateItems","x":6,"y":11.84,"rating":"B"},{"name":"20240929050420CreateNotes","x":6,"y":8.26,"rating":"A"},{"name":"20240929051902CreateEvents","x":5,"y":10.65,"rating":"A"},{"name":"20241002052921AddOauthDetailsToUsers","x":5,"y":1.0,"rating":"A"},{"name":"20241002063008AddFirstAndLastNameToUsers","x":5,"y":2.0,"rating":"A"},{"name":"Schema","x":6,"y":62.0,"rating":"B"},{"name":"Seeds","x":8,"y":0.0,"rating":"A"},{"name":"ItemsNavSteps","x":7,"y":22.54,"rating":"A"},{"name":"ItemsSteps","x":6,"y":38.74,"rating":"A"},{"name":"NavigationSteps","x":6,"y":28.8,"rating":"A"},{"name":"ShowItemSteps","x":4,"y":50.58,"rating":"B"},{"name":"SsoLoginSteps","x":8,"y":46.3,"rating":"A"},{"name":"UserProfilesSteps","x":3,"y":46.73,"rating":"A"},{"name":"Env","x":8,"y":0.0,"rating":"A"},{"name":"Simplecov","x":6,"y":0.0,"rating":"A"},{"name":"ChannelSpec","x":2,"y":6.8,"rating":"A"},{"name":"ConnectionSpec","x":2,"y":16.4,"rating":"A"},{"name":"ApplicationControllerSpec","x":3,"y":101.9,"rating":"C"},{"name":"ItemsControllerSpec","x":2,"y":97.58,"rating":"D"},{"name":"SessionsControllerSpec","x":3,"y":102.31,"rating":"C"},{"name":"UserProfilesControllerSpec","x":5,"y":48.33,"rating":"B"},{"name":"UsersControllerSpec","x":3,"y":37.68,"rating":"B"},{"name":"WelcomeControllerSpec","x":3,"y":21.08,"rating":"A"},{"name":"ApplicationRecordSpec","x":3,"y":6.8,"rating":"A"},{"name":"EventSpec","x":3,"y":20.08,"rating":"A"},{"name":"ItemSpec","x":3,"y":10.03,"rating":"A"},{"name":"NoteSpec","x":3,"y":10.14,"rating":"A"},{"name":"UserSpec","x":4,"y":25.11,"rating":"A"},{"name":"RailsHelper","x":5,"y":0.0,"rating":"A"},{"name":"SpecHelper","x":3,"y":0.0,"rating":"A"},{"name":"ApplicationSystemTestCase","x":6,"y":0.0,"rating":"A"},{"name":"ConnectionTest","x":6,"y":0.0,"rating":"A"},{"name":"ItemControllerTest","x":5,"y":0.0,"rating":"A"},{"name":"SessionsControllerTest","x":5,"y":9.8,"rating":"A"},{"name":"UsersControllerTest","x":5,"y":4.9,"rating":"A"},{"name":"WelcomeControllerTest","x":5,"y":4.9,"rating":"A"},{"name":"EventTest","x":5,"y":0.0,"rating":"A"},{"name":"ItemTest","x":5,"y":0.0,"rating":"A"},{"name":"NoteTest","x":5,"y":0.0,"rating":"A"},{"name":"UserTest","x":5,"y":0.0,"rating":"A"},{"name":"TestHelper","x":8,"y":0.0,"rating":"A"}];
+             var score = 95.96;
+            </script>
+          </div>
+        </div>
+        <!--End Churn vs Complexity graph-->
+
+        <!--Summary Wrapper-->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="Graph_Cards Summary_Wrapper_Main fadeIn-3">
+            <h4>Summary</h4>
+            
+            <div class="Summary_Wrapper">
+              
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                  <div class="summary_wrap Green_DR">
+                    <div class="pull-left Summary_Title col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                      <h3>A</h3>
+                    </div>
+                    <div class="pull-right Summary_Content col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                      <ul class="list-inline">
+                        <li><h4 id="ratingAfileCount">67</h4><span>files</span></li>
+                        <li><h4 id="ratingAfileCount">387</h4><span>churns</span></li>
+                        <li><h4 id="ratingAfileCount">32</h4><span>smells</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                  <div class="summary_wrap Green_Light">
+                    <div class="pull-left Summary_Title col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                      <h3>B</h3>
+                    </div>
+                    <div class="pull-right Summary_Content col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                      <ul class="list-inline">
+                        <li><h4 id="ratingAfileCount">6</h4><span>files</span></li>
+                        <li><h4 id="ratingAfileCount">28</h4><span>churns</span></li>
+                        <li><h4 id="ratingAfileCount">11</h4><span>smells</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                  <div class="summary_wrap Yellow_Color">
+                    <div class="pull-left Summary_Title col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                      <h3>C</h3>
+                    </div>
+                    <div class="pull-right Summary_Content col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                      <ul class="list-inline">
+                        <li><h4 id="ratingAfileCount">2</h4><span>files</span></li>
+                        <li><h4 id="ratingAfileCount">6</h4><span>churns</span></li>
+                        <li><h4 id="ratingAfileCount">1</h4><span>smells</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                  <div class="summary_wrap Orange_Color">
+                    <div class="pull-left Summary_Title col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                      <h3>D</h3>
+                    </div>
+                    <div class="pull-right Summary_Content col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                      <ul class="list-inline">
+                        <li><h4 id="ratingAfileCount">1</h4><span>files</span></li>
+                        <li><h4 id="ratingAfileCount">2</h4><span>churns</span></li>
+                        <li><h4 id="ratingAfileCount">2</h4><span>smells</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                  <div class="summary_wrap Red_Color">
+                    <div class="pull-left Summary_Title col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                      <h3>F</h3>
+                    </div>
+                    <div class="pull-right Summary_Content col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                      <ul class="list-inline">
+                        <li><h4 id="ratingAfileCount">0</h4><span>files</span></li>
+                        <li><h4 id="ratingAfileCount">0</h4><span>churns</span></li>
+                        <li><h4 id="ratingAfileCount">0</h4><span>smells</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              
+            </div>
+          </div>
+        </div>
+        <!--End Summary Wrapper-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /#page-content-wrapper -->
+
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScripts -->
+    <script src="assets/vendor/javascripts/jquery.min.js"></script>
+    <script src="assets/vendor/javascripts/jquery.tablesorter.min.js"></script>
+    <script src="assets/vendor/javascripts/jquery.scrollTo.min.js"></script>
+    <script src="assets/vendor/javascripts/jquery.timeago.js"></script>
+    <script src="assets/vendor/javascripts/highcharts.src-4.0.1.js"></script>
+    <script src="assets/vendor/javascripts/prettify.js"></script>
+    <script src="assets/vendor/javascripts/bootstrap.min.js"></script>
+    <script src="assets/javascripts/application.js"></script>
+    <script src="assets/vendor/javascripts/jquery.filtertable.min.js"></script>
+  </body>
+</html>
