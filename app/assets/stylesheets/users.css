@@ -58,7 +58,6 @@
     padding: 15px 20px;
     margin-top: auto; 
     bottom: 0; 
-    position: relative;
   }
 
   header {
@@ -110,4 +109,89 @@
     text-align: center; 
     margin: 20px 0; 
   }
-  
+
+.welcome-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: space-between;
+}
+#welcome-section {
+  text-align: center;
+  background: linear-gradient(135deg, #500000 0%, #750000 100%); /* Maroon gradient background */
+  color: #ffffff; /* Light text */
+  padding: 50px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 90%;
+  transform: translateY(-50px);
+  opacity: 0;
+  animation: fadeIn 2s forwards, slideDown 1.5s ease-in-out forwards;
+}
+
+#welcome-section h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+  color: #ffffff; /* Keep the header text white to contrast the dark section background */
+  font-weight: bold;
+}
+
+#welcome-section p {
+  font-size: 24px;
+  margin-top: 0;
+  color: #ffffff; /* Make sure the text inside is also white */
+}
+
+.btn-start {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 25px;
+  background-color: #ffffff; /* Light button */
+  color: #500000; /* Maroon text for the button */
+  font-size: 18px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-start:hover {
+  background-color: #f1f1f1;
+  transform: scale(1.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Subtle background color change */
+@keyframes gradientShift {
+  0% {
+    background-color: #f9f9f9;
+  }
+  50% {
+    background-color: #eaeaea;
+  }
+  100% {
+    background-color: #f9f9f9;
+  }
+}
