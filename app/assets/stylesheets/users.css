@@ -119,8 +119,8 @@
 }
 #welcome-section {
   text-align: center;
-  background: linear-gradient(135deg, #500000 0%, #750000 100%); /* Maroon gradient background */
-  color: #ffffff; /* Light text */
+  background: linear-gradient(135deg, #500000 0%, #750000 100%); 
+  color: #ffffff; 
   padding: 50px;
   border-radius: 15px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -134,22 +134,22 @@
 #welcome-section h1 {
   font-size: 36px;
   margin-bottom: 10px;
-  color: #ffffff; /* Keep the header text white to contrast the dark section background */
+  color: #ffffff; 
   font-weight: bold;
 }
 
 #welcome-section p {
   font-size: 24px;
   margin-top: 0;
-  color: #ffffff; /* Make sure the text inside is also white */
+  color: #ffffff; 
 }
 
 .btn-start {
   display: inline-block;
   margin-top: 20px;
   padding: 12px 25px;
-  background-color: #ffffff; /* Light button */
-  color: #500000; /* Maroon text for the button */
+  background-color: #ffffff; 
+  color: #500000;
   font-size: 18px;
   border: none;
   border-radius: 25px;
@@ -164,7 +164,6 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Keyframe Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -183,7 +182,6 @@
   }
 }
 
-/* Subtle background color change */
 @keyframes gradientShift {
   0% {
     background-color: #f9f9f9;
