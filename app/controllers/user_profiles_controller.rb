@@ -6,7 +6,10 @@ class UserProfilesController < ApplicationController
 
   # GET /user_profiles or /user_profiles.json
   def index
-    @user_profile = User.where(email: @current_user.email)
+    # @user_profile = User.where(email: @current_user.email)
+    puts current_user.first_name
+    @user_profile = current_user
+    
   end
 
   # GET /user_profiles/1 or /user_profiles/1.json

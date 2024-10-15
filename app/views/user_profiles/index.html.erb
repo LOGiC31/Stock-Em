@@ -2,7 +2,7 @@
 <header>
   <div class="header-title">Stock'Em</div>
   <div>
-    <span class="greeting">Hello, <span id="username"><%= @user_profile.name %></span></span>
+    <span class="greeting">Hello, <span id="username"><%= @user_profile.first_name %></span></span>
     <button class="icon-button user-icon">
       <i class="fas fa-user"></i>
     </button>
@@ -18,13 +18,9 @@
 <hr class="styled-hr">
 
 <div id="users">
-  <% @user_profile.each do |user_profile| %>
     <div class="user-card">
-      <%= render "user_profile", user_profile: user_profile %>
-      <p>
-      </p>
+      <%= render "user_profile", user_profile: @user_profile %>
     </div>
-  <% end %>
 </div>
 <footer>
   <div>The Stock'Em Team, 2024</div>
