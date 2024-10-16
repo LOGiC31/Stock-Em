@@ -18,10 +18,14 @@
 <hr class="styled-hr">
 
 <div id="users">
-    <div class="user-card">
-      <%= render "user_profile", user_profile: @user_profile %>
+  <div class="user-card" style="position: relative;">
+    <div class="edit-icon">
+      <%= link_to image_tag('edit_icon.png', alt: 'Edit', class: 'edit-icon-image'), edit_user_profile_path(@user_profile), class: 'edit-link' %>
     </div>
+    <%= render "user_profile", user_profile: @user_profile, editing: false %> <!-- Pass editing as false for viewing -->
+  </div>
 </div>
+
 <footer>
   <div>The Stock'Em Team, 2024</div>
 </footer>
