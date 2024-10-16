@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'welcome/index'
 
   resources :items
+  resources :items, only: [:index, :show] 
   resources :user_profiles
 
   root 'welcome#index'
