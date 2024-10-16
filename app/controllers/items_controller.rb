@@ -13,24 +13,21 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
-  # create new item
+  def set_status
+    @item = Item.find(params[:id])
 
-  # def create
-  #   @item = Item.new(item_params)
-  #   if @item.save
-  #     redirect_to @item
-  #   else
-  #     render :new
-  #   end
-  # end
+    if @item.update(item_params)
+      redirect_to @item, notice: 'Item status updated successfully.'
+    else
+      flash[:alert] = 'Error updating status.'
+      render :show
+    end
+  end
 
-  # edit item
-  # def edit
-  #   @item = Item.find(params[:id])
-  # end
+  private
 
-  # def item_params
-  #   params.require(:item).permit(:item_id, :serial_number, :item_name,
-  #                                  :category, :quality_score, :currently_available, :image, :details)
-  # end
+  def item_params
+    params.require(:item).permit(:item_id, :serial_number, :item_name,
+                                 :category, :quality_score, :currently_available, :image, :details, :status, :comment)
+  end
 end

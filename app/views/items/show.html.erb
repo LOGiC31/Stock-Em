@@ -170,7 +170,26 @@
      <h2>Notes</h2>
      <p>Mark Sturtevant (06/23/2019): Item sustained major damage.</p>
    </div>
+
+   
  </div>
+ <div>
+      <h3>Update Item Status</h3>
+      <%= form_with model: @item, url: set_status_item_path(@item), method: :patch, local: true do |f| %>
+        <div>
+          <label for="status">Select Status:</label>
+          <%= f.select :status, options_for_select(['Damaged', 'Lost', 'Not Available'], @item.status) %>
+        </div>
+        <div>
+          <label for="comment">Add Comment:</label>
+          <%= f.text_area :comment, placeholder: "Add any relevant comment", rows: 4 %>
+        </div>
+        <div>
+          <%= f.submit "Update Status", class: "btn" %>
+        </div>
+      <% end %>
+
+   </div>
 </main>
 
 

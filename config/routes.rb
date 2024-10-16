@@ -6,11 +6,13 @@ Rails.application.routes.draw do
   get 'users/show'
   get 'welcome/index'
 
-  resources :items
-  resources :items, only: [:index, :show] 
+  resources :items, only: %i[index show edit update] do
+    member do
+      patch :set_status
+    end
+  end
   resources :user_profiles
   resources :users
-
 
   root 'welcome#index'
   get 'welcome/index', to: 'welcome#index', as: 'welcome'
