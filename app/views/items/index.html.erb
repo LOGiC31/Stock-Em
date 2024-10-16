@@ -139,7 +139,7 @@
 
 <div class="card-container">
   <% @items.each do |item| %>
-    <div class="card">
+    <%= link_to item_path(item), class: 'card' do %>
       <div class="icon"><i class="fas <%= icon_for_category(item.category) %>"></i></div>
       <div class="card-content">
         <h3><%= item.item_name %></h3>
@@ -148,7 +148,7 @@
           <%= item.currently_available ? 'Available' : 'Not Available' %>
         </span>
       </div>
-    </div>
+    <% end %>
   <% end %>
 </div>
 
