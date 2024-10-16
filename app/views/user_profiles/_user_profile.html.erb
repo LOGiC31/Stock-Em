@@ -29,7 +29,7 @@
 
         <div class="user-field">
           <strong>UIN:</strong>
-          <%= form.text_field :uin, class: "user-value" %>
+          <%= form.text_field :uin, class: "user-value same-size", pattern: "\\d*", title: "Please enter only numbers" %>
         </div>
 
         <div class="user-field">
@@ -39,7 +39,7 @@
 
         <div class="user-field">
           <strong>Contact No:</strong>
-          <%= form.text_field :contact_no, class: "user-value" %>
+          <%= form.text_field :contact_no, class: "user-value same-size", pattern: "\\d*", title: "Please enter only numbers" %>
         </div>
 
         <div class="user-field">
@@ -89,9 +89,15 @@
 
 <style>
   .status-textarea {
-    max-width: 100%; /* Prevents stretching beyond the container */
-    width: auto; /* Allows the width to be responsive */
-    height: auto; /* Allows height to adjust based on content */
-    resize: vertical; /* Allows vertical resizing only */
+    max-width: 100%;
+    width: auto; 
+    height: auto; 
+    resize: vertical; 
+  }
+  
+  .same-size {
+    width: calc(50% - 10px); 
+    display: inline-block;
+    margin-right: 10px; 
   }
 </style>
