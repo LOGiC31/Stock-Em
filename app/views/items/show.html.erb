@@ -1,36 +1,71 @@
-<main>
-  <article>
-  <header>
-    <h1>Stock'Em Inventory</h1>
-  </header>
-    <h1>Item: <%= @item.item_name %></h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Stock'Em - <%= @item.item_name %></title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <style>
+ </style>
+</head>
+<body>
 
-    <p><strong>Item ID:</strong> <%= @item.item_id %></p>
-    <p><strong>Serial Number:</strong> <%= @item.serial_number %></p>
-    <p><strong>Category:</strong> <%= @item.category %></p>
-    <p><strong>Quality Score:</strong> <%= @item.quality_score %></p>
-    <p><strong>Available:</strong> <%= @item.currently_available ? 'Yes' : 'No' %></p>
-    <p><strong>Details:</strong> <%= @item.details %></p>
+
+<header>
+ <div class="header-title">Stock'Em</div>
+ <div>
+   <span class="greeting">Hello, <span id="username">User</span></span>
+   <span class="icon user-icon"><i class="fas fa-user"></i></span>
+ </div>
+</header>
+
+
+<main>
+ <h1><%= @item.item_name %></h1>
+  <div class="content-wrapper">
+   <div class="left-column">
+     <h2>Item Details</h2>
     
-    <%= image_tag(@item.image) if @item.image.present? %>
+     <div class="item-details">
+       <p><strong>Item ID:</strong> <%= @item.id %></p>
+       <p><strong>Serial Number:</strong> <%= @item.serial_number %></p>
+       <p><strong>Category:</strong> <%= @item.category %></p>
+       <p><strong>Quality Score:</strong> <%= @item.quality_score %></p>
+       <p><strong>Available:</strong>
+         <span class="availability" style="color: <%= @item.currently_available ? 'green' : 'red' %>;">
+           <%= @item.currently_available ? 'Yes' : 'No' %>
+         </span>
+       </p>
+       <p><strong>Details:</strong> <%= @item.details %></p>
+     </div>
     
-    <h2>Item History</h1>
-    <p>Checkin on 8/21/2024</p>
-    <p>Returned by Mark Sturtevant</p>
-    <p>Item given to Professor Wade</p>
-    <p>New Approximate Location: Wade's Attic</p>
-    <p>Details: Now has water damage :(</p>
+     <%= image_tag(@item.image) if @item.image.present? %>
     
-    <h2>Notes</h1>
-    <p>Mark Sturtevant (06/23/2019): Item sustained major damage</p>
-    
-    <%= link_to 'Edit', edit_item_path(@item) %> |
+     <%= link_to 'Edit', edit_item_path(@item) %> |
     <%= link_to 'Back to Items', items_path %>
-    <footer>
-      <div>The Stock'Em Team, 2024</div>
-    </footer>
-  
-  </article>
+   </div>
+
+
+   <div class="right-column">
+     <h2>Item History</h2>
+     <p>Checkin on 8/21/2024</p>
+     <p>Returned by Mark Sturtevant</p>
+     <p>Item given to Professor Wade</p>
+     <p>New Approximate Location: Wade's Attic</p>
+     <p>Details: Now has water damage :(</p>
+
+
+     <h2>Notes</h2>
+     <p>Mark Sturtevant (06/23/2019): Item sustained major damage</p>
+   </div>
+ </div>
 </main>
 
 
+<footer>
+ <div>The Stock'Em Team, 2024</div>
+</footer>
+
+
+</body>
+</html>
