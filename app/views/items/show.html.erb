@@ -1,5 +1,8 @@
 <main>
   <article>
+  <header>
+    <h1>Stock'Em Inventory</h1>
+  </header>
     <h1>Item: <%= @item.item_name %></h1>
 
     <p><strong>Item ID:</strong> <%= @item.item_id %></p>
@@ -23,6 +26,10 @@
     
     <%= link_to 'Edit', edit_item_path(@item) %> |
     <%= link_to 'Back to Items', items_path %>
+    <footer>
+      <p>&copy; 2024 Stock'Em</p>
+    </footer>
+  
   </article>
 </main>
 
