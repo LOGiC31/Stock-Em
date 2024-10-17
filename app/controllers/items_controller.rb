@@ -14,15 +14,25 @@ class ItemsController < ApplicationController
   end
 
   # create new item
+  def new
+    @item = Item.new
+    render :new
+  end
 
-  # def create
-  #   @item = Item.new(item_params)
-  #   if @item.save
-  #     redirect_to @item
-  #   else
-  #     render :new
-  #   end
-  # end
+  def create
+    @item = Item.new(item_params)
+    if @item.save
+      redirect_to items_path, notice: 'Item was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  private
+
+  def item_params
+    params.require(:item).permit(:item_name, :category, :quantity, :quality_score, :currently_available, :serial_number, :details)
+  end
 
   # edit item
   # def edit

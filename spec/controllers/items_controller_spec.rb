@@ -64,4 +64,59 @@ RSpec.describe ItemsController, type: :controller do
       end
     end
   end
+
+  describe 'POST #create' do
+    context 'with valid parameters' do
+      let(:valid_attributes) do
+        {
+          item_name: 'Test Item',
+          quality_score: 50,
+          serial_number: '123456',
+          category: 'Electronics',
+          currently_available: true
+        }
+      end
+
+      it 'creates a new item' do
+        expect {
+          post :create, params: { item: valid_attributes }
+        }.to change(Item, :count).by(1)
+      end
+
+      it 'redirects to the items index' do
+        post :create, params: { item: valid_attributes }
+        expect(response).to redirect_to(items_path)
+        expect(flash[:notice]).to eq('Item was successfully created.')
+      end
+    end
+
+    context 'with invalid parameters' do
+      let(:invalid_attributes) do
+        {
+          item_name: '', # Invalid because it's blank
+          quality_score: 150, # Invalid because it's out of range
+          serial_number: '123456',
+          category: 'Invalid Category', # Invalid because it's not included
+          currently_available: nil # Invalid because it must be true or false
+        }
+      end
+
+      it 'does not create a new item' do
+        expect {
+          post :create, params: { item: invalid_attributes }
+        }.not_to change(Item, :count)
+      end
+
+      it 'renders the new template' do
+        post :create, params: { item: invalid_attributes }
+        expect(response).to render_template(:new)
+      end
+
+      it 'assigns the unsaved item to @item' do
+        post :create, params: { item: invalid_attributes }
+        expect(assigns(:item)).to be_a_new(Item)
+        expect(assigns(:item)).to be_invalid
+      end
+    end
+  end
 end
