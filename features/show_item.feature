@@ -8,7 +8,7 @@ Feature: Show Item
     When I click on "Login with Google"
     And I successfully authenticate via Google
     Then I should be redirected to my user page
-    And I should see "You are logged in."
+    And I should see "Howdy,"
     Given there is an item in the database
     When I visit the item page
     Then I should see the item's details
