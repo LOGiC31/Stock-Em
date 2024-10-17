@@ -64,4 +64,28 @@ RSpec.describe ItemsController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #set_status' do
+    context 'with valid params' do
+      it 'updates the item status' do
+        patch :set_status, params: { id: item.id, item: { status: 'Damaged', comment: 'Item is damaged.' } }
+
+        item.reload # Reload the item to get the updated attributes
+        expect(item.status).to eq('Damaged')
+        expect(flash[:notice]).to eq('Item status updated successfully.')
+        expect(response).to redirect_to(item)
+      end
+    end
+
+    context 'with invalid params' do
+      it 'does not update the item status and re-renders the show template' do
+        patch :set_status, params: { id: item.id, item: { status: 'New', comment: 'Invalid status.' } }
+
+        item.reload
+        expect(item.status).to eq(nil)
+        expect(flash[:alert]).to eq('Error updating status. Status must be nil, Damaged, Lost, or Not Available.')
+        expect(response).to render_template(:show)
+      end
+    end
+  end
 end

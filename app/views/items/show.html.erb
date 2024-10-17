@@ -146,6 +146,7 @@
            <%= @item.currently_available ? 'Yes' : 'No' %>
          </span>
        </p>
+       <p><strong>Status:</strong> <%= @item.status %></p>
        <p><strong>Details:</strong> <%= @item.details %></p>
      </div>
     
@@ -173,23 +174,27 @@
 
    
  </div>
- <div>
-      <h3>Update Item Status</h3>
-      <%= form_with model: @item, url: set_status_item_path(@item), method: :patch, local: true do |f| %>
-        <div>
-          <label for="status">Select Status:</label>
-          <%= f.select :status, options_for_select(['Damaged', 'Lost', 'Not Available'], @item.status) %>
-        </div>
-        <div>
-          <label for="comment">Add Comment:</label>
-          <%= f.text_area :comment, placeholder: "Add any relevant comment", rows: 4 %>
-        </div>
-        <div>
-          <%= f.submit "Update Status", class: "btn" %>
-        </div>
-      <% end %>
+ <div style="background-color: #f5f5f5;border-radius: 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;padding: 20px;margin-top: 20px;">
+  <h3 style="color:#500000">Update Item Status</h3>
+  <%= form_with model: @item, url: set_status_item_path(@item), method: :patch, local: true do |f| %>
+    <div style="margin-top: 12px; display: flex; align-items: flex-start;">
+      <label for="status"><strong>Select Status:</strong></label>
+      <%= f.select :status, options_for_select(
+        [['Clear Status', nil], 'Damaged', 'Lost', 'Not Available'].reject { |s| s[1] == @item.status }, # Exclude the current status
+        @item.status # Pre-select the current status if it’s not nil
+      ),  {}, { style: "margin-left: 18px; padding: 10px; border-radius: 5px; border: 2px solid #ccc; background-color: #f5f5f5;", name: "item[status]" } %>
+    </div>
+    <div style="margin-top: 12px;">
+      <%= f.submit "Update Status", class: "btn" %>
+    </div>
+  <% end %>
+   <% if flash[:notice] %>  <!-- Display the success message -->
+    <div style="color: green; margin-top: 10px;">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+</div>
 
-   </div>
 </main>
 
 

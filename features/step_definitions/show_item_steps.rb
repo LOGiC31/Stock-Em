@@ -24,3 +24,20 @@ Then("I should see the item's details") do
   expect(page).to have_content(@item.details)
   expect(page).to have_content(@item.currently_available ? 'Available' : 'Not Available')
 end
+
+Given('I have an item named {string} with status {string}') do |item_name, status|
+  @item = Item.create(item_name:, status:)
+end
+
+When('I select {string} from the status dropdown') do |status|
+  select status, from: 'item[status]' # Ensure the select element has this name
+end
+
+Then('the item status should be {string}') do |expected_status|
+  @item.reload # Reload the item from the database
+  if expected_status == 'nil'
+    expect(@item.status).to be_nil
+  else
+    expect(@item.status).to eq(expected_status)
+  end
+end
