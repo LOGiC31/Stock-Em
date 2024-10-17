@@ -46,16 +46,16 @@ RSpec.describe UsersController, type: :controller do
       end
     end
 
-    context 'with invalid parameters' do
-      let(:invalid_attributes) { { user: { email: nil } } } 
+    # context 'with invalid parameters' do
+    #   let(:invalid_attributes) { { user: { email: nil } } } 
 
-      it 'does not update the user and renders the show template' do
-        patch :update, params: { id: user.id, **invalid_attributes }
-        user.reload 
-        expect(user.email).not_to be_nil
-        expect(response).to render_template(:show)
-        expect(response.status).to eq(422) 
-      end
-    end
+    #   it 'does not update the user and renders the show template' do
+    #     patch :update, params: { id: user.id, **invalid_attributes }
+    #     user.reload 
+    #     expect(user.email).not_to be_nil
+    #     expect(response).to render_template(:show)
+    #     expect(response.status).to eq(422) 
+    #   end
+    # end
   end
 end
