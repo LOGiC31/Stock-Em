@@ -104,6 +104,17 @@
      transition: background-color 0.3s;
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
    }
+   .btn2 {
+     font-size: 14px;
+     padding: 5px 10px;
+     background-color: #9c7c08;
+     color: white;
+     border-radius: 10px;
+     font-weight: bold;
+     text-decoration: none;
+     transition: background-color 0.3s;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   }
    .btn:hover {
      background-color: #800000;
    }
@@ -168,7 +179,31 @@
 
 
      <h2>Notes</h2>
-     <p>Mark Sturtevant (06/23/2019): Item sustained major damage.</p>
+	 
+	 <!-- Add in "create note button if have not done so already -->
+	 
+	 <% if !@writing_note %>
+	 <%= link_to 'Create Note', item_path(id: @item.id, writing_note: true), class: 'btn2' %>
+	 <% end %>
+	 
+	 <% if @writing_note %>
+	 <%= form_tag( add_note_path, method: "get") do %>
+		<%= label_tag(:note_msg, '') %>
+		<%= text_area_tag(:note_msg) %>
+		<%= hidden_field_tag :id, @item.id %>
+		<br>
+		<input type="submit" value="Publish", class: 'btn2'>
+	 <% end %>
+	 <% end %>
+	 
+	 <br>
+	 
+	 <% @notes.each do |note| %>
+		<br>
+        <p><%= User.find(note.user_id).first_name %> <%= User.find(note.user_id).last_name %> (<%= note.created_at.to_s.split[0] %>):</p>
+		<p><%= note.msg %></p>
+	 <% end %>
+	 
    </div>
  </div>
 </main>

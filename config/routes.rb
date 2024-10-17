@@ -17,4 +17,6 @@ Rails.application.routes.draw do
 
   get '/logout', to: 'sessions#logout', as: 'logout'
   get '/auth/google_oauth2/callback', to: 'sessions#omniauth'
+  
+  get '/add_note_to_item', to: 'items#add_note', as: 'add_note'
 end
