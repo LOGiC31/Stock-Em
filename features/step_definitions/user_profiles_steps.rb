@@ -15,10 +15,6 @@ Then('I should see my profile information') do
   end
 end
 
-When('I click on "Edit Profile"') do
-  click_link 'Edit Profile'
-end
-
 Then('I should be on the edit profile page') do
   expect(current_path).to eq(edit_user_profile_path(@user))
 end
@@ -34,3 +30,5 @@ end
 Then('I should be redirected to the home page') do
   expect(current_path).to eq(root_path)
 end
+
+
