@@ -132,11 +132,21 @@
   </div>
 </header>
 
-<div class="search-container">
+<%# <div class="search-container">
   <input type="text" placeholder="Search..." />
   <label class="filter">
     <input type="checkbox" /> Only show available items
   </label>
+</div> %>
+
+<div class="search-container">
+  <%= form_with url: items_path, method: :get, local: true do %>
+    <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "search-input" %>
+    <%= submit_tag "Search", class: "search-button" %>
+    <label class="filter">
+      <%= check_box_tag :available_only, '1', params[:available_only] == '1' %> Only show available items
+    </label>
+  <% end %>
 </div>
 
 <div class="card-container">
