@@ -196,8 +196,16 @@
 	 <% end %>
 	 <% end %>
 	 
+	 <br>
 	 
-     <p>Mark Sturtevant (06/23/2019): Item sustained major damage.</p>
+	 <% @notes.each do |note| %>
+		<br>
+        <%= note.user_id%> <%= '(' %> <%= note.created_at %> <%= ')' %>
+		<br>
+		<%= note.msg %>
+		<br>
+	 <% end %>
+	 
    </div>
  </div>
 </main>
