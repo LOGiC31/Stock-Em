@@ -118,6 +118,12 @@
    .btn:hover {
      background-color: #800000;
    }
+  .right-column .notes-section {
+      max-height: 300px; /* Set the height as per your needs */
+      overflow-y: auto;   /* Enable vertical scrolling */
+      padding-right: 10px; /* Optional: Add padding to avoid content cutting off */
+    }
+
    footer {
      display: flex;
      justify-content: space-between;
@@ -177,34 +183,35 @@
      <p>New Approximate Location: Wade's Attic</p>
      <p>Details: Now has water damage :(</p>
 
-
      <h2>Notes</h2>
-	 
-	 <!-- Add in "create note button if have not done so already -->
-	 
-	 <% if !@writing_note %>
-	 <%= link_to 'Create Note', item_path(id: @item.id, writing_note: true), class: 'btn2' %>
-	 <% end %>
-	 
-	 <% if @writing_note %>
-	 <%= form_tag( add_note_path, method: "get") do %>
-		<%= label_tag(:note_msg, '') %>
-		<%= text_area_tag(:note_msg) %>
-		<%= hidden_field_tag :id, @item.id %>
-		<br>
-		<input type="submit" value="Publish", class: 'btn2'>
-	 <% end %>
-	 <% end %>
-	 
-	 <br>
-	 
-	 <% @notes.each do |note| %>
-		<br>
-        <p><%= User.find(note.user_id).first_name %> <%= User.find(note.user_id).last_name %> (<%= note.created_at.to_s.split[0] %>):</p>
-		<p><%= note.msg %></p>
-	 <% end %>
-	 
-   </div>
+
+     <!-- Add in "create note" button if not writing a note already -->
+     <% if !@writing_note %>
+       <%= link_to 'Create Note', item_path(id: @item.id, writing_note: true), class: 'btn2',  style: 'margin-bottom: 5px;' %>
+     <% end %>
+     <h2>  </h2>
+
+     <!-- Note creation form -->
+     <% if @writing_note %>
+       <%= form_tag(add_note_path, method: "get") do %>
+         <%= label_tag(:note_msg, '') %>
+         <%= text_area_tag(:note_msg) %>
+         <%= hidden_field_tag :id, @item.id %>
+         <br>
+         <input type="submit" value="Publish" class="btn2">
+       <% end %>
+     <% end %>
+
+     <!-- Scrollable Notes Section -->
+     <div class="notes-section" style="max-height: 300px; overflow-y: auto; padding-right: 10px; ">
+       <% @notes.each do |note| %>
+         <br>
+         <p><%= User.find(note.user_id).first_name %> <%= User.find(note.user_id).last_name %> (<%= note.created_at.to_s.split[0] %>):</p>
+         <p><%= note.msg %></p>
+       <% end %>
+     </div>
+</div>
+
  </div>
 </main>
 
