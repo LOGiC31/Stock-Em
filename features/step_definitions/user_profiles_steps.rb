@@ -23,10 +23,6 @@ Then('I should be on the edit profile page') do
   expect(current_path).to eq(edit_user_profile_path(@user))
 end
 
-When('I fill in {string} with {string}') do |field, value|
-  fill_in field, with: value
-end
-
 When('I click on "Save"') do
   click_button 'Save'
 end
