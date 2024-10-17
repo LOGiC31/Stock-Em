@@ -11,6 +11,18 @@ class ItemsController < ApplicationController
   # get specific item
   def show
     @item = Item.find(params[:id])
+	@writing_note = ! params[:writing_note].nil?
+  end
+  
+  # add note to item
+  def add_note
+    @item = Item.find(params[:id])
+    Note.create!({ note_id: '', item: @item, msg: 'hello', user: User.find_by(id: session[:user_id]), created_at: DateTime.now, updated_at: DateTime.now})
+	
+	respond_to do |format|
+      format.html { redirect_to item_path(@item)}
+      format.json { head :no_content }
+    end
   end
 
   # create new item
