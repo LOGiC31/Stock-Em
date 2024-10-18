@@ -19,9 +19,9 @@ class ItemsController < ApplicationController
     # Debugging: Check filtered results
     puts "Filtered items: #{@items.map(&:item_name)}"
 
-    return unless params[:available_only] == '1'
-
-    @items = @items.select(&:currently_available)
+    if params[:available_only] == '1'
+      @items = @items.select(&:currently_available)
+    end
   end
 
   # get specific item

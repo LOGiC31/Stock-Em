@@ -133,7 +133,6 @@ RSpec.describe ItemsController, type: :controller do
        expect(response).to render_template(:show)
      end 
    end 
-
     context 'when the item does not exist' do
       it 'raises an ActiveRecord::RecordNotFound error' do
         expect do

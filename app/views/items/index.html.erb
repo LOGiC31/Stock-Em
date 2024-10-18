@@ -45,6 +45,11 @@
       display: flex;
       align-items: center;
     }
+    .search-form {
+      display: flex;
+      align-items: center;
+      width: 100%; /* Make sure the form takes up the full width */
+    }
     .search-container input[type="text"] {
       padding: 10px;
       border: 2px solid #ccc;
@@ -166,11 +171,10 @@
 </div> %>
 
 <div class="search-container">
-  <%= form_with url: items_path, method: :get, local: true do %>
-    <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "search-input" %>
-    <%= submit_tag "Search", class: "search-button" %>
+  <%= form_with url: items_path, method: :get, local: true, class: 'search-form' do %>
+    <%= text_field_tag :query, params[:query], placeholder: "Search..." %>
     <label class="filter">
-      <%= check_box_tag :available_only, '1', params[:available_only] == '1' %> Only show available items
+    <%= check_box_tag :available_only, '1', params[:available_only] == '1' %> Only show available items
     </label>
   <% end %>
 </div>
