@@ -55,10 +55,15 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     valid_statuses = [nil, 'Damaged', 'Lost', 'Not Available']
     status = get_valid_status(item_params[:status])
+    puts '=======> here'
+    puts status.inspect
     if valid_statuses.include?(status) && @item.update(item_params)
+      puts '*********      debug        *******'
+      puts @item.inspect
       flash[:notice] = 'Item status updated successfully.'
       redirect_to @item
     else
+      puts 'here =>>>>>>> error'
       flash[:alert] = 'Error updating status. Status must be nil, Damaged, Lost, or Not Available.'
       render :show
     end
