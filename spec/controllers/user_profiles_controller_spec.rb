@@ -50,4 +50,11 @@ RSpec.describe UserProfilesController, type: :controller do
       expect(response).to be_successful
     end
   end
+
+  describe 'GET #index' do
+    it 'returns a success response' do
+      get :index, params: { id: user_profile.to_param }
+      expect(response).to be_successful
+    end
+  end
 end

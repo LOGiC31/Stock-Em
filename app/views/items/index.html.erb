@@ -73,10 +73,17 @@
       transform: scale(1.2); 
     }
     .card-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); 
-      gap: 20px; 
-      margin: 20px 200px; 
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 20px 300px;
+      height: 60vh; /* Fixed height for scrolling */
+      overflow-y: auto; /* Enables scrolling */
+      padding: 20px; /* Padding for the content */
+      background-color: #fff; /* Background color for visibility */
+      border-radius: 10px; /* Rounded corners */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+      text-decoration: none;
     }
     .card {
       background-color: #f5f5f5;
@@ -85,7 +92,8 @@
       display: flex; 
       align-items: center; 
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-      transition: transform 0.2s, background-color 0.3s; 
+      transition: transform 0.2s, background-color 0.3s;
+      text-decoration: none; 
     }
     .card:hover {
       transform: translateY(-5px); 
@@ -123,6 +131,26 @@
     .not-available {
       color: red; 
     }
+    .new-item-button {
+      background-color: #500000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin: 20px auto; /* Centering with auto margins */
+      display: inline-block; /* Makes it block-level for auto margin */
+      text-decoration: none;
+    }
+    .new-item-button:hover {
+      background-color: #700000;
+    }
+    .button-container {
+      text-align: center; /* Center text inside the button container */
+      margin: 20px 0; /* Add some vertical spacing */
+    }
   </style>
 </head>
 <body>
@@ -130,7 +158,7 @@
 <header>
   <div class="header-title">Stock'Em</div>
   <div>
-    <span class="greeting">Hello, <span id="username">User</span></span>
+    <span class="greeting">Hello, <span id="username"><%= @current_user.first_name %></span></span>
     <span class="icon user-icon"><i class="fas fa-user"></i></span>
   </div>
 </header>
@@ -151,9 +179,10 @@
   <% end %>
 </div>
 
+<!-- Scrollable Card Container -->
 <div class="card-container">
   <% @items.each do |item| %>
-    <div class="card">
+    <%= link_to item_path(item), class: 'card' do %>
       <div class="icon"><i class="fas <%= icon_for_category(item.category) %>"></i></div>
       <div class="card-content">
         <h3><%= item.item_name %></h3>
@@ -162,8 +191,13 @@
           <%= item.currently_available ? 'Available' : 'Not Available' %>
         </span>
       </div>
-    </div>
+    <% end %>
   <% end %>
+</div>
+
+<!-- New Item Button Container -->
+<div class="button-container">
+  <%= link_to 'Create New Item', new_item_path, class: 'new-item-button' %>
 </div>
 
 <footer>

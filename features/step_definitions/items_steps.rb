@@ -1,17 +1,5 @@
 # frozen_string_literal: true
 
-Given('the following items exist:') do |table|
-  table.hashes.each do |item|
-    Item.create!(
-      item_name: item['item_name'],
-      serial_number: item['serial_number'],
-      category: item['category'],
-      quality_score: item['quality_score'].to_i,
-      currently_available: item['currently_available'] == 'true'
-    )
-  end
-end
-
 When('I check the item database') do
   @items = Item.all
 end
