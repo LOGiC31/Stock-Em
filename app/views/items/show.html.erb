@@ -104,9 +104,26 @@
      transition: background-color 0.3s;
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
    }
+   .btn2 {
+     font-size: 14px;
+     padding: 5px 10px;
+     background-color: #9c7c08;
+     color: white;
+     border-radius: 10px;
+     font-weight: bold;
+     text-decoration: none;
+     transition: background-color 0.3s;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   }
    .btn:hover {
      background-color: #800000;
    }
+  .right-column .notes-section {
+      max-height: 300px; /* Set the height as per your needs */
+      overflow-y: auto;   /* Enable vertical scrolling */
+      padding-right: 10px; /* Optional: Add padding to avoid content cutting off */
+    }
+
    footer {
      display: flex;
      justify-content: space-between;
@@ -167,12 +184,35 @@
      <p>New Approximate Location: Wade's Attic</p>
      <p>Details: Now has water damage :(</p>
 
-
      <h2>Notes</h2>
-     <p>Mark Sturtevant (06/23/2019): Item sustained major damage.</p>
-   </div>
 
-   
+     <!-- Add in "create note" button if not writing a note already -->
+     <% if !@writing_note %>
+       <%= link_to 'Create Note', item_path(id: @item.id, writing_note: true), class: 'btn2',  style: 'margin-bottom: 5px;' %>
+     <% end %>
+     <h2>  </h2>
+
+     <!-- Note creation form -->
+     <% if @writing_note %>
+       <%= form_tag(add_note_path, method: "get") do %>
+         <%= label_tag(:note_msg, '') %>
+         <%= text_area_tag(:note_msg) %>
+         <%= hidden_field_tag :id, @item.id %>
+         <br>
+         <input type="submit" value="Publish" class="btn2">
+       <% end %>
+     <% end %>
+
+     <!-- Scrollable Notes Section -->
+     <div class="notes-section" style="max-height: 300px; overflow-y: auto; padding-right: 10px; ">
+       <% @notes.each do |note| %>
+         <br>
+         <p><%= User.find(note.user_id).first_name %> <%= User.find(note.user_id).last_name %> (<%= note.created_at.to_s.split[0] %>):</p>
+         <p><%= note.msg %></p>
+       <% end %>
+     </div>
+</div>
+
  </div>
  <div style="background-color: #f5f5f5;border-radius: 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;padding: 20px;margin-top: 20px;">
   <h3 style="color:#500000">Update Item Status</h3>
@@ -186,11 +226,6 @@
     </div>
     <div style="margin-top: 12px;">
       <%= f.submit "Update Status", class: "btn" %>
-    </div>
-  <% end %>
-   <% if flash[:notice] %>  <!-- Display the success message -->
-    <div style="color: green; margin-top: 10px;">
-      <%= flash[:notice] %>
     </div>
   <% end %>
 </div>

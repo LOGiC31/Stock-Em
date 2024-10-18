@@ -8,7 +8,7 @@ Feature: Show Item
     When I click on "Login with Google"
     And I successfully authenticate via Google
     Then I should be redirected to my user page
-    And I should see "View Items"
+    And I should see "Howdy,"
     Given there is an item in the database
     When I visit the item page
     Then I should see the item's details
@@ -22,7 +22,6 @@ Feature: Show Item
     Given there is an item in the database
     When I visit the item page
     Given I have an item named "Test Item" with status "Available"
-    When I visit the item page
     And I select "Damaged" from the status dropdown
     And I click on "Update Status"
     And the item status should be "Damaged"
@@ -36,7 +35,8 @@ Feature: Show Item
     Given there is an item in the database
     When I visit the item page
     Given I have an item named "Test Item" with status "Available"
-    When I visit the item page
+    And I select "Damaged" from the status dropdown
+    And I click on "Update Status"
     And I select "Clear Status" from the status dropdown
     And I click on "Update Status"
     And the item status should be ""

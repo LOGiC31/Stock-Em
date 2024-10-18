@@ -26,7 +26,8 @@ Then("I should see the item's details") do
 end
 
 Given('I have an item named {string} with status {string}') do |item_name, status|
-  @item = Item.create(item_name:, status:)
+  @item1 = Item.find_or_create_by(item_name:)
+  @item1.update(status:)
 end
 
 When('I select {string} from the status dropdown') do |status|

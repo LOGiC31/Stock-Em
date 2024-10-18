@@ -18,24 +18,24 @@ class UserProfilesController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @user_profile.update(user_profile_params)
-        format.html { redirect_to user_profiles_path } 
-        format.json { render :show, status: :ok, location: @user_profile }
-      else
-        format.html { render :index, status: :unprocessable_entity } 
-        format.json { render json: @user_profile.errors, status: :unprocessable_entity }
-      end
-    end
+    # respond_to do |format|
+    #   if @user_profile.update(user_profile_params)
+    #     format.html { redirect_to user_profiles_path } 
+    #     format.json { render :show, status: :ok, location: @user_profile }
+    #   else
+    #     format.html { render :index, status: :unprocessable_entity } 
+    #     format.json { render json: @user_profile.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   def destroy
-    @user_profile.destroy!
+    # @user_profile.destroy!
 
-    respond_to do |format|
-      format.html { redirect_to user_profiles_path, status: :see_other, notice: "User profile destroyed." }
-      format.json { head :no_content }
-    end
+    # respond_to do |format|
+    #   format.html { redirect_to user_profiles_path, status: :see_other, notice: "User profile destroyed." }
+    #   format.json { head :no_content }
+    # end
   end
 
   private
@@ -45,6 +45,6 @@ class UserProfilesController < ApplicationController
   end
 
   def user_profile_params
-    params.require(:user).permit(:first_name, :last_name, :uin, :email, :contact_no, :role, :details)
+    # params.require(:user).permit(:first_name, :last_name, :uin, :email, :contact_no, :role, :details)
   end
 end

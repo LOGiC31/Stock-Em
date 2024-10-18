@@ -1,17 +1,5 @@
 # frozen_string_literal: true
 
-Given('the following items exist:') do |table|
-  table.hashes.each do |item|
-    Item.create!(
-      item_name: item['item_name'],
-      serial_number: item['serial_number'],
-      category: item['category'],
-      quality_score: item['quality_score'].to_i,
-      currently_available: item['currently_available'] == 'true'
-    )
-  end
-end
-
 When('I check the item database') do
   @items = Item.all
 end
@@ -25,4 +13,16 @@ end
 Then('there should be 1 item with serial number {string}') do |serial_number|
   item_count = Item.where(serial_number:).count
   expect(item_count).to eq(1)
+end
+
+When('I search for {string}') do |query|
+  visit items_path(query: query)
+end
+
+When('I filter by availability') do
+  visit items_path(available_only: '1')
+end
+
+When('I search for {string} and filter by availability') do |query|
+  visit items_path(query: query, available_only: '1')
 end

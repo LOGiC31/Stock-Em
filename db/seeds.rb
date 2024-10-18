@@ -28,7 +28,25 @@ items = [
   { item_id: 'ITM002', serial_number: 'SN54321', item_name: 'mobilePhonePixel', category: 'Electronics',
     quality_score: 85, currently_available: true },
   { item_id: 'ITM003', serial_number: 'SN67890', item_name: 'Desk Chair', category: 'Furniture', quality_score: 75,
-    currently_available: false, details: 'comfy chair indeed!' }
+    currently_available: false, details: 'comfy chair indeed!' },
+  { item_id: 'ITM004', serial_number: 'SN11223', item_name: 'Laptop Dell XPS', category: 'Electronics', quality_score: 88,
+    currently_available: true, details: 'lightweight and powerful laptop.' },
+  { item_id: 'ITM005', serial_number: 'SN44556', item_name: 'Projector', category: 'Electronics', quality_score: 80,
+    currently_available: false, details: 'high-resolution projection.' },
+  { item_id: 'ITM006', serial_number: 'SN77889', item_name: 'Monitor LG', category: 'Electronics', quality_score: 82,
+    currently_available: true, details: '27-inch widescreen monitor.' },
+  { item_id: 'ITM007', serial_number: 'SN99001', item_name: 'Graphics Tablet', category: 'Electronics', quality_score: 92,
+    currently_available: true, details: 'perfect for designers.' },
+  { item_id: 'ITM008', serial_number: 'SN00234', item_name: 'Office Desk', category: 'Furniture', quality_score: 70,
+    currently_available: true, details: 'spacious office desk.' },
+  { item_id: 'ITM009', serial_number: 'SN00987', item_name: 'Whiteboard', category: 'Supplies', quality_score: 65,
+    currently_available: false, details: 'magnetic whiteboard with markers.' },
+  { item_id: 'ITM010', serial_number: 'SN33445', item_name: 'Bluetooth Speaker', category: 'Electronics', quality_score: 87,
+    currently_available: true, details: 'portable and powerful speaker.' },
+  { item_id: 'ITM011', serial_number: 'SN66778', item_name: 'Mouse', category: 'Accessories', quality_score: 95,
+    currently_available: true, details: 'wireless ergonomic mouse.' },
+  { item_id: 'ITM012', serial_number: 'SN99002', item_name: 'Keyboard', category: 'Accessories', quality_score: 85,
+    currently_available: false, details: 'mechanical keyboard for gaming.' }
 ]
 
 items.each { |item| Item.create!(item) }
