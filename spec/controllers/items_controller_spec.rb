@@ -151,7 +151,8 @@ RSpec.describe ItemsController, type: :controller do
           quality_score: 50,
           serial_number: '123456',
           category: 'Electronics',
-          currently_available: true
+          currently_available: true,
+          status: nil
         }
       end
 
@@ -194,6 +195,40 @@ RSpec.describe ItemsController, type: :controller do
         post :create, params: { item: invalid_attributes }
         expect(assigns(:item)).to be_a_new(Item)
         expect(assigns(:item)).to be_invalid
+      end
+    end
+  end
+
+  describe 'PATCH #set_status' do
+    context 'with valid params' do
+      it 'updates the item status' do
+        # Pass a valid status
+        patch :set_status, params: { id: item1.id, item: { status: 'Damaged', comment: 'Item is damaged.' } }
+
+        item1.reload # Reload the item to get the updated attributes
+        expect(item1.status).to eq('Damaged')
+        expect(flash[:notice]).to eq('Item status updated successfully.')
+        expect(response).to redirect_to(item1)
+      end
+
+      it 'clears the item status when status is empty string' do
+        # Test when status is passed as an empty string (should be treated as nil)
+        patch :set_status, params: { id: item1.id, item: { status: '', comment: 'Cleared status.' } }
+
+        item1.reload
+        expect(flash[:notice]).to eq('Item status updated successfully.')
+        expect(response).to redirect_to(item1)
+      end
+    end
+
+    context 'with invalid params' do
+      it 'does not update the item status and re-renders the show template' do
+        patch :set_status, params: { id: item1.id, item: { status: 'InvalidStatus', comment: 'Invalid status.' } }
+
+        item1.reload
+        expect(item1.status).to eq(nil) # The status remains nil (or whatever it was before)
+        expect(flash[:alert]).to eq('Error updating status. Status must be nil, Damaged, Lost, or Not Available.')
+        expect(response).to render_template(:show)
       end
     end
   end
