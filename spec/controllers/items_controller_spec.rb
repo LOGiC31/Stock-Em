@@ -123,16 +123,16 @@ RSpec.describe ItemsController, type: :controller do
         expect(response).to have_http_status(:success)
       end
 
-      it 'assigns the requested item to @item' do 
+      it 'assigns the requested item to @item' do
         get :show, params: { id: item1.id }
-        expect(assigns(:item)).to eq(item1) 
+        expect(assigns(:item)).to eq(item1)
       end
 
-     it 'renders the show template' do
-       get :show, params: { id: item1.id }
-       expect(response).to render_template(:show)
-     end 
-   end 
+      it 'renders the show template' do
+        get :show, params: { id: item1.id }
+        expect(response).to render_template(:show)
+      end
+    end
     context 'when the item does not exist' do
       it 'raises an ActiveRecord::RecordNotFound error' do
         expect do
@@ -156,9 +156,9 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       it 'creates a new item' do
-        expect {
+        expect do
           post :create, params: { item: valid_attributes }
-        }.to change(Item, :count).by(1)
+        end.to change(Item, :count).by(1)
       end
 
       it 'redirects to the items index' do
@@ -180,9 +180,9 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       it 'does not create a new item' do
-        expect {
+        expect do
           post :create, params: { item: invalid_attributes }
-        }.not_to change(Item, :count)
+        end.not_to change(Item, :count)
       end
 
       it 'renders the new template' do

@@ -3,11 +3,8 @@
 # Contains logic for web pages which display item(s)
 class ItemsController < ApplicationController
   # get all the items
-  def index
+  def index # rubocop:disable Metrics/AbcSize
     @items = Item.all
-
-    # Debugging: Check if query parameter is present
-    puts "Search query: #{params[:query]}"
 
     if params[:query].present?
       query = params[:query].downcase
@@ -15,13 +12,9 @@ class ItemsController < ApplicationController
         item.item_name.downcase.include?(query) || item.category.downcase.include?(query)
       end
     end
+    return unless params[:available_only] == '1'
 
-    # Debugging: Check filtered results
-    puts "Filtered items: #{@items.map(&:item_name)}"
-
-    if params[:available_only] == '1'
-      @items = @items.select(&:currently_available)
-    end
+    @items = @items.select(&:currently_available)
   end
 
   # get specific item

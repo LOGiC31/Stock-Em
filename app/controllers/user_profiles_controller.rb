@@ -14,16 +14,16 @@ class UserProfilesController < ApplicationController
 
   def edit
     @editing = true
-    render :index 
+    render :index
   end
 
   def update
     # respond_to do |format|
     #   if @user_profile.update(user_profile_params)
-    #     format.html { redirect_to user_profiles_path } 
+    #     format.html { redirect_to user_profiles_path }
     #     format.json { render :show, status: :ok, location: @user_profile }
     #   else
-    #     format.html { render :index, status: :unprocessable_entity } 
+    #     format.html { render :index, status: :unprocessable_entity }
     #     format.json { render json: @user_profile.errors, status: :unprocessable_entity }
     #   end
     # end
@@ -41,7 +41,7 @@ class UserProfilesController < ApplicationController
   private
 
   def set_user_profile
-    @user_profile = current_user 
+    @user_profile = current_user
   end
 
   def user_profile_params

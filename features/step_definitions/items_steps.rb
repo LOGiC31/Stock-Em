@@ -16,7 +16,7 @@ Then('there should be 1 item with serial number {string}') do |serial_number|
 end
 
 When('I search for {string}') do |query|
-  visit items_path(query: query)
+  visit items_path(query:)
 end
 
 When('I filter by availability') do
@@ -24,5 +24,5 @@ When('I filter by availability') do
 end
 
 When('I search for {string} and filter by availability') do |query|
-  visit items_path(query: query, available_only: '1')
+  visit items_path(query:, available_only: '1')
 end

@@ -11,11 +11,11 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @current_user.update(user_params)
-        format.html { redirect_to user_profiles_path, notice: "User was successfully updated." }
+        format.html { redirect_to user_profiles_path, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @current_user }
-      # else
-      #   format.html { render :show, status: :unprocessable_entity }
-      #   format.json { render json: @current_user.errors, status: :unprocessable_entity }
+        # else
+        #   format.html { render :show, status: :unprocessable_entity }
+        #   format.json { render json: @current_user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -26,4 +26,3 @@ class UsersController < ApplicationController
     params.require(:user).permit(:first_name, :last_name, :uin, :email, :contact_no, :role, :details)
   end
 end
-

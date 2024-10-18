@@ -2,7 +2,7 @@
 
 # Creates the items database.
 class CreateItems < ActiveRecord::Migration[7.2]
-  def change
+  def change # rubocop:disable Metrics/MethodLength
     create_table :items do |t|
       t.string :item_id
       t.string :serial_number

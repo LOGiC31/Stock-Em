@@ -8,7 +8,6 @@ Then(/I should see "(.*)" before "(.*)"/) do |e1, e2|
   expect(page.body.index(e1) < page.body.index(e2))
 end
 
-
 When('I press {string}') do |button|
   click_button(button)
 end
