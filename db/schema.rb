@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 20_241_002_063_008) do
+ActiveRecord::Schema[7.2].define(version: 20_241_015_055_118) do
   create_table 'events', force: :cascade do |t|
     t.string 'event_id'
     t.integer 'item_id', null: false
@@ -39,6 +39,8 @@ ActiveRecord::Schema[7.2].define(version: 20_241_002_063_008) do
     t.string 'details'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+    t.string 'status'
+    t.text 'comment'
   end
 
   create_table 'notes', force: :cascade do |t|

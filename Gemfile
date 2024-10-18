@@ -65,7 +65,6 @@ group :test do
   gem 'selenium-webdriver'
 
   gem 'shoulda-matchers', '~> 4.0'
-
 end
 
 group :production do

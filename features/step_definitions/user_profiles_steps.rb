@@ -15,16 +15,12 @@ Then('I should see my profile information') do
   end
 end
 
-When('I click on "Edit Profile"') do
-  click_link 'Edit Profile'
+When('I fill in {string} with {string}') do |field, value|
+  fill_in field, with: value
 end
 
 Then('I should be on the edit profile page') do
   expect(current_path).to eq(edit_user_profile_path(@user))
-end
-
-When('I fill in {string} with {string}') do |field, value|
-  fill_in field, with: value
 end
 
 When('I click on "Save"') do

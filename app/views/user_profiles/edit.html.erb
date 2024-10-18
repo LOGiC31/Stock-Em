@@ -1,12 +1,55 @@
-<% content_for :title, "Editing user profile" %>
+<h1>Edit Profile</h1>
 
-<h1>Editing user profile</h1>
+<%= form_with(model: @user_profile, local: true) do |form| %>
+  <% if @user_profile.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user_profile.errors.count, "error") %> prohibited this user profile from being saved:</h2>
+      <ul>
+        <% @user_profile.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
-<%= render "form", user_profile: @user_profile %>
+  <div class="field">
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name %>
+  </div>
 
-<br>
+  <div class="field">
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
+  </div>
 
-<div>
-  <%= link_to "Show this user profile", @user_profile %> |
-  <%= link_to "Back to user profiles", user_profiles_path %>
-</div>
+  <div class="field">
+    <%= form.label :uin %>
+    <%= form.text_field :uin %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.email_field :email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :contact_no %>
+    <%= form.telephone_field :contact_no %>
+  </div>
+
+  <div class="field">
+    <%= form.label :role %>
+    <%= form.text_field :role %>
+  </div>
+
+  <div class="field">
+    <%= form.label :details %>
+    <%= form.text_area :details %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Save Changes" %>
+  </div>
+<% end %>
+
+<%= link_to 'Back', user_profiles_path %>

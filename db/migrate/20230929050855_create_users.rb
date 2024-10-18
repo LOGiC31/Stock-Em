@@ -2,7 +2,7 @@
 
 # Creates the users database
 class CreateUsers < ActiveRecord::Migration[7.2]
-  def change
+  def change # rubocop:disable Metrics/MethodLength
     create_table :users do |t|
       t.string :user_id
       t.string :name

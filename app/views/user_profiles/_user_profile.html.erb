@@ -1,47 +1,103 @@
 <div id="<%= dom_id user_profile %>" class="user-details">
   <div class="user-image">
-    <%= image_tag 'default_user.png', alt: "#{user_profile.name}'s profile image", class: "profile-pic" %>
+    <%= image_tag 'default_user.png', alt: "#{user_profile.first_name}'s profile image", class: "profile-pic" %>
   </div>
 
   <div class="user-info">
-    <div class="user-field">
-      <strong>User ID:</strong>
-      <span class="user-value"><%= user_profile.user_id %></span>
-    </div>
+    <% if @editing %>
+      <% if @current_user.errors.any? %>
+        <div class="error-messages" style="color: red; margin-bottom: 15px;">
+          <h2><%= pluralize(@current_user.errors.count, "error") %> prohibited this user profile from being saved:</h2>
+          <ul>
+            <% @current_user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-    <div class="user-field">
-      <strong>Name:</strong>
-      <span class="user-value"><%= user_profile.name %></span>
-    </div>
+      <%= form_with(model: @current_user, url: user_path(@current_user), method: :patch, local: true) do |form| %>
+        <div class="user-field">
+          <strong>First Name:</strong>
+          <span class="user-value"><%= @current_user.first_name %></span>
+        </div>
 
-    <div class="user-field">
-      <strong>UIN:</strong>
-      <span class="user-value"><%= user_profile.uin %></span>
-    </div>
+        <div class="user-field">
+          <strong>Last Name:</strong>
+          <span class="user-value"><%= @current_user.last_name %></span>
+        </div>
 
-    <div class="user-field">
-      <strong>Email:</strong>
-      <span class="user-value"><%= user_profile.email %></span>
-    </div>
+        <div class="user-field">
+          <strong>UIN:</strong>
+          <%= form.text_field :uin, class: "user-value same-size", pattern: "\\d*", title: "Please enter only numbers" %>
+        </div>
 
-    <div class="user-field">
-      <strong>Contact No:</strong>
-      <span class="user-value"><%= user_profile.contact_no %></span>
-    </div>
+        <div class="user-field">
+          <strong>Email:</strong>
+          <span class="user-value"><%= @current_user.email %></span>
+        </div>
 
-    <div class="user-field">
-      <strong>Role:</strong>
-      <span class="user-value"><%= user_profile.role %></span>
-    </div>
+        <div class="user-field">
+          <strong>Contact No:</strong>
+          <%= form.text_field :contact_no, class: "user-value same-size", pattern: "\\d*", title: "Please enter only numbers" %>
+        </div>
 
-    <div class="user-field">
-      <strong>Details:</strong>
-      <span class="user-value"><%= user_profile.details %></span>
-    </div>
+        <div class="user-field">
+          <strong>Role:</strong>
+          <span class="user-value"><%= @current_user.role %></span>
+        </div>
 
-    <div class="user-field">
-      <strong>Auth Level:</strong>
-      <span class="user-value"><%= user_profile.auth_level %></span>
-    </div>
+        <div class="user-field">
+          <strong>Status:</strong>
+          <%= form.text_area :details, class: "user-value status-textarea" %>
+        </div>
+
+        <div class="form-actions">
+          <%= form.submit "Save", class: "btn" %>
+          <%= link_to "Cancel", user_profiles_path, class: "btn" %>
+        </div>
+      <% end %>
+    <% else %>
+      <!-- Display user information here when not in editing mode -->
+      <div class="user-field1">
+        <strong>Name:</strong>
+        <span class="user-value1"><%= user_profile.first_name + " " + user_profile.last_name %></span>
+      </div>
+      <div class="user-field1">
+        <strong>UIN:</strong>
+        <span class="user-value1"><%= user_profile.uin %></span>
+      </div>
+      <div class="user-field1">
+        <strong>Email:</strong>
+        <span class="user-value1"><%= user_profile.email %></span>
+      </div>
+      <div class="user-field1">
+        <strong>Contact No:</strong>
+        <span class="user-value1"><%= user_profile.contact_no %></span>
+      </div>
+      <div class="user-field1">
+        <strong>Role:</strong>
+        <span class="user-value1"><%= user_profile.role %></span>
+      </div>
+      <div class="user-field1">
+        <strong>Status:</strong>
+        <span class="user-value1"><%= user_profile.details %></span>
+      </div>
+    <% end %>
   </div>
 </div>
+
+<style>
+  .status-textarea {
+    max-width: 100%;
+    width: auto; 
+    height: auto; 
+    resize: vertical; 
+  }
+  
+  .same-size {
+    width: calc(50% - 10px); 
+    display: inline-block;
+    margin-right: 10px; 
+  }
+</style>
