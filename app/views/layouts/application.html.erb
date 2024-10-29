@@ -26,7 +26,30 @@
         <% end %>
       </div>
     <% end %>
-
-    <%= yield %>
+    <% if @current_user %>
+    <header>
+  <a href="/items" class="header-title" style="color: inherit; text-decoration: none;">Stock'Em</a>
+  <div>
+    <span class="greeting">Hello, <span id="username"><%= @current_user.first_name %></span></span>
+    <button class="icon-button user-icon">
+      <i class="fas fa-user"></i>
+    <div class="dropdown-menu">
+                <a href="/user_profiles">User Profile</a>
+                <a href="/logout">Logout</a>  
+    </div>
+     </button>
+  </div>
+</header>
+<% else %>
+  <header style="width: -webkit-fill-available;">
+    <div class="header-title">Stock'Em</div>
+  </header>
+<% end %>
+ <div class="main-content" style="height: 100%; display: flex; width: 100%; flex-direction: row; justify-content: center; ">
+      <%= yield %>
+    </div>
+  <footer style="width: -webkit-fill-available;">
+  <div>The Stock'Em Team, 2024</div>
+</footer>
   </body>
 </html>
