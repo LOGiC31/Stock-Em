@@ -1,14 +1,8 @@
 <%= stylesheet_link_tag 'users', media: 'all', 'data-turbolinks-track': 'reload' %>
-<div class= "welcome-container">
-<header style="width: -webkit-fill-available;">
-  <div class="header-title">Stock'Em</div>
-  </header>
+<div class="welcome">
 <div id="welcome-section">
     <h1>Welcome to Stock'Em</h1>
     <p>Your One Stop Solution to All Your Capstone Needs</p>
     <%= button_to "Login with Google", "/auth/google_oauth2", data: { turbo: "false" }, class: "btn-start" %>
 </div>
-<footer style="width: -webkit-fill-available; margin-top: 0px;">
-  <div>The Stock'Em Team, 2024</div>
-</footer>
 </div>

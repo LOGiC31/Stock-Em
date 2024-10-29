@@ -6,39 +6,9 @@
   <title>Stock'Em</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      background-color: #f8f8f8;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #500000;
-      color: white;
-      padding: 15px 20px;
-    }
-    .header-title {
-      font-size: 30px; 
-      font-weight: bold; 
-    }
     .greeting {
       font-size: 20px; 
       margin-right: 10px; 
-    }
-    footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #500000;
-      color: white;
-      padding: 15px 20px;
-      margin-top: auto; 
     }
     .search-container {
       margin: 20px;
@@ -151,18 +121,14 @@
       text-align: center; /* Center text inside the button container */
       margin: 20px 0; /* Add some vertical spacing */
     }
+    .div-main{
+      width: 100%;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
-
-<header>
-  <div class="header-title">Stock'Em</div>
-  <div>
-    <span class="greeting">Hello, <span id="username"><%= @current_user.first_name %></span></span>
-    <span class="icon user-icon"><i class="fas fa-user"></i></span>
-  </div>
-</header>
-
+<div class="div-main">
 <%# <div class="search-container">
   <input type="text" placeholder="Search..." />
   <label class="filter">
@@ -199,10 +165,6 @@
 <div class="button-container">
   <%= link_to 'Create New Item', new_item_path, class: 'new-item-button' %>
 </div>
-
-<footer>
-  <div>The Stock'Em Team, 2024</div>
-</footer>
-
+</div>
 </body>
 </html>

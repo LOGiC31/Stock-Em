@@ -35,9 +35,8 @@
      font-size: 20px;
      color: white;
    }
-   main {
+   .main {
      padding: 40px 100px;
-     flex: 1;
      background-color: #fff;
      border-radius: 10px;
      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -138,16 +137,7 @@
 <body>
 
 
-<header>
- <div class="header-title">Stock'Em</div>
- <div>
-   <span class="greeting">Hello, <span id="username">User</span></span>
-   <span class="icon user-icon"><i class="fas fa-user"></i></span>
- </div>
-</header>
-
-
-<main>
+<div class="main">
  <h1><%= @item.item_name %></h1>
   <div class="content-wrapper">
    <div class="left-column">
@@ -220,7 +210,7 @@
     <div style="margin-top: 12px; display: flex; align-items: flex-start;">
       <label for="status"><strong>Select Status:</strong></label>
       <%= f.select :status, options_for_select(
-        [['Clear Status', nil], 'Damaged', 'Lost', 'Not Available'].reject { |s| s[1] == @item.status }, # Exclude the current status
+        [['Clear Status', nil], 'Damaged', 'Lost', 'Not Available', 'Intact'].reject { |s| s[1] == @item.status }, # Exclude the current status
         @item.status # Pre-select the current status if it’s not nil
       ),  {}, { style: "margin-left: 18px; padding: 10px; border-radius: 5px; border: 2px solid #ccc; background-color: #f5f5f5;", name: "item[status]" } %>
     </div>
@@ -230,12 +220,7 @@
   <% end %>
 </div>
 
-</main>
-
-
-<footer>
- <div>The Stock'Em Team, 2024</div>
-</footer>
+</div>
 
 
 </body>
