@@ -35,9 +35,9 @@
      font-size: 20px;
      color: white;
    }
-   main {
-     padding: 40px 100px;
+   .main {
      flex: 1;
+     padding: 5px 40px;
      background-color: #fff;
      border-radius: 10px;
      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -54,7 +54,13 @@
      justify-content: space-between;
      gap: 40px;
      align-items: flex-start;
+     height: 52%;
    }
+   @media (max-width: 768px) {
+    .content-wrapper {
+      flex-direction: column; /* Stack columns on smaller screens */
+    }
+  }
    .left-column, .right-column {
      flex: 1;
      padding: 20px;
@@ -62,6 +68,11 @@
      border-radius: 10px;
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
      flex-shrink: 0;
+     box-sizing: border-box;
+   }
+   .right-column {
+     max-height: 95%; /* Set a maximum height for the right column */
+    overflow-y: auto; 
    }
    h2 {
      color: #500000;
@@ -95,7 +106,7 @@
      gap: 10px;
    }
    .btn {
-     padding: 10px 20px;
+     padding: 10px 15px;
      background-color: #500000;
      color: white;
      border-radius: 20px;
@@ -118,11 +129,18 @@
    .btn:hover {
      background-color: #800000;
    }
-  .right-column {
-      max-height: 344px; /* Set the height as per your needs */
-      overflow-y: auto;   /* Enable vertical scrolling */
-      padding-right: 10px; /* Optional: Add padding to avoid content cutting off */
+   .event-user {
+      font-weight: bold; 
+      color: #333; 
+      margin: 0; 
+      font-size: 0.9em; 
+   }
+   .event-details {
+      color: #555; 
+      margin-top: 5px; 
+      font-size: 0.8em;
     }
+
 
    footer {
      display: flex;
@@ -150,6 +168,7 @@
 <main>
  <h1><%= @item.item_name %></h1>
   <div class="content-wrapper">
+    
    <div class="left-column">
      <h2>Item Details</h2>
     
@@ -178,11 +197,19 @@
 
    <div class="right-column">
      <h2>Item History</h2>
-     <p>Checkin on 8/21/2024</p>
-     <p>Returned by Mark Sturtevant</p>
-     <p>Item given to Professor Wade</p>
-     <p>New Approximate Location: Wade's Attic</p>
-     <p>Details: Now has water damage :(</p>
+     <div class="notes-section" style="padding-right: 10px; ">
+       <% @events.each do |event| %>
+         <br>
+         <p class="event-user">
+          <%= User.find(event.associated_user_id).first_name %> 
+          <%= User.find(event.associated_user_id).last_name %> 
+          (<%= event.created_at.to_s.split[0] %>):
+        </p>
+        <p class="event-details">
+          <%= event.details %>
+        </p>
+       <% end %>
+     
 
      <h2>Notes</h2>
 
@@ -204,17 +231,23 @@
      <% end %>
 
      <!-- Scrollable Notes Section -->
-     <div class="notes-section" style="max-height: 300px; overflow-y: auto; padding-right: 10px; ">
+     <%# <div class="notes-section" style="max-height: 210px; padding-right: 10px; "> %>
        <% @notes.each do |note| %>
          <br>
-         <p><%= User.find(note.user_id).first_name %> <%= User.find(note.user_id).last_name %> (<%= note.created_at.to_s.split[0] %>):</p>
-         <p><%= note.msg %></p>
+         <p class="event-user">
+          <%= User.find(note.user_id).first_name %> 
+          <%= User.find(note.user_id).last_name %> 
+          (<%= note.created_at.to_s.split[0] %>):
+        </p>
+        <p class="event-details">
+          <%= note.msg %>
+        </p>
        <% end %>
      </div>
 </div>
 
  </div>
- <div style="background-color: #f5f5f5;border-radius: 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;padding: 20px;margin-top: 20px;">
+ <div style="background-color: #f5f5f5;border-radius: 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;padding: 20px;margin-top: 35px;">
   <h3 style="color:#500000">Update Item Status</h3>
   <%= form_with model: @item, url: set_status_item_path(@item), method: :patch, local: true do |f| %>
     <div style="margin-top: 12px; display: flex; align-items: flex-start;">

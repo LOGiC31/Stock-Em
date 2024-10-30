@@ -2,6 +2,7 @@
 
 # Contains logic for web pages which display item(s)
 class ItemsController < ApplicationController
+  include EventLogger
   # get all the items
   def index
     @items = Item.all
@@ -29,6 +30,7 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     @writing_note = !params[:writing_note].nil?
     @notes = Note.where(item_id: @item.id).order('created_at DESC')
+    @events = Event.where(item_id: @item.id).order('created_at DESC')
   end
 
   # add note to item
@@ -58,15 +60,17 @@ class ItemsController < ApplicationController
     end
   end
 
-  def set_status
+  def set_status # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @item = Item.find(params[:id])
+    @notes = Note.where(item_id: @item.id).order('created_at DESC')
     valid_statuses = [nil, 'Damaged', 'Lost', 'Not Available']
     status = get_valid_status(item_params[:status])
     if valid_statuses.include?(status) && @item.update(item_params)
+      log_event(params[:id], 'status_update', "Status Updated to #{status}", session[:user_id])
       flash[:notice] = 'Item status updated successfully.'
       redirect_to @item
     else
-      flash[:alert] = 'Error updating status. Status must be nil, Damaged, Lost, or Not Available.'
+      flash[:notice] = 'Error updating status. Status must be nil, Damaged, Lost, or Not Available.'
       render :show
     end
   end
