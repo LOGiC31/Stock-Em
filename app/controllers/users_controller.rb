@@ -2,6 +2,7 @@
 
 # Similar to user profiles, just defines a way to showcase a profile.
 class UsersController < ApplicationController
+  skip_before_action :require_login, only: [:update_auth_level]
   def show
     @current_user = User.find(params[:id])
   end
@@ -17,6 +18,16 @@ class UsersController < ApplicationController
         #   format.html { render :show, status: :unprocessable_entity }
         #   format.json { render json: @current_user.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def update_auth_level
+    user = User.find(params[:id])
+
+    if user.update(auth_level: params[:auth_level], role: user.role)
+      render json: { auth_level: user.auth_level, role: user.role }
+    else
+      render json: { status: 'error', message: user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
