@@ -24,7 +24,7 @@ RSpec.describe ItemsController, type: :controller do
     Item.create!(
       serial_number: 'SN2',
       item_name: 'Chair',
-      category: 'Furniture',
+      category: 'Furnitures',
       quality_score: 75,
       currently_available: true,
       details: 'abc',
@@ -198,6 +198,68 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
+  describe 'PUT #update' do
+    context 'with valid parameters' do
+      let(:new_attributes) do
+        {
+          item_name: 'Updated Laptop',
+          status: 'Not Available',
+          quality_score: 60
+        }
+      end
+
+      it 'updates the item' do
+        put :update, params: { id: item1.id, item: new_attributes }
+        item1.reload
+        expect(item1.item_name).to eq('Updated Laptop')
+        expect(item1.currently_available).to eq(false)
+      end
+
+      it 'redirects to the item' do
+        put :update, params: { id: item1.id, item: new_attributes }
+        expect(response).to redirect_to(item1)
+        expect(flash[:notice]).to eq('Item was successfully updated.')
+      end
+    end
+
+    context 'with invalid parameters' do
+      let(:invalid_attributes) do
+        { item_name: '', quality_score: -10 }
+      end
+
+      it 'does not update the item' do
+        put :update, params: { id: item1.id, item: invalid_attributes }
+        item1.reload
+        expect(item1.item_name).not_to eq('')
+        expect(item1.quality_score).not_to eq(-10)
+      end
+
+      it 'redirects to the item with an alert flash message' do
+        put :update, params: { id: item1.id, item: invalid_attributes }
+        expect(response).to redirect_to(item1)
+        expect(flash[:alert]).to eq('There was a problem updating the item.')
+      end
+    end
+  end
+  describe 'DELETE #destroy' do
+    it 'deletes the item' do
+      expect do
+        delete :destroy, params: { id: item1.id }
+      end.to change(Item, :count).by(-1)
+    end
+
+    it 'redirects to the items index' do
+      delete :destroy, params: { id: item1.id }
+      expect(response).to redirect_to(items_path)
+      expect(flash[:notice]).to eq('Item was successfully deleted.')
+    end
+
+    it 'sets an alert flash if deletion fails' do
+      allow_any_instance_of(Item).to receive(:destroy).and_return(false)
+      delete :destroy, params: { id: item1.id }
+      expect(flash[:alert]).to eq('Failed to delete the item.')
+      expect(response).to redirect_to(items_path)
+     
   describe 'PATCH #set_status' do
     context 'with valid params' do
       it 'updates the item status' do
@@ -222,12 +284,55 @@ RSpec.describe ItemsController, type: :controller do
 
     context 'with invalid params' do
       it 'does not update the item status and re-renders the show template' do
-        patch :set_status, params: { id: item1.id, item: { status: 'InvalidStatus', comment: 'Invalid status.' } }
+        patch :set_status, params: { id: item1.id, item: { status: 'someotherstatus', comment: 'Invalid status.' } }
 
         item1.reload
-        expect(item1.status).to eq(nil) # The status remains nil (or whatever it was before)
-        expect(flash[:alert]).to eq('Error updating status. Status must be nil, Damaged, Lost, or Not Available.')
+        expect(item1.status).to eq(nil)
+        expect(flash[:notice]).to eq('Error updating status. Status must be nil, Damaged, Lost, or Not Available.')
         expect(response).to render_template(:show)
+      end
+    end
+  end
+
+  describe 'POST #add_note' do
+    before do
+      # Simulating a user login by setting the session
+      session[:user_id] = user.id
+
+      # Mocking the User.find_by method to return the user we created
+      allow(User).to receive(:find_by).with(id: session[:user_id]).and_return(user)
+    end
+
+    context 'when the note is successfully created' do
+      let(:note_message) { 'This is a test note.' }
+
+      before do
+        post :add_note, params: { id: item1.id, note_msg: note_message }
+      end
+
+      it 'creates a new note for the item' do
+        expect(Note.last.msg).to eq(note_message)
+        expect(Note.last.item).to eq(item1)
+        expect(Note.last.user).to eq(user)
+      end
+
+      it 'redirects to the item show page' do
+        expect(response).to redirect_to(item_path(item1))
+      end
+
+      it 'responds with no content for JSON format' do
+        post :add_note, params: { id: item1.id, note_msg: note_message }, format: :json
+        expect(response).to have_http_status(:no_content)
+      end
+    end
+
+    context 'when the note creation fails' do
+      before do
+        post :add_note, params: { id: item1.id, note_msg: nil }
+      end
+
+      it 'does not create a note and redirects back with an error' do
+        expect(response).to redirect_to(item_path(item1))
       end
     end
   end

@@ -102,50 +102,52 @@
 <body>
 <div>
 <div class="form-container">
-  <h2>Create New Item</h2>
+  <% if @evtype == "Checkout" %>
+    <h2>Checkout Item</h2>
+  <% else %>
+    <h2>Checkin Item</h2>
+  <% end %>
 
-  <%= form_with(model: @item, local: true) do |form| %>
-    <!-- Authenticity token for CSRF protection is automatically handled by form_with -->
-  <% if @item.errors.any? %>
-    <div class="error-messages">
-      <h3><%= pluralize(@item.errors.count, "error") %> prevented this item from being saved:</h3>
-      <ul>
-        <% @item.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+  <%= form_tag(publish_event_path, method: "get") do |form| %>
+
+    <%= hidden_field_tag :itemid, @itemid %>
+    <%= hidden_field_tag :evtype, @evtype %>
+
+    <!-- Responsible Professor   -->
+    <label class="required">Responsible Professor</label>
+    <%= text_field_tag(:professor) %>
+
+    <!-- Student / Teams if a Check-In   -->
+    <% if @evtype == "Checkout" %>
+      <label>Student / Teams Checked Out To</label>
+      <%= text_field_tag(:teams) %>
+    <% end %>
+
+    <!-- New Location  -->
+    <% if @evtype == "Checkout" %>
+      <label class="required">Class & Section, or Approximate Location</label>
+    <% else %>
+      <label class="required">New Location in Storage</label>
+    <% end %>
+
+    <%= text_field_tag(:location) %>
+
+    <!-- Additional Comments   -->
+    <label>Additional Comments</label>
+    <%= text_field_tag(:comments) %>
+
+    <div class="button-container">
+    <input type="submit" value="Publish" class="submit-button">
     </div>
-  <% end %>
-    
-   <label for="item_name" class="required">Item Name</label>
-<%= form.text_field :item_name, id: 'item_name', required: true, minlength: 3, maxlength: 50 %>
-
-
-
-<% categories = JSON.parse(File.read(Rails.root.join('app/assets/data/category.json')))['data'] %>
-<label for="category" class="required">Category</label>
-<%= form.select :category, options_for_select(categories.map { |category| [category, category] }, @item.category), { prompt: 'Select a category' }, { id: 'category', required: true } %>
-
-<label for="quality_score" class="required">Quality Score</label>
-<%= form.number_field :quality_score, id: 'quality_score', min: 0, max: 100, required: true %>
-
-<label for="currently_available" class="required">Currently Available</label>
-<%= form.select :currently_available, options_for_select([['Select availability', ''], ['Yes', true], ['No', false]], @item.currently_available), id: 'currently_available', required: true %>
-
-<label for="serial_number" class="required">Serial Number</label>
-<%= form.text_field :serial_number, id: 'serial_number', required: true %>
-
-<label for="details" >Details</label>
-<%= form.text_field :details, id: 'details', required: false %>
-
-<div class="button-container">
-  <%= form.submit 'Create Item', class: 'submit-button' %>
-</div>
 
   <% end %>
-
 
 </div>
 </div>
 </body>
 </html>
+
+
+
+
+

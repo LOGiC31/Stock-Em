@@ -1,0 +1,177 @@
+<style>
+    /* Add your styles here */
+    .form-container {
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      flex: 1;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #500000;
+      color: white;
+    }
+    .edit-input {
+      display: none; /* Hidden by default */
+    }
+    .logout-button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #500000; /* Logout button color */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .logout-button:hover {
+      background-color: #500000; /* Change color on hover */
+    }
+  </style>
+
+<div class="form-container">
+    <h2>Users</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Auth Level</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr data-user-id="<%= user.id %>">
+            <td><%= user.id %></td>
+            <td>
+                <span class="name-display"><%= "#{user.first_name} #{user.last_name}" %></span> <!-- Display full name -->
+                <input type="text" class="edit-input name-input" value="<%= "#{user.first_name} #{user.last_name}" %>" style="display: none;" /> <!-- Hidden input for editing -->
+            </td>
+            <td><%= user.email %></td>
+            <td><%= user.role %></td>
+            <td>
+              <span class="auth-level-display"><%= user.auth_level %></span>
+              <select class="edit-input auth-level-select" name="auth_level">
+                <option value="2" <%= user.auth_level == 2 ? 'selected' : '' %>>Professor Admin</option>
+                <option value="1" <%= user.auth_level == 1 ? 'selected' : '' %>>Assistant</option>
+                <option value="0" <%= user.auth_level == 0 ? 'selected' : '' %>>Student</option>
+              </select>
+            </td>
+            <td>
+                <button class="edit-button">Edit</button>
+                <button class="save-button" style="display:none;">Save</button>
+                <button class="cancel-button" style="display:none;">Cancel</button>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <div style="display:flex;justify-content:center;">
+        <%= button_to 'Logout', admin_logout_path, method: :delete, data: { confirm: 'Are you sure you want to log out?' }, class: 'logout-button' %>
+    </div>
+</div>
+
+<script>
+  document.querySelectorAll('.edit-button').forEach(button => {
+  button.addEventListener('click', function() {
+    const row = this.closest('tr');
+    const originalAuthLevel = row.querySelector('.auth-level-display').textContent; // Store original auth level
+
+    row.querySelector('.auth-level-display').style.display = 'none';
+    row.querySelector('.auth-level-select').style.display = 'inline-block';
+    this.style.display = 'none'; // Hide edit button
+    row.querySelector('.save-button').style.display = 'inline-block'; // Show save button
+    row.querySelector('.cancel-button').style.display = 'inline-block'; // Show cancel button
+
+    // Store the original value in the dropdown for cancellation
+    row.querySelector('.auth-level-select').setAttribute('data-original-value', originalAuthLevel);
+  });
+});
+
+document.querySelectorAll('.save-button').forEach(button => {
+  button.addEventListener('click', function() {
+    const row = this.closest('tr');
+    const userId = row.getAttribute('data-user-id');
+    const authLevel = row.querySelector('.auth-level-select').value;
+
+    // Send AJAX request to update auth level
+    fetch(`/users/${userId}/update_auth_level`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({ auth_level: authLevel })
+    })
+    .then(response => {
+      if (response.ok) {
+        response.json().then(data => {
+          // Update the display text based on the response from the server
+          row.querySelector('.auth-level-display').textContent = authLevel;
+          row.querySelector('.auth-level-display').style.display = 'inline';
+
+          // Update the role display
+          row.querySelector('td:nth-child(4)').textContent = data.role; // Update the role column
+
+          row.querySelector('.auth-level-select').style.display = 'none';
+          this.style.display = 'none'; // Hide save button
+          row.querySelector('.edit-button').style.display = 'inline-block'; // Show edit button
+          row.querySelector('.cancel-button').style.display = 'none'; // Hide cancel button
+        });
+      } else {
+        alert('Failed to update auth level');
+      }
+    });
+  });
+});
+
+document.querySelectorAll('.cancel-button').forEach(button => {
+  button.addEventListener('click', function() {
+    const row = this.closest('tr');
+    const originalValue = row.querySelector('.auth-level-select').getAttribute('data-original-value');
+
+    row.querySelector('.auth-level-display').textContent = originalValue; // Revert to original value
+    row.querySelector('.auth-level-display').style.display = 'inline'; // Show original value
+    row.querySelector('.auth-level-select').style.display = 'none'; // Hide dropdown
+    this.style.display = 'none'; // Hide cancel button
+    row.querySelector('.edit-button').style.display = 'inline-block'; // Show edit button
+    row.querySelector('.save-button').style.display = 'none'; // Hide save button
+  });
+
+
+    // document.getElementById('logout-button').addEventListener('click', function() {
+    // fetch('/admin/logout', { // Update to use the correct route
+    //     method: 'DELETE',
+    //     headers: {
+    //     'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    //     }
+    // })
+    // .then(response => {
+    //     if (response.ok) {
+    //     window.location.href = '/admin/login'; // Redirect to admin login page
+    //     } else {
+    //     alert('Logout failed');
+    //     }
+    // });
+    // });
+
+
+});
+
+</script>

@@ -33,5 +33,6 @@ Scenario: view a specific item
 Scenario: going back to the main page
   Given I am logged in
   And   I am on the details page for the item "SN1"
-  And   I follow "Back to Items"
+  #And   I follow "Back to Items"
+  And   I select "Back"
   Then  I should be on the home page

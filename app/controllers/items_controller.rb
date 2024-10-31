@@ -2,16 +2,39 @@
 
 # Contains logic for web pages which display item(s)
 class ItemsController < ApplicationController
+  include EventLogger
   # get all the items
   def index # rubocop:disable Metrics/AbcSize
     @items = Item.all
+    
+    # if params[:query].present?
+    #   query = params[:query].downcase
+    #   @items = @items.select do |item|
+    #     item.item_name.downcase.include?(query) || item.category.downcase.include?(query)
+    #   end
+    # end
+
+    @categories = Item.distinct.pluck(:category)
+    @statuses = Item.distinct.pluck(:status)
 
     if params[:query].present?
-      query = params[:query].downcase
-      @items = @items.select do |item|
-        item.item_name.downcase.include?(query) || item.category.downcase.include?(query)
-      end
+      keywords = params[:query].split(' ')
+
+      @items = @items.where(
+        keywords.map do |_keyword|
+          "(LOWER(item_name) LIKE ? OR LOWER(category) LIKE ? OR LOWER(status) LIKE ? OR LOWER(CASE WHEN currently_available THEN 'available' ELSE 'not available' END) LIKE ?)"
+        end.join(' AND '),
+        *keywords.flat_map do |keyword|
+          ["%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%"]
+        end
+      )
+
     end
+
+    @items = @items.where(category: params[:category]) if params[:category].present?
+
+    @items = @items.where(status: params[:status]) if params[:status].present?
+
     return unless params[:available_only] == '1'
 
     @items = @items.select(&:currently_available)
@@ -22,6 +45,7 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     @writing_note = !params[:writing_note].nil?
     @notes = Note.where(item_id: @item.id).order('created_at DESC')
+    @events = Event.where(item_id: @item.id).order('created_at DESC')
   end
 
   # add note to item
@@ -51,15 +75,45 @@ class ItemsController < ApplicationController
     end
   end
 
-  def set_status
+  def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @item = Item.find(params[:id])
+    original_params = item_params.dup
+    if @item.update(item_params)
+      if params[:item][:status] == 'Not Available' || params[:item][:status] == 'Lost'
+        @item.update(currently_available: false) # Update available to false
+      end
+      if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
+        @item.update(currently_available: true) # Update available to false
+      end
+      flash[:notice] = 'Item was successfully updated.'
+    else
+      flash[:alert] = 'There was a problem updating the item.'
+      @item.update(original_params)
+    end
+    redirect_to @item
+  end
+
+  def destroy
+    @item = Item.find(params[:id])
+    if @item.destroy
+      flash[:notice] = 'Item was successfully deleted.'
+    else
+      flash[:alert] = 'Failed to delete the item.'
+    end
+    redirect_to items_path
+  end
+
+  def set_status # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    @item = Item.find(params[:id])
+    @notes = Note.where(item_id: @item.id).order('created_at DESC')
     valid_statuses = [nil, 'Damaged', 'Lost', 'Not Available']
     status = get_valid_status(item_params[:status])
     if valid_statuses.include?(status) && @item.update(item_params)
+      log_event(params[:id], 'status_update', "Status Updated to #{status}", session[:user_id])
       flash[:notice] = 'Item status updated successfully.'
       redirect_to @item
     else
-      flash[:alert] = 'Error updating status. Status must be nil, Damaged, Lost, or Not Available.'
+      flash[:notice] = 'Error updating status. Status must be nil, Damaged, Lost, or Not Available.'
       render :show
     end
   end
