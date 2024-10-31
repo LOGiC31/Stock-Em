@@ -233,14 +233,13 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe 'POST #add_note' do
+    before do
+      # Simulating a user login by setting the session
+      session[:user_id] = user.id
 
-  before do
-    # Simulating a user login by setting the session
-    session[:user_id] = user.id
-
-    # Mocking the User.find_by method to return the user we created
-    allow(User).to receive(:find_by).with(id: session[:user_id]).and_return(user)
-  end
+      # Mocking the User.find_by method to return the user we created
+      allow(User).to receive(:find_by).with(id: session[:user_id]).and_return(user)
+    end
 
     context 'when the note is successfully created' do
       let(:note_message) { 'This is a test note.' }

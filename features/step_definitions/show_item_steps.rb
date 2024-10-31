@@ -44,7 +44,7 @@ Then('the item status should be {string}') do |expected_status|
 end
 
 When('I filter by status {string}') do |status|
-  within('#status') do 
+  within('#status') do
     find('#status').click
     find('option', text: status).click
   end
@@ -52,12 +52,12 @@ When('I filter by status {string}') do |status|
 end
 
 When('I click on the status dropdown') do
-  puts "Current URL: #{current_path}" 
+  puts "Current URL: #{current_path}"
   find('.status').click
 end
 
 When('I click on the category dropdown') do
-  puts "Current URL: #{current_path}" 
+  puts "Current URL: #{current_path}"
   find('.category').click
 end
 
@@ -74,6 +74,6 @@ When('I select {string} from the category dropdown list') do |category|
 end
 
 When('I click Filter') do
-  button = find('input.btn.btn-primary[type="submit"]') 
+  button = find('input.btn.btn-primary[type="submit"]')
   button.click
 end

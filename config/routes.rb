@@ -29,5 +29,4 @@ Rails.application.routes.draw do
   post 'admin/login', to: 'admin_sessions#create'
   delete 'admin/logout', to: 'admin_sessions#destroy', as: 'admin_logout'
   get 'admin/dashboard', to: 'admin_sessions#dashboard', as: 'admin_dashboard'
-
 end
