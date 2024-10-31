@@ -58,4 +58,18 @@ RSpec.describe SessionsController, type: :controller do
       end
     end
   end
+  describe 'POST #logout' do
+    before do
+      session[:user_id] = 1
+      post :logout
+    end
+
+    it 'sets current_user to nil' do
+      expect(assigns(:current_user)).to be_nil
+    end
+
+    it 'redirects to the welcome path' do
+      expect(response).to redirect_to(welcome_path)
+    end
+  end
 end

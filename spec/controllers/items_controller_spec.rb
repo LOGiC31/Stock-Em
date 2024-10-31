@@ -24,7 +24,7 @@ RSpec.describe ItemsController, type: :controller do
     Item.create!(
       serial_number: 'SN2',
       item_name: 'Chair',
-      category: 'Furniture',
+      category: 'Furnitures',
       quality_score: 75,
       currently_available: true,
       details: 'abc',
@@ -259,6 +259,81 @@ RSpec.describe ItemsController, type: :controller do
       delete :destroy, params: { id: item1.id }
       expect(flash[:alert]).to eq('Failed to delete the item.')
       expect(response).to redirect_to(items_path)
+     
+  describe 'PATCH #set_status' do
+    context 'with valid params' do
+      it 'updates the item status' do
+        # Pass a valid status
+        patch :set_status, params: { id: item1.id, item: { status: 'Damaged', comment: 'Item is damaged.' } }
+
+        item1.reload # Reload the item to get the updated attributes
+        expect(item1.status).to eq('Damaged')
+        expect(flash[:notice]).to eq('Item status updated successfully.')
+        expect(response).to redirect_to(item1)
+      end
+
+      it 'clears the item status when status is empty string' do
+        # Test when status is passed as an empty string (should be treated as nil)
+        patch :set_status, params: { id: item1.id, item: { status: '', comment: 'Cleared status.' } }
+
+        item1.reload
+        expect(flash[:notice]).to eq('Item status updated successfully.')
+        expect(response).to redirect_to(item1)
+      end
+    end
+
+    context 'with invalid params' do
+      it 'does not update the item status and re-renders the show template' do
+        patch :set_status, params: { id: item1.id, item: { status: 'someotherstatus', comment: 'Invalid status.' } }
+
+        item1.reload
+        expect(item1.status).to eq(nil)
+        expect(flash[:notice]).to eq('Error updating status. Status must be nil, Damaged, Lost, or Not Available.')
+        expect(response).to render_template(:show)
+      end
+    end
+  end
+
+  describe 'POST #add_note' do
+    before do
+      # Simulating a user login by setting the session
+      session[:user_id] = user.id
+
+      # Mocking the User.find_by method to return the user we created
+      allow(User).to receive(:find_by).with(id: session[:user_id]).and_return(user)
+    end
+
+    context 'when the note is successfully created' do
+      let(:note_message) { 'This is a test note.' }
+
+      before do
+        post :add_note, params: { id: item1.id, note_msg: note_message }
+      end
+
+      it 'creates a new note for the item' do
+        expect(Note.last.msg).to eq(note_message)
+        expect(Note.last.item).to eq(item1)
+        expect(Note.last.user).to eq(user)
+      end
+
+      it 'redirects to the item show page' do
+        expect(response).to redirect_to(item_path(item1))
+      end
+
+      it 'responds with no content for JSON format' do
+        post :add_note, params: { id: item1.id, note_msg: note_message }, format: :json
+        expect(response).to have_http_status(:no_content)
+      end
+    end
+
+    context 'when the note creation fails' do
+      before do
+        post :add_note, params: { id: item1.id, note_msg: nil }
+      end
+
+      it 'does not create a note and redirects back with an error' do
+        expect(response).to redirect_to(item_path(item1))
+      end
     end
   end
 end
