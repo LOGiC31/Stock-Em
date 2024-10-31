@@ -243,12 +243,16 @@
      <%= image_tag(@item.image) if @item.image.present? %>
     
      <div class="btn-container">
-        <button id="edit_button" class='btn' >Edit</button>
+       <% if @item.currently_available %>
+         <%= link_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
+       <% else %>
+         <%= link_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
+       <% end %> 
+       <button id="edit_button" class='btn' >Edit</button>
         <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form'}, id:'back_button' %>
         <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id:'delete_button' %>
       </div>
     </div>
-
    </div>
 
 

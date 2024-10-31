@@ -150,6 +150,11 @@
       overflow: hidden;
     }
   </style>
+  <script>
+    function submitForm() {
+      document.getElementById('search-form').submit();
+    }
+  </script>
 </head>
 <body>
 <div class="div-main">
@@ -161,7 +166,7 @@
 </div> %>
 
 <div class="search-container">
-  <%= form_with url: items_path, method: :get, local: true, class: 'search-form' do %>
+  <%= form_with url: items_path, method: :get, local: true, class: 'search-form' , id: 'search-form' do %>
 
     <!-- Search by general query (narrower width) -->
     <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "search-bar" %>
@@ -199,7 +204,7 @@
 
     <!-- Availability Filter -->
     <label class="filter">
-      <%= check_box_tag :available_only, '1', params[:available_only] == '1' %> Only show available items
+      <%= check_box_tag :available_only, '1', params[:available_only] == '1', onchange: "submitForm()" %> Only show available items
     </label>
   <% end %>
 </div>
