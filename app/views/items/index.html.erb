@@ -97,6 +97,10 @@
       display: flex;
       flex-direction: column; 
     }
+    .item-status {
+      font-size: 14px; 
+      margin-top: 5px;
+    }
     h3 {
       margin: 10px 0 5px 0; 
       font-size: 18px; 
@@ -199,17 +203,24 @@
 <div class="card-container">
   <% @items.each do |item| %>
     <%= link_to item_path(item), class: 'card' do %>
-      <div class="icon"><i class="fas <%= icon_for_category(item.category) %>"></i></div>
+      <div class="icon">
+        <i class="fas <%= icon_for_category(item.category) %>"></i>
+      </div>
       <div class="card-content">
-        <h3><%= item.item_name %></h3>
-        <p><%= item.category %></p>
+        <h3 class="item-name"><%= item.item_name %></h3>
+        <p class="item-category"><%= item.category %></p>
         <span class="availability <%= item.currently_available ? 'available' : 'not-available' %>">
           <%= item.currently_available ? 'Available' : 'Not Available' %>
         </span>
+        <p class="item-status">
+          <strong>Status:</strong> <%= item.status.present? ? item.status : 'No Status' %>
+        </p>
       </div>
     <% end %>
   <% end %>
 </div>
+
+
 
 <!-- New Item Button Container -->
 <div class="button-container">
