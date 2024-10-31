@@ -4,51 +4,39 @@
 class ItemsController < ApplicationController
   include EventLogger
   # get all the items
-  def index
+  def index # rubocop:disable Metrics/AbcSize
     @items = Item.all
+
+    # if params[:query].present?
+    #   query = params[:query].downcase
+    #   @items = @items.select do |item|
+    #     item.item_name.downcase.include?(query) || item.category.downcase.include?(query)
+    #   end
+    # end
+
     @categories = Item.distinct.pluck(:category)
     @statuses = Item.distinct.pluck(:status)
 
-    apply_filters
-  end
+    if params[:query].present?
+      keywords = params[:query].split(' ')
 
-  private
+      @items = @items.where(
+        keywords.map do |_keyword|
+          "(LOWER(item_name) LIKE ? OR LOWER(category) LIKE ? OR LOWER(status) LIKE ? OR LOWER(CASE WHEN currently_available THEN 'available' ELSE 'not available' END) LIKE ?)"
+        end.join(' AND '),
+        *keywords.flat_map do |keyword|
+          ["%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%"]
+        end
+      )
 
-  def apply_filters
-    filter_items_by_query if params[:query].present?
-    filter_items_by_category if params[:category].present?
-    filter_items_by_status if params[:status].present?
-    filter_available_items if params[:available_only] == '1'
-  end
-
-  def filter_items_by_query
-    keywords = params[:query].split(' ')
-    query_string = build_query_string
-    query_params = build_query_params(keywords)
-
-    @items = @items.where(query_string, *query_params)
-  end
-
-  def build_query_string
-    '(LOWER(item_name) LIKE ? OR LOWER(category) LIKE ? OR LOWER(status) LIKE ? ' \
-    "OR LOWER(CASE WHEN currently_available THEN 'available' ELSE 'not available' END) LIKE ?)"
-  end
-
-  def build_query_params(keywords)
-    keywords.flat_map do |keyword|
-      Array.new(4, "%#{keyword.downcase}%")
     end
-  end
 
-  def filter_items_by_category
-    @items = @items.where(category: params[:category])
-  end
+    @items = @items.where(category: params[:category]) if params[:category].present?
 
-  def filter_items_by_status
-    @items = @items.where(status: params[:status])
-  end
+    @items = @items.where(status: params[:status]) if params[:status].present?
 
-  def filter_available_items
+    return unless params[:available_only] == '1'
+
     @items = @items.select(&:currently_available)
   end
 
@@ -106,6 +94,8 @@ class ItemsController < ApplicationController
     status = nil if status.blank?
     status
   end
+
+  private
 
   def item_params
     params.require(:item).permit(:item_id, :serial_number, :item_name,
