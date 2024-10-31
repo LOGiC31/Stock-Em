@@ -27,7 +27,7 @@ When('I select {string}') do |action|
   page.find("##{button_id}", visible: :all, wait: 10).click
 end
 
-When("I set {string} to {string}") do |field_label, new_value|
+When("I set field {string} to {string}") do |field_label, new_value|
   # Remove colon from field label if present
   field_name = case field_label.gsub(':', '')
     when 'Item Name'
@@ -37,7 +37,7 @@ When("I set {string} to {string}") do |field_label, new_value|
     when 'Category'
       'category'
     when 'Status'
-      'status'
+      'internal_status'
     when 'Location'
       'location'
     when 'Details'
@@ -46,7 +46,7 @@ When("I set {string} to {string}") do |field_label, new_value|
   
   begin
     case field_name
-    when 'category', 'status'
+    when 'category', 'internal_status'
       # Handle hidden select fields differently
       select_element = find("select#item_#{field_name}", visible: :all)
       option = select_element.find(:option, new_value, visible: :all)

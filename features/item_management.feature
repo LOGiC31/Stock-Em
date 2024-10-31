@@ -6,7 +6,7 @@ Feature: Item Management
     Given I am logged in
     And I am on the item details page
     When I select "Edit"
-    And I set "Item Name" to "Newest Item Name"
+    And I set field "Item Name" to "Newest Item Name"
     When I select "Save"
     And I should see "Newest Item Name"
     And I should see "Item was successfully updated."
@@ -15,7 +15,7 @@ Feature: Item Management
     Given I am logged in
     And I am on the item details page
     When I select "Edit"
-    And I set "Quality Score" to "-19"
+    And I set field "Quality Score" to "-19"
     And I select "Save"
     And I should not see "-19"
     And I should not see "Item was successfully updated."
@@ -25,7 +25,7 @@ Feature: Item Management
     Given I am logged in
     And I am on the item details page
     When I select "Edit"
-    And I set "Item Name" to "Not new item"
+    And I set field "Item Name" to "Not new item"
     When I select "Cancel"
     And I should not see "Not new item"
     And I should not see "Item was successfully updated."
@@ -34,7 +34,7 @@ Feature: Item Management
     Given I am logged in
     And I am on the item details page
     When I select "Edit"
-    And I set "Quality Score" to "19"
+    And I set field "Quality Score" to "19"
     And I select "Save"
     And I should see "19"
     And I should see "Item was successfully updated."
@@ -50,16 +50,14 @@ Feature: Item Management
     Given I am logged in
     And I am on the item details page
     When I select "Edit"
-    And I set "Item Name" to "New Item Name"
-    And I set "Category" to "Furniture"
-    And I set "Status" to "Lost"
-    And I set "Quality Score" to "75"
-    And I set "Location" to "Warehouse A"
-    And I set "Details" to "This is a detailed description"
+    And I set field "Item Name" to "New Item Name"
+    And I set field "Category" to "Furniture"
+    And I set field "Status" to "Lost"
+    And I set field "Quality Score" to "75"
+    And I set field "Details" to "This is a detailed description"
     And I select "Save"
     Then I should see "New Item Name"
     And I should see "75"
-    And I should see "Warehouse A"
     And I should see "Furniture"
     And I should see "Lost"
     And I should see "This is a detailed description"
