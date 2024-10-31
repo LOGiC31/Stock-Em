@@ -198,37 +198,67 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe 'PATCH #set_status' do
-    context 'with valid params' do
-      it 'updates the item status' do
-        # Pass a valid status
-        patch :set_status, params: { id: item1.id, item: { status: 'Damaged', comment: 'Item is damaged.' } }
-
-        item1.reload # Reload the item to get the updated attributes
-        expect(item1.status).to eq('Damaged')
-        expect(flash[:notice]).to eq('Item status updated successfully.')
-        expect(response).to redirect_to(item1)
+  describe 'PUT #update' do
+    context 'with valid parameters' do
+      let(:new_attributes) do
+        {
+          item_name: 'Updated Laptop',
+          status: 'Not Available',
+          quality_score: 60
+        }
       end
 
-      it 'clears the item status when status is empty string' do
-        # Test when status is passed as an empty string (should be treated as nil)
-        patch :set_status, params: { id: item1.id, item: { status: '', comment: 'Cleared status.' } }
-
+      it 'updates the item' do
+        put :update, params: { id: item1.id, item: new_attributes }
         item1.reload
-        expect(flash[:notice]).to eq('Item status updated successfully.')
+        expect(item1.item_name).to eq('Updated Laptop')
+        expect(item1.currently_available).to eq(false)
+      end
+
+      it 'redirects to the item' do
+        put :update, params: { id: item1.id, item: new_attributes }
         expect(response).to redirect_to(item1)
+        expect(flash[:notice]).to eq('Item was successfully updated.')
       end
     end
 
-    context 'with invalid params' do
-      it 'does not update the item status and re-renders the show template' do
-        patch :set_status, params: { id: item1.id, item: { status: 'InvalidStatus', comment: 'Invalid status.' } }
-
-        item1.reload
-        expect(item1.status).to eq(nil) # The status remains nil (or whatever it was before)
-        expect(flash[:alert]).to eq('Error updating status. Status must be nil, Damaged, Lost, or Not Available.')
-        expect(response).to render_template(:show)
+    context 'with invalid parameters' do
+      let(:invalid_attributes) do
+        { item_name: '', quality_score: -10 }
       end
+
+      it 'does not update the item' do
+        put :update, params: { id: item1.id, item: invalid_attributes }
+        item1.reload
+        expect(item1.item_name).not_to eq('')
+        expect(item1.quality_score).not_to eq(-10)
+      end
+
+      it 'redirects to the item with an alert flash message' do
+        put :update, params: { id: item1.id, item: invalid_attributes }
+        expect(response).to redirect_to(item1)
+        expect(flash[:alert]).to eq('There was a problem updating the item.')
+      end
+    end
+  end
+  describe 'DELETE #destroy' do
+    it 'deletes the item' do
+      expect do
+        delete :destroy, params: { id: item1.id }
+      end.to change(Item, :count).by(-1)
+    end
+
+    it 'redirects to the items index' do
+      delete :destroy, params: { id: item1.id }
+      expect(response).to redirect_to(items_path)
+      expect(flash[:notice]).to eq('Item was successfully deleted.')
+    end
+
+    it 'sets an alert flash if deletion fails' do
+      allow_any_instance_of(Item).to receive(:destroy).and_return(false)
+      delete :destroy, params: { id: item1.id }
+      expect(flash[:alert]).to eq('Failed to delete the item.')
+      expect(response).to redirect_to(items_path)
     end
   end
 end
