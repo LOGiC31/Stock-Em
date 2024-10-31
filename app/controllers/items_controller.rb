@@ -55,7 +55,7 @@ class ItemsController < ApplicationController
     status = nil if status.blank?
     status
   end
-  
+
   def update
     @item = Item.find(params[:id])
     original_params = item_params.dup
@@ -66,26 +66,24 @@ class ItemsController < ApplicationController
       if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
         @item.update(currently_available: true) # Update available to false
       end
-      flash[:notice] = "Item was successfully updated."
-      redirect_to @item
+      flash[:notice] = 'Item was successfully updated.'
     else
-      flash[:alert] = "There was a problem updating the item."
+      flash[:alert] = 'There was a problem updating the item.'
       @item.update(original_params)
-      redirect_to @item
     end
+    redirect_to @item
   end
 
   def destroy
     @item = Item.find(params[:id])
     if @item.destroy
-      flash[:notice] = "Item was successfully deleted."
-      redirect_to items_path
+      flash[:notice] = 'Item was successfully deleted.'
     else
-      flash[:alert] = "Failed to delete the item."
-      redirect_to items_path
+      flash[:alert] = 'Failed to delete the item.'
     end
+    redirect_to items_path
   end
-  
+
   private
 
   def item_params
