@@ -194,12 +194,6 @@
 
 <main>
  <h1><%= @item.item_name %></h1>
-  <% if flash[:notice].present? %>
-    <div id="flash-notice" style="background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin-bottom: 20px;">
-      <%= flash[:notice] %>
-      <% flash.delete(:notice) %> 
-    </div>
-  <% end %>
   <div class="content-wrapper">
    <div class="left-column">
      <h2>Item Details</h2>
@@ -239,7 +233,7 @@
           </div>
 
           <div id="action_buttons" style="display: none; margin-top: 20px;">
-            <button type="submit" class="btn">Save</button>
+            <button type="submit" id="submit_button" class="btn">Save</button>
             <button type="button" id="cancel_button" class="btn">Cancel</button>
           </div>
         <% end %>
@@ -255,12 +249,8 @@
     
      <div class="btn-container">
         <button id="edit_button" class='btn' >Edit</button>
-        <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form' } %>
-        <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn' %>
-      </div>
-      <div id="action_buttons" style="display: none; margin-top: 20px;">
-        <%# <button id="save_button" class="btn">Save</button> %>
-        <button id="cancel_button" class="btn">Cancel</button>
+        <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form'}, id:'back_button' %>
+        <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id:'delete_button' %>
       </div>
     </div>
 
@@ -292,14 +282,21 @@
        <% end %>
      <% end %>
 
-     <!-- Scrollable Notes Section -->
-     <div class="notes-section" style="max-height: 300px; overflow-y: auto; padding-right: 10px; ">
-       <% @notes.each do |note| %>
-         <br>
-         <p><%= User.find(note.user_id).first_name %> <%= User.find(note.user_id).last_name %> (<%= note.created_at.to_s.split[0] %>):</p>
-         <p><%= note.msg %></p>
-       <% end %>
-     </div>
+      <!-- Scrollable Notes Section -->
+      <div class="notes-section" style="max-height: 300px; overflow-y: auto; padding-right: 10px;">
+        <% if @notes&.any? %>
+          <% @notes.each do |note| %>
+            <br>
+            <% user = User.find_by(id: note.user_id) %>
+            <% if user %>
+              <p><%= user.first_name %> <%= user.last_name %> (<%= note.created_at.strftime('%Y-%m-%d') %>):</p>
+              <p><%= note.msg %></p>
+            <% end %>
+          <% end %>
+        <% else %>
+          <p>No notes available</p>
+        <% end %>
+      </div>
 </div>
 </main>
 

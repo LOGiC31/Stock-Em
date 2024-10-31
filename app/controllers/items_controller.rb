@@ -51,30 +51,14 @@ class ItemsController < ApplicationController
     end
   end
 
-  def set_status
-    @item = Item.find(params[:id])
-    valid_statuses = [nil, 'Damaged', 'Lost', 'Not Available']
-    status = get_valid_status(item_params[:status])
-    if valid_statuses.include?(status) && @item.update(item_params)
-      flash[:notice] = 'Item status updated successfully.'
-      redirect_to @item
-    else
-      flash[:alert] = 'Error updating status. Status must be nil, Damaged, Lost, or Not Available.'
-      render :show
-    end
-  end
-
   def get_valid_status(status)
     status = nil if status.blank?
     status
   end
-
-  def edit
-    @item = Item.find(params[:id])
-  end
   
   def update
     @item = Item.find(params[:id])
+    original_params = item_params.dup
     if @item.update(item_params)
       if params[:item][:status] == 'Not Available' || params[:item][:status] == 'Lost'
         @item.update(currently_available: false) # Update available to false
@@ -85,16 +69,21 @@ class ItemsController < ApplicationController
       flash[:notice] = "Item was successfully updated."
       redirect_to @item
     else
-      flash.now[:alert] = "There was a problem updating the item."
-      render :edit
+      flash[:alert] = "There was a problem updating the item."
+      @item.update(original_params)
+      redirect_to @item
     end
   end
 
   def destroy
     @item = Item.find(params[:id])
-    @item.destroy
-    flash[:notice] = 'Item was successfully deleted.'
-    redirect_to items_path
+    if @item.destroy
+      flash[:notice] = "Item was successfully deleted."
+      redirect_to items_path
+    else
+      flash[:alert] = "Failed to delete the item."
+      redirect_to items_path
+    end
   end
   
   private
