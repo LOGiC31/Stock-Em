@@ -26,7 +26,7 @@ Feature: Login as admin
     And I click on "Login as Admin"
     Then I should be on the 'Dashboard' page
     And I should see "Users"
-    And I should see "Paul Taele"
+    And I should see "random TA"
 
   Scenario: Successfully logging as an admin
     Given I am on the home page
@@ -40,6 +40,7 @@ Feature: Login as admin
     And I click on "Login as Admin"
     Then I should be on the 'Dashboard' page
     And I should see "Users"
-    And I should see "Paul Taele"
+    And I should see "random TA"
     When I edit the user’s role to "Student"
+
 

@@ -8,7 +8,7 @@ Background: items in database
 
   Given the following items exist:
   | serial_number | item_name  | category    | quality_score | currently_available | details  | created_at | updated_at |
-  | SN1           | Item One   | Furniture   | 50            | true                | ""       | 2024-10-01 | 2024-10-02 |
+  | SN1           | Item One   | Furnitures  | 50            | true                | ""       | 2024-10-01 | 2024-10-02 |
   | SN2           | Item Two   | Electronics | 75            | false               | "abc"    | 2024-10-02 | 2024-10-02 |
   
   Given the following users exist:
@@ -23,7 +23,7 @@ Scenario: view an available item and see Checkout
 
 Scenario: view an unavailable item and see Checkin
   Given I am logged in
-  And   I am on the details page for the item "SN1"
+  And   I am on the details page for the item "SN2"
   Then  I should not see "Checkout"
   And   I should see "Checkin"
 
@@ -49,4 +49,3 @@ Scenario: Checkin follows the correct UI flow
   And   I press "Publish"
   And   I should see "Checkout"
   And   I should see "orange"
-
