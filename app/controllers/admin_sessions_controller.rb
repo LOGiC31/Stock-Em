@@ -2,11 +2,11 @@ class AdminSessionsController < ApplicationController
   skip_before_action :require_login, only: %i[new create dashboard destroy]
 
   def dashboard
-    @users = User.all # Fetch all users from the users table
+    @users = User.all
   end
 
   def new
-    # This action will render app/views/admin_sessions/new.html.erb
+    # render new
   end
 
   def create

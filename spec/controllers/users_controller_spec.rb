@@ -57,5 +57,35 @@ RSpec.describe UsersController, type: :controller do
     #     expect(response.status).to eq(422)
     #   end
     # end
+    #
+  end
+  describe 'PATCH #update_auth_level' do
+    let(:user) { User.create!(auth_level: 0, role: 'Students', email: 'vinay@example.com') }
+    context 'when the update is successful' do
+      before do
+        patch :update_auth_level, params: { id: user.id, auth_level: 1 }
+      end
+
+      it 'updates the auth level and returns the updated attributes' do
+        expect(response).to have_http_status(:success)
+        json_response = JSON.parse(response.body)
+        expect(json_response['auth_level']).to eq(1)
+        expect(json_response['role']).to eq('Assistants')
+        expect(user.reload.auth_level).to eq(1)
+      end
+    end
+
+    context 'when the update fails' do
+      before do
+        # Assuming auth_level must be a specific range, e.g., 0-2
+        patch :update_auth_level, params: { id: user.id, auth_level: 5 }
+      end
+
+      it 'returns an error message' do
+        expect(response).to have_http_status(:unprocessable_entity)
+        json_response = JSON.parse(response.body)
+        expect(json_response['status']).to eq('error')
+      end
+    end
   end
 end
