@@ -154,6 +154,22 @@
       </select>
     </label>
 
+    <!-- Status Filter -->
+    <label class="filter">
+      <select name="status" id="status" class="filter-dropdown status">
+        <option value="">All Statuses</option>
+        <% if @statuses.present? %>
+          <% @statuses.each do |status| %>
+            <% if status.present? %>
+              <option value="<%= status %>" <%= 'selected' if params[:status] == status %>><%= status.capitalize %></option>
+            <% else %>
+              <option value="unknown" <%= 'selected' if params[:status] == 'unknown' %>>Unknown</option>
+            <% end %>
+          <% end %>
+        <% end %>
+      </select>
+    </label>
+
     <!-- Submit Button -->
     <%= submit_tag "Filter", class: "btn btn-primary" %>
 
