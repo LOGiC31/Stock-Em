@@ -181,6 +181,11 @@
     
      <div class="btn-container">
        <%= link_to 'Edit', edit_item_path(@item), class: 'btn' %>
+       <% if @item.currently_available %>
+         <%= link_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
+       <% else %>
+         <%= link_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
+       <% end %>
        <%= link_to 'Back to Items', items_path, class: 'btn' %>
      </div>
    </div>

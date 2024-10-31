@@ -25,6 +25,9 @@ Rails.application.routes.draw do
   get '/auth/google_oauth2/callback', to: 'sessions#omniauth'
   get '/add_note_to_item', to: 'items#add_note', as: 'add_note'
 
+  get '/create_new_event', to: 'events#new', as: 'create_event'
+  get '/publish_event', to: 'events#publish_event', as: 'publish_event'
+
   get 'admin/login', to: 'admin_sessions#new', as: 'admin_login'
   post 'admin/login', to: 'admin_sessions#create'
   delete 'admin/logout', to: 'admin_sessions#destroy', as: 'admin_logout'
