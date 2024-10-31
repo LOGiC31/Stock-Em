@@ -13,30 +13,32 @@ Feature: Show Item
     When I visit the item page
     Then I should see the item's details
 
-  Scenario: Successfully updating item status to 'Damaged'
-    Given I am on the home page
-    When I click on "Login with Google"
-    And I successfully authenticate via Google
-    Then I should be redirected to my user page
-    And I should see "View Items"
-    Given there is an item in the database
-    When I visit the item page
-    Given I have an item named "Test Item" with status "Available"
-    And I select "Damaged" from the status dropdown
-    And I click on "Update Status"
-    And the item status should be "Damaged"
+# These scenarios have been integrated with item_management_feature
 
-  Scenario: Successfully clearing the item status
-    Given I am on the home page
-    When I click on "Login with Google"
-    And I successfully authenticate via Google
-    Then I should be redirected to my user page
-    And I should see "View Items"
-    Given there is an item in the database
-    When I visit the item page
-    Given I have an item named "Test Item" with status "Available"
-    And I select "Damaged" from the status dropdown
-    And I click on "Update Status"
-    And I select "Clear Status" from the status dropdown
-    And I click on "Update Status"
-    And the item status should be ""
+#  Scenario: Successfully updating item status to 'Damaged'
+#    Given I am on the home page
+#    When I click on "Login with Google"
+#    And I successfully authenticate via Google
+#    Then I should be redirected to my user page
+#    And I should see "View Items"
+#    Given there is an item in the database
+#    When I visit the item page
+#    Given I have an item named "Test Item" with status "Available"
+#    And I select "Damaged" from the status dropdown
+#    And I click on "Update Status"
+#    And the item status should be "Damaged"
+
+#  Scenario: Successfully clearing the item status
+#    Given I am on the home page
+#    When I click on "Login with Google"
+#    And I successfully authenticate via Google
+#    Then I should be redirected to my user page
+#    And I should see "View Items"
+#    Given there is an item in the database
+#    When I visit the item page
+#    Given I have an item named "Test Item" with status "Available"
+#    And I select "Damaged" from the status dropdown
+#    And I click on "Update Status"
+#    And I select "Clear Status" from the status dropdown
+#    And I click on "Update Status"
+#    And the item status should be ""
