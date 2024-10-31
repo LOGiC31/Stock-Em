@@ -10,7 +10,7 @@ class EventsController < ApplicationController
       details = "Checked out to "
 
       unless params[:teams].blank?
-        details = params[:teams].to_s + " in "
+        details += params[:teams].to_s + " in "
       end
 
       details += params[:location].to_s + " "

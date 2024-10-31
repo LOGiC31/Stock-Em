@@ -108,7 +108,7 @@
     <h2>Checkin Item</h2>
   <% end %>
 
-  <%= form_tag(publish_event_path, method: "get") do %>
+  <%= form_tag(publish_event_path, method: "get") do |form| %>
 
     <%= hidden_field_tag :itemid, @itemid %>
     <%= hidden_field_tag :evtype, @evtype %>
@@ -137,7 +137,7 @@
     <%= text_field_tag(:comments) %>
 
     <div class="button-container">
-    <input type="submit" value="Publish" class="btn2">
+    <input type="submit" value="Publish" class="submit-button">
     </div>
 
   <% end %>
