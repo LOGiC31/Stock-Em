@@ -7,12 +7,37 @@ class ItemsController < ApplicationController
   def index # rubocop:disable Metrics/AbcSize
     @items = Item.all
 
+    # if params[:query].present?
+    #   query = params[:query].downcase
+    #   @items = @items.select do |item|
+    #     item.item_name.downcase.include?(query) || item.category.downcase.include?(query)
+    #   end
+    # end
+
+    @categories = Item.distinct.pluck(:category)
+    @statuses = Item.distinct.pluck(:status)
+
     if params[:query].present?
-      query = params[:query].downcase
-      @items = @items.select do |item|
-        item.item_name.downcase.include?(query) || item.category.downcase.include?(query)
-      end
+      keywords = params[:query].split(" ")
+
+      @items = @items.where(
+  keywords.map do |keyword|
+    "(LOWER(item_name) LIKE ? OR LOWER(category) LIKE ? OR LOWER(status) LIKE ? OR LOWER(CASE WHEN currently_available THEN 'available' ELSE 'not available' END) LIKE ?)"
+  end.join(" AND "),
+  *keywords.flat_map { |keyword| ["%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%"] }
+)
+
+
     end
+
+    if params[:category].present?
+      @items = @items.where(category: params[:category])
+    end
+  
+    if params[:status].present?
+      @items = @items.where(status: params[:status])
+    end
+
     return unless params[:available_only] == '1'
 
     @items = @items.select(&:currently_available)
