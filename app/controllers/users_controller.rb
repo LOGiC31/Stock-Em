@@ -3,6 +3,7 @@
 # Similar to user profiles, just defines a way to showcase a profile.
 class UsersController < ApplicationController
   skip_before_action :require_login, only: [:update_auth_level]
+  skip_before_action :require_login, only: [:update_auth_level]
   def show
     @current_user = User.find(params[:id])
   end
