@@ -54,7 +54,7 @@
      justify-content: space-between;
      gap: 40px;
      align-items: flex-start;
-     height: 52%;
+     height: 60%;
    }
    @media (max-width: 768px) {
     .content-wrapper {
@@ -185,6 +185,12 @@
   .editing .display {
     display: none; /* Hide display text when editing */
   }
+  .updateForm {
+    display: flex;
+    justify-content : space-evenly;
+    align-items: center;
+    margin-left: 0px;
+  }
  </style>
 </head>
 <body>
@@ -194,14 +200,14 @@
  <h1><%= @item.item_name %></h1>
   <div class="content-wrapper">
     
-   <div class="left-column">
-     <h2>Item Details</h2>
+    <div class="left-column">
+      <h2>Item Details</h2>
     
-     <div class="item-details">
-       <p><strong>Item ID:</strong> <%= @item.id %></p>
-       <p><strong>Serial Number:</strong> <%= @item.serial_number %></p>
+      <div class="item-details">
+        <p><strong>Item ID:</strong> <%= @item.id %></p>
+        <p><strong>Serial Number:</strong> <%= @item.serial_number %></p>
       </div>
-        <%= form_with model: @item, local: true do |f| %>
+          <%= form_with model: @item, local: true do |f| %>
           <div class="item-details">
               <p class="editable-field"><strong class= "editable-label">Item Name:</strong>
                   <span class="display"><%= @item.item_name %></span>
@@ -231,99 +237,97 @@
             <button type="submit" id="submit_button" class="btn">Save</button>
             <button type="button" id="cancel_button" class="btn">Cancel</button>
           </div>
-        <% end %>
-     <div class="item-details">
-       <p><strong>Available:</strong>
-         <span class="availability" style="color: <%= @item.currently_available ? 'green' : 'red' %>;">
-           <%= @item.currently_available ? 'Yes' : 'No' %>
-         </span>
-       </p>
-     </div>
+          <% end %>
+          <div class="item-details">
+            <p><strong>Available:</strong>
+              <span class="availability" style="color: <%= @item.currently_available ? 'green' : 'red' %>;">
+                <%= @item.currently_available ? 'Yes' : 'No' %>
+              </span>
+            </p>
+          </div>
     
-     <%= image_tag(@item.image) if @item.image.present? %>
+      <%= image_tag(@item.image) if @item.image.present? %>
     
-     <div class="btn-container">
-       <% if @item.currently_available %>
-         <%= link_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
-       <% else %>
-         <%= link_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
-       <% end %> 
-       <button id="edit_button" class='btn' >Edit</button>
-        <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form'}, id:'back_button' %>
-        <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id:'delete_button' %>
+      <div class="btn-container">
+          <% if @item.currently_available %>
+            <%= link_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
+          <% else %>
+            <%= link_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
+          <% end %> 
+          <button id="edit_button" class='btn' >Edit</button>
+            <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form'}, id:'back_button' %>
+          <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id:'delete_button' %>
       </div>
     </div>
-   </div>
 
+    <div class="right-column">
+        <h2>Item History</h2>
+        <div class="notes-section" style="padding-right: 10px; ">
+        <% @events.each do |event| %>
+          <br>
+          <p class="event-user">
+            <%= User.find(event.associated_user_id).first_name %> 
+            <%= User.find(event.associated_user_id).last_name %> 
+            (<%= event.created_at.to_s.split[0] %>):
+          </p>
+          <p class="event-details">
+            <%= event.details %>
+          </p>
+        <% end %>
+      
 
-   <div class="right-column">
-     <h2>Item History</h2>
-     <div class="notes-section" style="padding-right: 10px; ">
-       <% @events.each do |event| %>
-         <br>
-         <p class="event-user">
-          <%= User.find(event.associated_user_id).first_name %> 
-          <%= User.find(event.associated_user_id).last_name %> 
-          (<%= event.created_at.to_s.split[0] %>):
-        </p>
-        <p class="event-details">
-          <%= event.details %>
-        </p>
-       <% end %>
-     
+      <h2>Notes</h2>
 
-     <h2>Notes</h2>
+      <!-- Add in "create note" button if not writing a note already -->
+      <% if !@writing_note %>
+        <%= link_to 'Create Note', item_path(id: @item.id, writing_note: true), class: 'btn2',  style: 'margin-bottom: 5px;' %>
+      <% end %>
+      <h2>  </h2>
 
-     <!-- Add in "create note" button if not writing a note already -->
-     <% if !@writing_note %>
-       <%= link_to 'Create Note', item_path(id: @item.id, writing_note: true), class: 'btn2',  style: 'margin-bottom: 5px;' %>
-     <% end %>
-     <h2>  </h2>
+      <!-- Note creation form -->
+      <% if @writing_note %>
+        <%= form_tag(add_note_path, method: "get") do %>
+          <%= label_tag(:note_msg, '') %>
+          <%= text_area_tag(:note_msg) %>
+          <%= hidden_field_tag :id, @item.id %>
+          <br>
+          <input type="submit" value="Publish" class="btn2">
+        <% end %>
+      <% end %>
 
-     <!-- Note creation form -->
-     <% if @writing_note %>
-       <%= form_tag(add_note_path, method: "get") do %>
-         <%= label_tag(:note_msg, '') %>
-         <%= text_area_tag(:note_msg) %>
-         <%= hidden_field_tag :id, @item.id %>
-         <br>
-         <input type="submit" value="Publish" class="btn2">
-       <% end %>
-     <% end %>
-
-     <!-- Scrollable Notes Section -->
-     <%# <div class="notes-section" style="max-height: 210px; padding-right: 10px; "> %>
-       <% @notes.each do |note| %>
-         <br>
-         <p class="event-user">
-          <%= User.find(note.user_id).first_name %> 
-          <%= User.find(note.user_id).last_name %> 
-          (<%= note.created_at.to_s.split[0] %>):
-        </p>
-        <p class="event-details">
-          <%= note.msg %>
-        </p>
-       <% end %>
-     </div>
-</div>
-
- </div>
- <div style="background-color: #f5f5f5;border-radius: 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;padding: 20px;margin-top: 35px;">
-  <h3 style="color:#500000">Update Item Status</h3>
-  <%= form_with model: @item, url: set_status_item_path(@item), method: :patch, local: true do |f| %>
-    <div style="margin-top: 12px; display: flex; align-items: flex-start;">
-      <label for="status"><strong>Select Status:</strong></label>
-      <%= f.select :status, options_for_select(
-        [['Clear Status', nil], 'Damaged', 'Lost', 'Not Available', 'Intact'].reject { |s| s[1] == @item.status }, # Exclude the current status
-        @item.status # Pre-select the current status if it’s not nil
-      ),  {}, { style: "margin-left: 18px; padding: 10px; border-radius: 5px; border: 2px solid #ccc; background-color: #f5f5f5;", name: "item[status]" } %>
+      <!-- Scrollable Notes Section -->
+      <%# <div class="notes-section" style="max-height: 210px; padding-right: 10px; "> %>
+        <% @notes.each do |note| %>
+          <br>
+          <p class="event-user">
+            <%= User.find(note.user_id).first_name %> 
+            <%= User.find(note.user_id).last_name %> 
+            (<%= note.created_at.to_s.split[0] %>):
+          </p>
+          <p class="event-details">
+            <%= note.msg %>
+          </p>
+        <% end %>
     </div>
-    <div style="margin-top: 12px;">
-      <%= f.submit "Update Status", class: "btn" %>
+  </div>
+  </div>
+  <div style="background-color: #f5f5f5;border-radius: 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;padding: 20px;">
+      <h3 style="color:#500000">Update:</h3>  
+      <div style="display:flex; justify-content:flex-start; align-items: center;">
+          
+          <%= form_with model: @item, url: set_status_item_path(@item), class:"updateForm", method: :patch, local: true do |f| %>
+              <label for="status"><strong>Select Status:</strong></label>
+              <%= f.select :status, options_for_select(
+                [['Clear Status', nil], 'Damaged', 'Lost', 'Not Available', 'Intact'].reject { |s| s[1] == @item.status }, # Exclude the current status
+                @item.status # Pre-select the current status if it’s not nil
+              ),  {}, { style: "margin-left: 18px; padding: 10px; border-radius: 5px; border: 2px solid #ccc; background-color: #f5f5f5;", name: "item[status]" } %>
+            
+            <div style="margin-left: 10px;">
+              <%= f.submit "Update Status", class: "btn" %>
+            </div>
+          <% end %>
+      </div>
     </div>
-  <% end %>
-</div>
-
 </div>
 <script>
   setTimeout(function() {
