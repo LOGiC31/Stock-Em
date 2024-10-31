@@ -101,6 +101,7 @@ class ItemsController < ApplicationController
       flash[:alert] = 'Failed to delete the item.'
     end
     redirect_to items_path
+  end
 
   def set_status # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @item = Item.find(params[:id])

@@ -5,7 +5,6 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>Stock'Em - <%= @item.item_name %></title>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
- <%= javascript_include_tag 'application', 'data-turbo-track': 'reload' %>
  <style>
    body {
      font-family: Arial, sans-serif;
@@ -80,14 +79,11 @@
      margin-bottom: 15px;
      font-size: 22px;
    }
-   .item-details p,
-   .editable-field p,
-    p {
-      font-size: 16px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
+   p {
+     font-size: 16px;
+     color: #666;
+     margin-bottom: 10px;
+   }
    .item-details strong {
      color: #333;
    }
@@ -108,7 +104,6 @@
      margin-top: 20px;
      display: flex;
      gap: 10px;
-     align-items: center; 
    }
    .btn {
      padding: 10px 15px;
@@ -120,15 +115,8 @@
      transition: background-color 0.3s;
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
    }
-   button.btn {
-    font-size: 16px; /* Ensure button font size matches */
-  }
-
-  a.btn {
-        font-size: 16px; /* Ensure link font size matches */
-  }
    .btn2 {
-     font-size: 16px;
+     font-size: 14px;
      padding: 5px 10px;
      background-color: #9c7c08;
      color: white;
@@ -141,11 +129,18 @@
    .btn:hover {
      background-color: #800000;
    }
-  .right-column {
-      max-height: 344px; /* Set the height as per your needs */
-      overflow-y: auto;   /* Enable vertical scrolling */
-      padding-right: 10px; /* Optional: Add padding to avoid content cutting off */
+   .event-user {
+      font-weight: bold; 
+      color: #333; 
+      margin: 0; 
+      font-size: 0.9em; 
+   }
+   .event-details {
+      color: #555; 
+      margin-top: 5px; 
+      font-size: 0.8em;
     }
+
 
    footer {
      display: flex;
@@ -156,7 +151,8 @@
      padding: 15px 20px;
      margin-top: auto;
    }
-  .editable {
+
+     .editable {
     display: none;
     font-size: 16px;
     color: #333; /* Change to desired color */
@@ -189,23 +185,15 @@
   .editing .display {
     display: none; /* Hide display text when editing */
   }
-  </style>
+ </style>
 </head>
 <body>
 
 
-<header>
- <div class="header-title">Stock'Em</div>
- <div>
-   <span class="greeting">Hello, <span id="username">User</span></span>
-   <span class="icon user-icon"><i class="fas fa-user"></i></span>
- </div>
-</header>
-
-
-<main>
+<div class="main">
  <h1><%= @item.item_name %></h1>
   <div class="content-wrapper">
+    
    <div class="left-column">
      <h2>Item Details</h2>
     
@@ -230,7 +218,7 @@
               </p>
               <p class="editable-field"><strong class="editable-label">Status:</strong>
                   <span class="display"><%= @item.status %></span>
-                  <%= f.select :status, options_for_select([nil, 'Available', 'Damaged', 'Lost', 'Not Available'], @item.status), {}, { class: "editable", style: "display: none;" } %>
+                  <%= f.select :status, options_for_select([nil, 'Available', 'Damaged', 'Lost', 'Not Available'], @item.status), {}, { class: "editable", style: "display: none;", id:'item_internal_status' } %>
 
               </p>
               <p class="editable-field"><strong class="editable-label">Details:</strong>
@@ -260,6 +248,9 @@
         <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id:'delete_button' %>
       </div>
     </div>
+
+   </div>
+
 
    <div class="right-column">
      <h2>Item History</h2>
@@ -296,7 +287,6 @@
        <% end %>
      <% end %>
 
-
      <!-- Scrollable Notes Section -->
      <%# <div class="notes-section" style="max-height: 210px; padding-right: 10px; "> %>
        <% @notes.each do |note| %>
@@ -330,8 +320,7 @@
   <% end %>
 </div>
 
-</main>
-
+</div>
 <script>
   setTimeout(function() {
     var flashNotice = document.getElementById('flash-notice');
@@ -377,7 +366,5 @@
     document.getElementById('edit_button').style.display = 'inline'; // Show the edit button again
     });
 </script>
-</div>
-
 </body>
 </html>
