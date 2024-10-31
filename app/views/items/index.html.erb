@@ -154,6 +154,9 @@
       </select>
     </label>
 
+    <!-- Submit Button -->
+    <%= submit_tag "Filter", class: "btn btn-primary" %>
+
     <!-- Availability Filter -->
     <label class="filter">
       <%= check_box_tag :available_only, '1', params[:available_only] == '1' %> Only show available items
