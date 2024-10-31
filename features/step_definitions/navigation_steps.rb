@@ -17,7 +17,7 @@ When('I follow {string}') do |link|
 end
 
 Then('I should not see {string}') do |string|
-  File.open("tmp/page_output.html", "w") do |file|
+  File.open('tmp/page_output.html', 'w') do |file|
     file.write(page.body)
   end
   expect(page).not_to have_content(string)

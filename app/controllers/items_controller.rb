@@ -18,25 +18,22 @@ class ItemsController < ApplicationController
     @statuses = Item.distinct.pluck(:status)
 
     if params[:query].present?
-      keywords = params[:query].split(" ")
+      keywords = params[:query].split(' ')
 
       @items = @items.where(
-  keywords.map do |keyword|
-    "(LOWER(item_name) LIKE ? OR LOWER(category) LIKE ? OR LOWER(status) LIKE ? OR LOWER(CASE WHEN currently_available THEN 'available' ELSE 'not available' END) LIKE ?)"
-  end.join(" AND "),
-  *keywords.flat_map { |keyword| ["%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%"] }
-)
-
+        keywords.map do |_keyword|
+          "(LOWER(item_name) LIKE ? OR LOWER(category) LIKE ? OR LOWER(status) LIKE ? OR LOWER(CASE WHEN currently_available THEN 'available' ELSE 'not available' END) LIKE ?)"
+        end.join(' AND '),
+        *keywords.flat_map do |keyword|
+          ["%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%"]
+        end
+      )
 
     end
 
-    if params[:category].present?
-      @items = @items.where(category: params[:category])
-    end
-  
-    if params[:status].present?
-      @items = @items.where(status: params[:status])
-    end
+    @items = @items.where(category: params[:category]) if params[:category].present?
+
+    @items = @items.where(status: params[:status]) if params[:status].present?
 
     return unless params[:available_only] == '1'
 
