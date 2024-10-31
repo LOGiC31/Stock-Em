@@ -138,9 +138,25 @@
 
 <div class="search-container">
   <%= form_with url: items_path, method: :get, local: true, class: 'search-form' do %>
-    <%= text_field_tag :query, params[:query], placeholder: "Search..." %>
+
+    <!-- Search by general query (narrower width) -->
+    <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "search-bar" %>
+
+    <!-- Category Filter -->
     <label class="filter">
-    <%= check_box_tag :available_only, '1', params[:available_only] == '1' %> Only show available items
+      <select name="category" id="category" class="filter-dropdown category">
+        <option value="">All Categories</option>
+        <% if @categories.present? %>
+          <% @categories.each do |category| %>
+            <option value="<%= category %>" <%= 'selected' if params[:category] == category %>><%= category %></option>
+          <% end %>
+        <% end %>
+      </select>
+    </label>
+
+    <!-- Availability Filter -->
+    <label class="filter">
+      <%= check_box_tag :available_only, '1', params[:available_only] == '1' %> Only show available items
     </label>
   <% end %>
 </div>
