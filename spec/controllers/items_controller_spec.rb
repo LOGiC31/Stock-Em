@@ -24,7 +24,7 @@ RSpec.describe ItemsController, type: :controller do
     Item.create!(
       serial_number: 'SN2',
       item_name: 'Chair',
-      category: 'Furniture',
+      category: 'Furnitures',
       quality_score: 75,
       currently_available: true,
       details: 'abc',
@@ -259,6 +259,51 @@ RSpec.describe ItemsController, type: :controller do
       delete :destroy, params: { id: item1.id }
       expect(flash[:alert]).to eq('Failed to delete the item.')
       expect(response).to redirect_to(items_path)
+    end
+  end
+end
+
+  describe 'POST #add_note' do
+
+  before do
+    # Simulating a user login by setting the session
+    session[:user_id] = user.id
+
+    # Mocking the User.find_by method to return the user we created
+    allow(User).to receive(:find_by).with(id: session[:user_id]).and_return(user)
+  end
+
+    context 'when the note is successfully created' do
+      let(:note_message) { 'This is a test note.' }
+
+      before do
+        post :add_note, params: { id: item1.id, note_msg: note_message }
+      end
+
+      it 'creates a new note for the item' do
+        expect(Note.last.msg).to eq(note_message)
+        expect(Note.last.item).to eq(item1)
+        expect(Note.last.user).to eq(user)
+      end
+
+      it 'redirects to the item show page' do
+        expect(response).to redirect_to(item_path(item1))
+      end
+
+      it 'responds with no content for JSON format' do
+        post :add_note, params: { id: item1.id, note_msg: note_message }, format: :json
+        expect(response).to have_http_status(:no_content)
+      end
+    end
+
+    context 'when the note creation fails' do
+      before do
+        post :add_note, params: { id: item1.id, note_msg: nil }
+      end
+
+      it 'does not create a note and redirects back with an error' do
+        expect(response).to redirect_to(item_path(item1))
+      end
     end
   end
 end

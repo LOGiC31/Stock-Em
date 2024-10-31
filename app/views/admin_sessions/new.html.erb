@@ -1,0 +1,115 @@
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #f8f8f8;
+    }
+    header, footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #500000;
+      color: white;
+      padding: 15px 20px;
+    }
+    .header-title {
+      font-size: 30px; 
+      font-weight: bold; 
+    }
+    .greeting {
+      font-size: 20px; 
+      margin-right: 10px; 
+    }
+    .form-container {
+      margin: 20px auto;
+      padding: 40px 30px 40px 15px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+    label {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    .required:after {
+      content: " *";
+      color: red;
+    }
+    input[type="text"], input[type="password"] {
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      margin-top: 5px;
+      transition: border-color 0.3s;
+      box-sizing: border-box;
+      margin-bottom: 5%;
+    }
+    input[type="text"]:focus, input[type="password"]:focus {
+      border-color: #500000;
+      outline: none;
+      margin-bottom: 5%;
+    }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .submit-button {
+      background-color: #500000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-left: 8px;
+    }
+    .submit-button:hover {
+      background-color: #700000;
+    }
+    .error-messages {
+      color: red;
+      margin-bottom: 10px;
+    }
+
+  </style>
+<div>
+    <h1>Admin Login</h1>
+
+     <div class="form-container">
+
+    <%= form_with(url: admin_login_path, local: true) do |form| %>
+      <% if flash[:alert] %>
+        <div class="error-messages"><%= flash[:alert] %></div>
+      <% end %>
+
+      <label for="username" class="required">Username</label>
+      <%= form.text_field :username, id: 'username', required: true %>
+
+      <label for="password" class="required">Password</label>
+      <%= form.password_field :password, id: 'password', required: true %>
+
+      <div class="button-container">
+        <%= form.submit 'Login as Admin', class: 'submit-button' %>
+      </div>
+
+      <div class="button-container">
+        <%= link_to 'Home', welcome_index_path, method: :get, class: 'submit-button' %>
+      </div>
+
+        
+    <% end %>
+  </div>
+
+    </div>
+</div>

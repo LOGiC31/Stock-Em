@@ -2,6 +2,7 @@
 
 # Contains logic for web pages which display item(s)
 class ItemsController < ApplicationController
+  include EventLogger
   # get all the items
   def index # rubocop:disable Metrics/AbcSize
     @items = Item.all
@@ -22,6 +23,7 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     @writing_note = !params[:writing_note].nil?
     @notes = Note.where(item_id: @item.id).order('created_at DESC')
+    @events = Event.where(item_id: @item.id).order('created_at DESC')
   end
 
   # add note to item
@@ -89,5 +91,6 @@ class ItemsController < ApplicationController
   def item_params
     params.require(:item).permit(:item_id, :serial_number, :item_name,
                                  :category, :quality_score, :currently_available, :image, :details, :status, :comment, :location)
+
   end
 end

@@ -3,6 +3,7 @@ import "controllers"
 import Rails from "@rails/ujs";
 Rails.start();
 
+
 document.addEventListener('DOMContentLoaded', function() {
     const flashMessage = document.querySelector('.flash-message');
     if (flashMessage) {
