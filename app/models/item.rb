@@ -8,4 +8,5 @@ class Item < ApplicationRecord
   validates :serial_number, presence: true, uniqueness: true
   validates :category, inclusion: { in: %w[Electronics Furniture Accessories Supplies] }
   validates :currently_available, inclusion: { in: [true, false] }
+  validates :location, length: { maximum: 100 }, allow_blank: true
 end

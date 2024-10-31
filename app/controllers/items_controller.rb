@@ -69,10 +69,38 @@ class ItemsController < ApplicationController
     status
   end
 
+  def edit
+    @item = Item.find(params[:id])
+  end
+  
+  def update
+    @item = Item.find(params[:id])
+    if @item.update(item_params)
+      if params[:item][:status] == 'Not Available' || params[:item][:status] == 'Lost'
+        @item.update(currently_available: false) # Update available to false
+      end
+      if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
+        @item.update(currently_available: true) # Update available to false
+      end
+      flash[:notice] = "Item was successfully updated."
+      redirect_to @item
+    else
+      flash.now[:alert] = "There was a problem updating the item."
+      render :edit
+    end
+  end
+
+  def destroy
+    @item = Item.find(params[:id])
+    @item.destroy
+    flash[:notice] = 'Item was successfully deleted.'
+    redirect_to items_path
+  end
+  
   private
 
   def item_params
     params.require(:item).permit(:item_id, :serial_number, :item_name,
-                                 :category, :quality_score, :currently_available, :image, :details, :status, :comment)
+                                 :category, :quality_score, :currently_available, :image, :details, :status, :comment, :location)
   end
 end

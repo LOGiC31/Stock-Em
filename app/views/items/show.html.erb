@@ -5,6 +5,7 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>Stock'Em - <%= @item.item_name %></title>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <%= javascript_include_tag 'application', 'data-turbo-track': 'reload' %>
  <style>
    body {
      font-family: Arial, sans-serif;
@@ -68,11 +69,14 @@
      margin-bottom: 15px;
      font-size: 22px;
    }
-   p {
-     font-size: 16px;
-     color: #666;
-     margin-bottom: 10px;
-   }
+   .item-details p,
+   .editable-field p,
+    p {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
    .item-details strong {
      color: #333;
    }
@@ -93,9 +97,10 @@
      margin-top: 20px;
      display: flex;
      gap: 10px;
+     align-items: center; 
    }
    .btn {
-     padding: 10px 20px;
+     padding: 10px 15px;
      background-color: #500000;
      color: white;
      border-radius: 20px;
@@ -104,8 +109,15 @@
      transition: background-color 0.3s;
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
    }
+   button.btn {
+    font-size: 16px; /* Ensure button font size matches */
+  }
+
+  a.btn {
+        font-size: 16px; /* Ensure link font size matches */
+  }
    .btn2 {
-     font-size: 14px;
+     font-size: 16px;
      padding: 5px 10px;
      background-color: #9c7c08;
      color: white;
@@ -133,7 +145,40 @@
      padding: 15px 20px;
      margin-top: auto;
    }
- </style>
+  .editable {
+    display: none;
+    font-size: 16px;
+    color: #333; /* Change to desired color */
+    margin-bottom: 10px;
+    border: none; /* Remove border if needed */
+    outline: none; /* Remove default outline */
+    width: calc(100% - 20px); /* Adjust width to avoid offset */
+    padding: 5px; /* Add some padding for better appearance */
+    margin-left: 0; /* or adjust as necessary */
+    padding-left: 0; /* adjust if needed */
+  }
+  .editable-field {
+    margin-left: -15px; /* Reset any margin */
+    padding-left: 0; /* Reset any padding */
+  }
+  .editable strong {
+    color: #333; /* Ensure the same color for the editable field */
+  }
+  .editable-label {
+    color: #333; /* Consistent color for strong elements */
+  }
+  .editable:focus {
+      /* outline: none; Remove default outline */
+      border-bottom: 1px solid #500000; /* Change bottom border color on focus */
+      background-color: white;  
+  }
+  .editing .editable {
+    display: inline; /* Show inputs when editing */
+  }
+  .editing .display {
+    display: none; /* Hide display text when editing */
+  }
+  </style>
 </head>
 <body>
 
@@ -149,6 +194,12 @@
 
 <main>
  <h1><%= @item.item_name %></h1>
+  <% if flash[:notice].present? %>
+    <div id="flash-notice" style="background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin-bottom: 20px;">
+      <%= flash[:notice] %>
+      <% flash.delete(:notice) %> 
+    </div>
+  <% end %>
   <div class="content-wrapper">
    <div class="left-column">
      <h2>Item Details</h2>
@@ -156,24 +207,62 @@
      <div class="item-details">
        <p><strong>Item ID:</strong> <%= @item.id %></p>
        <p><strong>Serial Number:</strong> <%= @item.serial_number %></p>
-       <p><strong>Category:</strong> <%= @item.category %></p>
-       <p><strong>Quality Score:</strong> <%= @item.quality_score %></p>
+      </div>
+        <%= form_with model: @item, local: true do |f| %>
+          <div class="item-details">
+              <p class="editable-field"><strong class= "editable-label">Item Name:</strong>
+                  <span class="display"><%= @item.item_name %></span>
+                  <%= f.text_field :item_name, class: "editable" %>
+              </p>
+
+              <p class="editable-field"><strong class="editable-label">Category:</strong>
+                  <span class="display"><%= @item.category %></span>
+                  <%= f.select :category, options_for_select(['Electronics', 'Furniture', 'Accessories', 'Supplies'], @item.category), {}, { class: "editable", style: "display: none;" } %>
+              </p>
+              <p class="editable-field"><strong class= "editable-label">Quality Score:</strong>
+                  <span class="display"><%= @item.quality_score %></span>
+                  <%= f.text_field :quality_score, class: "editable" %>
+              </p>
+              <p class="editable-field"><strong class="editable-label">Status:</strong>
+                  <span class="display"><%= @item.status %></span>
+                  <%= f.select :status, options_for_select([nil, 'Available', 'Damaged', 'Lost', 'Not Available'], @item.status), {}, { class: "editable", style: "display: none;" } %>
+
+              </p>
+              <p class="editable-field"><strong class="editable-label">Location:</strong>
+                  <span class="display"><%= @item.location %></span>
+                  <%= f.text_area :location, class: "editable" %>
+              </p>
+              <p class="editable-field"><strong class="editable-label">Details:</strong>
+                  <span class="display"><%= @item.details %></span>
+                  <%= f.text_area :details, class: "editable" %>
+              </p>
+          </div>
+
+          <div id="action_buttons" style="display: none; margin-top: 20px;">
+            <button type="submit" class="btn">Save</button>
+            <button type="button" id="cancel_button" class="btn">Cancel</button>
+          </div>
+        <% end %>
+     <div class="item-details">
        <p><strong>Available:</strong>
          <span class="availability" style="color: <%= @item.currently_available ? 'green' : 'red' %>;">
            <%= @item.currently_available ? 'Yes' : 'No' %>
          </span>
        </p>
-       <p><strong>Status:</strong> <%= @item.status %></p>
-       <p><strong>Details:</strong> <%= @item.details %></p>
      </div>
     
      <%= image_tag(@item.image) if @item.image.present? %>
     
      <div class="btn-container">
-       <%= link_to 'Edit', edit_item_path(@item), class: 'btn' %>
-       <%= link_to 'Back to Items', items_path, class: 'btn' %>
-     </div>
-   </div>
+        <button id="edit_button" class='btn' >Edit</button>
+        <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form' } %>
+        <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn' %>
+      </div>
+      <div id="action_buttons" style="display: none; margin-top: 20px;">
+        <%# <button id="save_button" class="btn">Save</button> %>
+        <button id="cancel_button" class="btn">Cancel</button>
+      </div>
+    </div>
 
 
    <div class="right-column">
@@ -212,24 +301,6 @@
        <% end %>
      </div>
 </div>
-
- </div>
- <div style="background-color: #f5f5f5;border-radius: 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;padding: 20px;margin-top: 20px;">
-  <h3 style="color:#500000">Update Item Status</h3>
-  <%= form_with model: @item, url: set_status_item_path(@item), method: :patch, local: true do |f| %>
-    <div style="margin-top: 12px; display: flex; align-items: flex-start;">
-      <label for="status"><strong>Select Status:</strong></label>
-      <%= f.select :status, options_for_select(
-        [['Clear Status', nil], 'Damaged', 'Lost', 'Not Available'].reject { |s| s[1] == @item.status }, # Exclude the current status
-        @item.status # Pre-select the current status if it’s not nil
-      ),  {}, { style: "margin-left: 18px; padding: 10px; border-radius: 5px; border: 2px solid #ccc; background-color: #f5f5f5;", name: "item[status]" } %>
-    </div>
-    <div style="margin-top: 12px;">
-      <%= f.submit "Update Status", class: "btn" %>
-    </div>
-  <% end %>
-</div>
-
 </main>
 
 
@@ -237,6 +308,51 @@
  <div>The Stock'Em Team, 2024</div>
 </footer>
 
+<script>
+  setTimeout(function() {
+    var flashNotice = document.getElementById('flash-notice');
+    if (flashNotice) {
+      flashNotice.style.display = 'none'; 
+    }
+  }, 4000); 
 
+  document.getElementById('edit_button').addEventListener('click', function() {
+    // Show editable fields and hide display fields
+    document.querySelectorAll('.editable').forEach(function(input) {
+        input.style.display = 'inline'; // Show input fields
+        input.parentElement.classList.add('editing'); // Add editing class
+    });
+    
+    // Show the dropdowns specifically for category and status
+    document.querySelectorAll('select.editable').forEach(function(select) {
+        select.style.display = 'inline'; // Show dropdowns
+    });
+    
+    document.querySelectorAll('.display').forEach(function(span) {
+        span.style.display = 'none'; // Hide display text
+    });
+    document.getElementById('action_buttons').style.display = 'block'; // Show action buttons
+    this.style.display = 'none'; // Hide the edit button
+    });
+
+    document.getElementById('cancel_button').addEventListener('click', function() {
+    // Hide editable fields and show display fields
+    document.querySelectorAll('.editable').forEach(function(input) {
+        input.style.display = 'none'; // Hide input fields
+    });
+
+    // Hide the dropdowns specifically for category and status
+    document.querySelectorAll('select.editable').forEach(function(select) {
+        select.style.display = 'none'; // Hide dropdowns
+    });
+    
+    document.querySelectorAll('.display').forEach(function(span) {
+        span.style.display = 'inline'; // Show display text
+    });
+    document.getElementById('action_buttons').style.display = 'none'; // Hide action buttons
+    document.getElementById('edit_button').style.display = 'inline'; // Show the edit button again
+    });
+
+</script>
 </body>
 </html>
