@@ -222,10 +222,6 @@
                   <%= f.select :status, options_for_select([nil, 'Available', 'Damaged', 'Lost', 'Not Available'], @item.status), {}, { class: "editable", style: "display: none;" } %>
 
               </p>
-              <p class="editable-field"><strong class="editable-label">Location:</strong>
-                  <span class="display"><%= @item.location %></span>
-                  <%= f.text_area :location, class: "editable" %>
-              </p>
               <p class="editable-field"><strong class="editable-label">Details:</strong>
                   <span class="display"><%= @item.details %></span>
                   <%= f.text_area :details, class: "editable" %>
