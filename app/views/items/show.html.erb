@@ -151,6 +151,40 @@
      padding: 15px 20px;
      margin-top: auto;
    }
+
+     .editable {
+    display: none;
+    font-size: 16px;
+    color: #333; /* Change to desired color */
+    margin-bottom: 10px;
+    border: none; /* Remove border if needed */
+    outline: none; /* Remove default outline */
+    width: calc(100% - 20px); /* Adjust width to avoid offset */
+    padding: 5px; /* Add some padding for better appearance */
+    margin-left: 0; /* or adjust as necessary */
+    padding-left: 0; /* adjust if needed */
+  }
+  .editable-field {
+    margin-left: -15px; /* Reset any margin */
+    padding-left: 0; /* Reset any padding */
+  }
+  .editable strong {
+    color: #333; /* Ensure the same color for the editable field */
+  }
+  .editable-label {
+    color: #333; /* Consistent color for strong elements */
+  }
+  .editable:focus {
+      /* outline: none; Remove default outline */
+      border-bottom: 1px solid #500000; /* Change bottom border color on focus */
+      background-color: white;  
+  }
+  .editing .editable {
+    display: inline; /* Show inputs when editing */
+  }
+  .editing .display {
+    display: none; /* Hide display text when editing */
+  }
  </style>
 </head>
 <body>
@@ -166,23 +200,55 @@
      <div class="item-details">
        <p><strong>Item ID:</strong> <%= @item.id %></p>
        <p><strong>Serial Number:</strong> <%= @item.serial_number %></p>
-       <p><strong>Category:</strong> <%= @item.category %></p>
-       <p><strong>Quality Score:</strong> <%= @item.quality_score %></p>
+      </div>
+        <%= form_with model: @item, local: true do |f| %>
+          <div class="item-details">
+              <p class="editable-field"><strong class= "editable-label">Item Name:</strong>
+                  <span class="display"><%= @item.item_name %></span>
+                  <%= f.text_field :item_name, class: "editable" %>
+              </p>
+
+              <p class="editable-field"><strong class="editable-label">Category:</strong>
+                  <span class="display"><%= @item.category %></span>
+                  <%= f.select :category, options_for_select(['Electronics', 'Furniture', 'Accessories', 'Supplies'], @item.category), {}, { class: "editable", style: "display: none;" } %>
+              </p>
+              <p class="editable-field"><strong class= "editable-label">Quality Score:</strong>
+                  <span class="display"><%= @item.quality_score %></span>
+                  <%= f.text_field :quality_score, class: "editable" %>
+              </p>
+              <p class="editable-field"><strong class="editable-label">Status:</strong>
+                  <span class="display"><%= @item.status %></span>
+                  <%= f.select :status, options_for_select([nil, 'Available', 'Damaged', 'Lost', 'Not Available'], @item.status), {}, { class: "editable", style: "display: none;", id:'item_internal_status' } %>
+
+              </p>
+              <p class="editable-field"><strong class="editable-label">Details:</strong>
+                  <span class="display"><%= @item.details %></span>
+                  <%= f.text_area :details, class: "editable" %>
+              </p>
+          </div>
+
+          <div id="action_buttons" style="display: none; margin-top: 20px;">
+            <button type="submit" id="submit_button" class="btn">Save</button>
+            <button type="button" id="cancel_button" class="btn">Cancel</button>
+          </div>
+        <% end %>
+     <div class="item-details">
        <p><strong>Available:</strong>
          <span class="availability" style="color: <%= @item.currently_available ? 'green' : 'red' %>;">
            <%= @item.currently_available ? 'Yes' : 'No' %>
          </span>
        </p>
-       <p><strong>Status:</strong> <%= @item.status %></p>
-       <p><strong>Details:</strong> <%= @item.details %></p>
      </div>
     
      <%= image_tag(@item.image) if @item.image.present? %>
     
      <div class="btn-container">
-       <%= link_to 'Edit', edit_item_path(@item), class: 'btn' %>
-       <%= link_to 'Back to Items', items_path, class: 'btn' %>
-     </div>
+        <button id="edit_button" class='btn' >Edit</button>
+        <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form'}, id:'back_button' %>
+        <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id:'delete_button' %>
+      </div>
+    </div>
+
    </div>
 
 
@@ -255,7 +321,50 @@
 </div>
 
 </div>
+<script>
+  setTimeout(function() {
+    var flashNotice = document.getElementById('flash-notice');
+    if (flashNotice) {
+      flashNotice.style.display = 'none'; 
+    }
+  }, 4000); 
 
+  document.getElementById('edit_button').addEventListener('click', function() {
+    // Show editable fields and hide display fields
+    document.querySelectorAll('.editable').forEach(function(input) {
+        input.style.display = 'inline'; // Show input fields
+        input.parentElement.classList.add('editing'); // Add editing class
+    });
+    
+    // Show the dropdowns specifically for category and status
+    document.querySelectorAll('select.editable').forEach(function(select) {
+        select.style.display = 'inline'; // Show dropdowns
+    });
+    
+    document.querySelectorAll('.display').forEach(function(span) {
+        span.style.display = 'none'; // Hide display text
+    });
+    document.getElementById('action_buttons').style.display = 'block'; // Show action buttons
+    this.style.display = 'none'; // Hide the edit button
+    });
 
+    document.getElementById('cancel_button').addEventListener('click', function() {
+    // Hide editable fields and show display fields
+    document.querySelectorAll('.editable').forEach(function(input) {
+        input.style.display = 'none'; // Hide input fields
+    });
+
+    // Hide the dropdowns specifically for category and status
+    document.querySelectorAll('select.editable').forEach(function(select) {
+        select.style.display = 'none'; // Hide dropdowns
+    });
+    
+    document.querySelectorAll('.display').forEach(function(span) {
+        span.style.display = 'inline'; // Show display text
+    });
+    document.getElementById('action_buttons').style.display = 'none'; // Hide action buttons
+    document.getElementById('edit_button').style.display = 'inline'; // Show the edit button again
+    });
+</script>
 </body>
 </html>

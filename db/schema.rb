@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,6 +9,7 @@
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
+
 
 ActiveRecord::Schema[7.2].define(version: 20_241_030_192_044) do
   create_table 'admins', force: :cascade do |t|
@@ -51,37 +50,37 @@ ActiveRecord::Schema[7.2].define(version: 20_241_030_192_044) do
     t.text 'comment'
   end
 
-  create_table 'notes', force: :cascade do |t|
-    t.string 'note_id'
-    t.integer 'item_id', null: false
-    t.string 'msg'
-    t.integer 'user_id', null: false
-    t.string 'image'
-    t.datetime 'created_at', null: false
-    t.datetime 'updated_at', null: false
-    t.index ['item_id'], name: 'index_notes_on_item_id'
-    t.index ['user_id'], name: 'index_notes_on_user_id'
+  create_table "notes", force: :cascade do |t|
+    t.string "note_id"
+    t.integer "item_id", null: false
+    t.string "msg"
+    t.integer "user_id", null: false
+    t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_notes_on_item_id"
+    t.index ["user_id"], name: "index_notes_on_user_id"
   end
 
-  create_table 'users', force: :cascade do |t|
-    t.string 'user_id'
-    t.string 'name'
-    t.string 'uin'
-    t.string 'email'
-    t.string 'contact_no'
-    t.string 'role'
-    t.string 'details'
-    t.integer 'auth_level'
-    t.datetime 'created_at', null: false
-    t.datetime 'updated_at', null: false
-    t.string 'provider'
-    t.string 'first_name'
-    t.string 'last_name'
+  create_table "users", force: :cascade do |t|
+    t.string "user_id"
+    t.string "name"
+    t.string "uin"
+    t.string "email"
+    t.string "contact_no"
+    t.string "role"
+    t.string "details"
+    t.integer "auth_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "provider"
+    t.string "first_name"
+    t.string "last_name"
   end
 
-  add_foreign_key 'events', 'items'
-  add_foreign_key 'events', 'users', column: 'associated_student_id'
-  add_foreign_key 'events', 'users', column: 'associated_user_id'
-  add_foreign_key 'notes', 'items'
-  add_foreign_key 'notes', 'users'
+  add_foreign_key "events", "items"
+  add_foreign_key "events", "users", column: "associated_student_id"
+  add_foreign_key "events", "users", column: "associated_user_id"
+  add_foreign_key "notes", "items"
+  add_foreign_key "notes", "users"
 end

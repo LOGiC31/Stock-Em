@@ -77,3 +77,4 @@ When('I click Filter') do
   button = find('input.btn.btn-primary[type="submit"]')
   button.click
 end
+

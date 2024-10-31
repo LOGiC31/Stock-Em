@@ -121,9 +121,11 @@
 <%= form.text_field :item_name, id: 'item_name', required: true, minlength: 3, maxlength: 50 %>
 
 
+
 <% categories = JSON.parse(File.read(Rails.root.join('app/assets/data/category.json')))['data'] %>
 <label for="category" class="required">Category</label>
 <%= form.select :category, options_for_select(categories.map { |category| [category, category] }, @item.category), { prompt: 'Select a category' }, { id: 'category', required: true } %>
+
 <label for="quality_score" class="required">Quality Score</label>
 <%= form.number_field :quality_score, id: 'quality_score', min: 0, max: 100, required: true %>
 
@@ -141,6 +143,7 @@
 </div>
 
   <% end %>
+
 
 </div>
 </div>

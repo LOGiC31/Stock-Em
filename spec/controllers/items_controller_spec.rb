@@ -198,6 +198,68 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
+  describe 'PUT #update' do
+    context 'with valid parameters' do
+      let(:new_attributes) do
+        {
+          item_name: 'Updated Laptop',
+          status: 'Not Available',
+          quality_score: 60
+        }
+      end
+
+      it 'updates the item' do
+        put :update, params: { id: item1.id, item: new_attributes }
+        item1.reload
+        expect(item1.item_name).to eq('Updated Laptop')
+        expect(item1.currently_available).to eq(false)
+      end
+
+      it 'redirects to the item' do
+        put :update, params: { id: item1.id, item: new_attributes }
+        expect(response).to redirect_to(item1)
+        expect(flash[:notice]).to eq('Item was successfully updated.')
+      end
+    end
+
+    context 'with invalid parameters' do
+      let(:invalid_attributes) do
+        { item_name: '', quality_score: -10 }
+      end
+
+      it 'does not update the item' do
+        put :update, params: { id: item1.id, item: invalid_attributes }
+        item1.reload
+        expect(item1.item_name).not_to eq('')
+        expect(item1.quality_score).not_to eq(-10)
+      end
+
+      it 'redirects to the item with an alert flash message' do
+        put :update, params: { id: item1.id, item: invalid_attributes }
+        expect(response).to redirect_to(item1)
+        expect(flash[:alert]).to eq('There was a problem updating the item.')
+      end
+    end
+  end
+  describe 'DELETE #destroy' do
+    it 'deletes the item' do
+      expect do
+        delete :destroy, params: { id: item1.id }
+      end.to change(Item, :count).by(-1)
+    end
+
+    it 'redirects to the items index' do
+      delete :destroy, params: { id: item1.id }
+      expect(response).to redirect_to(items_path)
+      expect(flash[:notice]).to eq('Item was successfully deleted.')
+    end
+
+    it 'sets an alert flash if deletion fails' do
+      allow_any_instance_of(Item).to receive(:destroy).and_return(false)
+      delete :destroy, params: { id: item1.id }
+      expect(flash[:alert]).to eq('Failed to delete the item.')
+      expect(response).to redirect_to(items_path)
+     
   describe 'PATCH #set_status' do
     context 'with valid params' do
       it 'updates the item status' do
