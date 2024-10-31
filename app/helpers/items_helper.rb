@@ -7,7 +7,6 @@ module ItemsHelper
     when 'Mobile Devices'
       'fa-mobile-alt'
     when 'Development Boards and Kits'
-      'fa-solid fa-microchip'
       'fa-regular fa-layer-group'
     when 'Sensors and Modules'
       'fa-solid fa-fingerprint'

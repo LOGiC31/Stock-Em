@@ -88,4 +88,32 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    let(:user) { User.create!(name: 'Vinay', email: 'vinay@example.com') }
+
+    context 'with valid parameters' do
+      let(:valid_attributes) { { user: { name: 'Vinay', email: 'vinay@example.com' } } }
+
+      it 'updates the user and redirects to user profiles' do
+        patch :update, params: { id: user.id, **valid_attributes }
+        user.reload
+        expect(user.name).to eq('Vinay')
+        expect(response).to redirect_to(user_profiles_path)
+        expect(flash[:notice]).to eq('User was successfully updated.')
+      end
+    end
+
+    # context 'with invalid parameters' do
+    #   let(:invalid_attributes) { { user: { email: nil } } }
+
+    #   it 'does not update the user and renders the show template' do
+    #     patch :update, params: { id: user.id, **invalid_attributes }
+    #     user.reload
+    #     expect(user.email).not_to be_nil
+    #     expect(response).to render_template(:show)
+    #     expect(response.status).to eq(422)
+    #   end
+    # end
+  end
 end
