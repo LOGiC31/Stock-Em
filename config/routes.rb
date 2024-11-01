@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   get 'users/show'
   get 'welcome/index'
 
-
   resources :items, only: %i[index show edit update create new destroy] do
     member do
       patch :set_status

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given('an admin with username {string} and password {string} exists') do |username, password|
   # Assuming you have an Admin model; adjust as necessary for your app's setup
   Admin.create(username:, password:)
@@ -66,7 +68,7 @@ When('I click "Save"') do
       puts "Save button not found. Current row content: #{text}"
       save_and_open_page # Open the current page for debugging
     end
-  end 
+  end
 end
 
 When('I click "Cancel"') do
