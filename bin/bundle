@@ -22,19 +22,33 @@ m = Module.new do
   end
 
   def cli_arg_version
-    return unless invoked_as_script? # don't want to hijack other binstubs
-    return unless 'update'.start_with?(ARGV.first || ' ') # must be running `bundle update`
+    return unless invoked_as_script? # Don't hijack other binstubs
+    return unless 'update'.start_with?(ARGV.first || ' ') # Must be running `bundle update`
 
-    bundler_version = nil
+    bundler_version = extract_version_from_args
+    bundler_version || extract_version_with_update
+  end
+
+  # Helper method to extract version when updating
+  def extract_version_with_update
     update_index = nil
-    ARGV.each_with_index do |a, i|
-      bundler_version = a if update_index && update_index.succ == i && a.match?(Gem::Version::ANCHORED_VERSION_PATTERN)
-      next unless a =~ /\A--bundler(?:[= ](#{Gem::Version::VERSION_PATTERN}))?\z/
+    ARGV.each_with_index do |arg, i|
+      next unless arg =~ /\A--bundler(?:[= ](#{Gem::Version::VERSION_PATTERN}))?\z/
 
-      bundler_version = Regexp.last_match(1)
       update_index = i
+      return Regexp.last_match(1)
     end
-    bundler_version
+    nil
+  end
+
+  # Helper method to find version in command arguments
+  def extract_version_from_args
+    ARGV.each_with_index do |arg, i|
+      next unless update_index && update_index.succ == i
+
+      return arg if arg.match?(Gem::Version::ANCHORED_VERSION_PATTERN)
+    end
+    nil
   end
 
   def gemfile
@@ -84,20 +98,34 @@ m = Module.new do
   end
 
   def activate_bundler
-    gem_error = activation_error_handling do
-      gem 'bundler', bundler_requirement
-    end
+    ENV['BUNDLE_GEMFILE'] ||= gemfile
+    gem_error = activation_error_handling { gem 'bundler', bundler_requirement }
     return if gem_error.nil?
 
-    require_error = activation_error_handling do
-      require 'bundler/version'
-    end
-    if require_error.nil? && Gem::Requirement.new(bundler_requirement).satisfied_by?(Gem::Version.new(Bundler::VERSION))
+    require_error = activation_error_handling { require 'bundler/version' }
+    check_version_compatibility(gem_error, require_error)
+  end
+
+  # Extract compatibility check into helper to reduce method length
+  def check_version_compatibility(gem_error, require_error)
+    if require_error.nil? && Gem::Requirement.new(bundler_requirement)
+                                             .satisfied_by?(Gem::Version.new(Bundler::VERSION))
       return
     end
 
-    warn "Activating bundler (#{bundler_requirement}) failed:\n#{gem_error.message}\n\nTo install the version of bundler this project requires, run `gem install bundler -v '#{bundler_requirement}'`"
+    display_bundler_warning(gem_error)
     exit 42
+  end
+
+  # Move warning message to a separate method to resolve line length issue
+  def display_bundler_warning(gem_error)
+    warn <<~WARNING
+      Activating bundler (#{bundler_requirement}) failed:
+      #{gem_error.message}
+
+      To install the version of bundler this project requires, run
+      `gem install bundler -v '#{bundler_requirement}'`
+    WARNING
   end
 
   def activation_error_handling
