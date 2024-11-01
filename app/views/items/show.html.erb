@@ -213,10 +213,10 @@
                   <span class="display"><%= @item.item_name %></span>
                   <%= f.text_field :item_name, class: "editable" %>
               </p>
-
-              <p class="editable-field"><strong class="editable-label">Category:</strong>
+                <% categories = JSON.parse(File.read(Rails.root.join('app/assets/data/category.json')))['data'] %>
+                  <p class="editable-field"><strong class="editable-label">Category:</strong>
                   <span class="display"><%= @item.category %></span>
-                  <%= f.select :category, options_for_select(['Electronics', 'Furniture', 'Accessories', 'Supplies'], @item.category), {}, { class: "editable", style: "display: none;" } %>
+                  <%= f.select :category, options_for_select(categories.map { |category| [category, category] }, @item.category), {prompt: 'Select a category'}, { class: "editable", style: "display: none;" } %>
               </p>
               <p class="editable-field"><strong class= "editable-label">Quality Score:</strong>
                   <span class="display"><%= @item.quality_score %></span>
