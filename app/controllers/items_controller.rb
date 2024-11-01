@@ -6,7 +6,7 @@ class ItemsController < ApplicationController
   # get all the items
   def index # rubocop:disable Metrics/AbcSize
     @items = Item.all
-    
+
     # if params[:query].present?
     #   query = params[:query].downcase
     #   @items = @items.select do |item|
@@ -20,14 +20,22 @@ class ItemsController < ApplicationController
     if params[:query].present?
       keywords = params[:query].split(' ')
 
-      @items = @items.where(
-        keywords.map do |_keyword|
-          "(LOWER(item_name) LIKE ? OR LOWER(category) LIKE ? OR LOWER(status) LIKE ? OR LOWER(CASE WHEN currently_available THEN 'available' ELSE 'not available' END) LIKE ?)"
-        end.join(' AND '),
-        *keywords.flat_map do |keyword|
-          ["%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%", "%#{keyword.downcase}%"]
-        end
-      )
+      condition = <<-SQL.strip_heredoc
+        (LOWER(item_name) LIKE :keyword OR#{' '}
+        LOWER(category) LIKE :keyword OR#{' '}
+        LOWER(status) LIKE :keyword OR#{' '}
+        LOWER(CASE WHEN currently_available THEN 'available'#{' '}
+        ELSE 'not available' END) LIKE :keyword)
+      SQL
+
+      # Map keywords to SQL conditions and join them with 'AND'
+      query_conditions = keywords.map { condition }.join(' AND ')
+
+      # Map each keyword into a hash format to be used in the query
+      query_params = keywords.flat_map { |keyword| { keyword: "%#{keyword.downcase}%" } }
+
+      # Apply the query
+      @items = @items.where(query_conditions, *query_params)
 
     end
 
