@@ -5,10 +5,10 @@ Given('I am on the home page') do
 end
 
 When('I click on {string}') do |text|
-  if has_button?(text)
+  if has_link?(text)
+    click_link(text, match: :prefer_exact)
+  elsif has_button?(text)
     click_button text
-  elsif has_link?(text)
-    click_link text
   else
     raise "No button or link found with text '#{text}'"
   end
