@@ -2,40 +2,32 @@
 
 # Contains logic for web pages which display item(s)
 class EventsController < ApplicationController
-  
   def publish_event # rubocop:disable Metrics/AbcSize
-    details = ""
-    time_string = Time.now.strftime("%Y-%m-%d %H:%M:%S")
-    if params[:evtype] == "Checkout"
-      details = "Checked out to "
+    details = ''
+    time_string = Time.now.strftime('%Y-%m-%d %H:%M:%S')
+    if params[:evtype] == 'Checkout'
+      details = 'Checked out to '
 
-      unless params[:teams].blank?
-        details += params[:teams].to_s + " in "
-      end
+      details += "#{params[:teams]} in " unless params[:teams].blank?
 
-      details += params[:location].to_s + " "
-      details += "on " + time_string + " "
-      details += "with " + params[:professor].to_s + " as the responsible professor"
+      details += "#{params[:location]} "
+      details += "on #{time_string} "
+      details += "with #{params[:professor]} as the responsible professor"
 
-      unless params[:comments].blank?
-        details += ".  " + params[:comments].to_s
-      end
     else
-      details = "Checked in on " + time_string + " "
-      details += "to " + params[:professor].to_s + " "
-      details += "with the new location being " + params[:location].to_s
+      details = "Checked in on #{time_string} "
+      details += "to #{params[:professor]} "
+      details += "with the new location being #{params[:location]}"
 
-      unless params[:comments].blank?
-        details += ".  " + params[:comments].to_s
-      end
     end
+    details += ".  #{params[:comments]}" unless params[:comments].blank?
 
     Event.create!({ event_id: '', item_id: params[:itemid], event_type: params[:evtype], associated_student_id: session[:user_id],
                     associated_user_id: session[:user_id], location: params[:location], created_at: Time.now,
-                    updated_at: Time.now, details: details })
+                    updated_at: Time.now, details: })
 
     item = Item.find(params[:itemid])
-    item.update!(currently_available: ! item.currently_available)
+    item.update!(currently_available: !item.currently_available)
 
     respond_to do |format|
       format.html { redirect_to item_path(item) }
@@ -48,11 +40,9 @@ class EventsController < ApplicationController
     @itemid = params[:itemid]
 
     item = Item.find(params[:itemid])
-    @evtype = "Checkout"
-    if item.currently_available == false
-      @evtype = "Checkin"
-    end
+    @evtype = 'Checkout'
+    return unless item.currently_available == false
 
+    @evtype = 'Checkin'
   end
-  
 end
