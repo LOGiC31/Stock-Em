@@ -7,9 +7,18 @@ end
 
 Given('some users exists') do
   users = [
-    { user_id: 'USR003', first_name: 'random', last_name: 'TA', uin: '987654', email: 'randomTA@example.com', contact_no: '5559876',
-      role: 'assistants', auth_level: 1 }
+    {
+      user_id: 'USR003',
+      first_name: 'random',
+      last_name: 'TA',
+      uin: '987654',
+      email: 'randomTA@example.com',
+      contact_no: '5559876',
+      role: 'assistants',
+      auth_level: 1
+    }
   ]
+
   users.each { |user| User.create!(user) }
 end
 
@@ -66,7 +75,6 @@ When('I click "Save"') do
       find('.save-button').click
     else
       puts "Save button not found. Current row content: #{text}"
-      save_and_open_page # Open the current page for debugging
     end
   end
 end
