@@ -22,9 +22,17 @@ class EventsController < ApplicationController
     end
     details += ".  #{params[:comments]}" unless params[:comments].blank?
 
-    Event.create!({ event_id: '', item_id: params[:itemid], event_type: params[:evtype], associated_student_id: session[:user_id],
-                    associated_user_id: session[:user_id], location: params[:location], created_at: Time.now,
-                    updated_at: Time.now, details: })
+    Event.create!(
+      event_id: '',
+      item_id: params[:itemid],
+      event_type: params[:evtype],
+      associated_student_id: session[:user_id],
+      associated_user_id: session[:user_id],
+      location: params[:location],
+      created_at: Time.now,
+      updated_at: Time.now,
+      details:
+    )
 
     item = Item.find(params[:itemid])
     item.update!(currently_available: !item.currently_available)
