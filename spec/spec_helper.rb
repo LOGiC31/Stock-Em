@@ -92,3 +92,10 @@ RSpec.configure do |config|
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
 end
+
+require 'simplecov'
+SimpleCov.start do
+  add_filter 'app/helpers/items_helper.rb'
+  add_filter 'app/mailers/application_mailer.rb'
+  add_filter 'app/jobs/application_job.rb'
+end

@@ -100,15 +100,7 @@
   </style>
 </head>
 <body>
-
-<header>
-  <div class="header-title">Stock'Em</div>
-  <div>
-    <span class="greeting">Hello, <span id="username"><%= @current_user.first_name %></span></span>
-    <span class="icon user-icon"><i class="fas fa-user"></i></span>
-  </div>
-</header>
-
+<div>
 <div class="form-container">
   <h2>Create New Item</h2>
 
@@ -128,8 +120,11 @@
    <label for="item_name" class="required">Item Name</label>
 <%= form.text_field :item_name, id: 'item_name', required: true, minlength: 3, maxlength: 50 %>
 
+
+
+<% categories = JSON.parse(File.read(Rails.root.join('app/assets/data/category.json')))['data'] %>
 <label for="category" class="required">Category</label>
-<%= form.select :category, options_for_select([['Select a category', ''], ['Electronics', 'Electronics'], ['Furniture', 'Furniture']], @item.category), id: 'category', required: true %>
+<%= form.select :category, options_for_select(categories.map { |category| [category, category] }, @item.category), { prompt: 'Select a category' }, { id: 'category', required: true } %>
 
 <label for="quality_score" class="required">Quality Score</label>
 <%= form.number_field :quality_score, id: 'quality_score', min: 0, max: 100, required: true %>
@@ -150,14 +145,7 @@
   <% end %>
 
 
-
-  <%= link_to 'Back to Items', items_path, class: 'button' %>
-
 </div>
-
-<footer>
-  <div>The Stock'Em Team, 2024</div>
-</footer>
-
+</div>
 </body>
 </html>
