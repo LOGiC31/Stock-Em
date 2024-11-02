@@ -30,7 +30,7 @@ When('I select {string}') do |action|
   page.find("##{button_id}", visible: :all, wait: 10).click
 end
 
-When('I set field {string} to {string}') do |field_label, new_value|
+When('I set field {string} to {string}') do |field_label, new_value| # rubocop:disable Metrics/BlockLength
   # Remove colon from field label if present
   field_name = case field_label.gsub(':', '')
                when 'Item Name'
@@ -66,8 +66,8 @@ When('I set field {string} to {string}') do |field_label, new_value|
       next unless f.tag_name == 'select'
 
       puts '  Available options:'
-      f.all('option', visible: :all).each do |option|
-        puts "    - #{option.text}"
+      f.all('option', visible: :all).each do |opt|
+        puts "    - #{opt.text}"
       end
     end
     raise e

@@ -4,7 +4,7 @@
 class ItemsController < ApplicationController
   include EventLogger
   # get all the items
-  def index # rubocop:disable Metrics/AbcSize
+  def index # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     @items = Item.all
 
     # if params[:query].present?

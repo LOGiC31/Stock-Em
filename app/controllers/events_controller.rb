@@ -2,7 +2,7 @@
 
 # Contains logic for web pages which display item(s)
 class EventsController < ApplicationController
-  def publish_event # rubocop:disable Metrics/AbcSize
+  def publish_event # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     details = ''
     time_string = Time.now.strftime('%Y-%m-%d %H:%M:%S')
     if params[:evtype] == 'Checkout'

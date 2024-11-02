@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe UsersController, type: :controller do
+RSpec.describe UsersController, type: :controller do # rubocop:disable Metrics/BlockLength
   let(:valid_user) { User.create!(user_id: 1, email: 'vinay@example.com', name: 'Vinay') }
 
   before do
