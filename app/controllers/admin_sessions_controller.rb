@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for admin sessions
 class AdminSessionsController < ApplicationController
   skip_before_action :require_login, only: %i[new create dashboard destroy]
 

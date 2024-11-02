@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionsController, type: :controller do
-  describe 'POST #omniauth' do
+RSpec.describe SessionsController, type: :controller do # rubocop:disable Metrics/BlockLength
+  describe 'POST #omniauth' do # rubocop:disable Metrics/BlockLength
     let(:auth_hash) do
       {
         'uid' => '12345',

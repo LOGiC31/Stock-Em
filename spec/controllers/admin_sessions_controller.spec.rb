@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AdminSessionsController, type: :controller do
+RSpec.describe AdminSessionsController, type: :controller do # rubocop:disable Metrics/BlockLength
   let(:admin) { Admin.create(username: 'adminuser', password: 'password123') }
 
   describe 'GET #dashboard' do

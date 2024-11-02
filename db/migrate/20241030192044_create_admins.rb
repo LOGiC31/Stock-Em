@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Creates a table to store admin users
 class CreateAdmins < ActiveRecord::Migration[7.2]
   def change
     create_table :admins do |t|

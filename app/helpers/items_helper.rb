@@ -2,7 +2,7 @@
 
 # Items utility methods
 module ItemsHelper
-  def icon_for_category(category)
+  def icon_for_category(category) # rubocop:disable Metrics/MethodLength
     case category
     when 'Mobile Devices'
       'fa-mobile-alt'
