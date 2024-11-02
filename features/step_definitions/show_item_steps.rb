@@ -42,3 +42,38 @@ Then('the item status should be {string}') do |expected_status|
     expect(@item.status).to eq(expected_status)
   end
 end
+
+When('I filter by status {string}') do |status|
+  within('#status') do
+    find('#status').click
+    find('option', text: status).click
+  end
+  click_button 'Filter'
+end
+
+When('I click on the status dropdown') do
+  puts "Current URL: #{current_path}"
+  find('.status').click
+end
+
+When('I click on the category dropdown') do
+  puts "Current URL: #{current_path}"
+  find('.category').click
+end
+
+When('I select {string} from the status dropdown list') do |status|
+  select status, from: 'status'
+  selected_option = find('#status option[selected]')
+  expect(selected_option.text).to eq(status.capitalize)
+end
+
+When('I select {string} from the category dropdown list') do |category|
+  select category, from: 'category'
+  selected_option = find('#category option[selected]')
+  expect(selected_option.text).to eq(category)
+end
+
+When('I click Filter') do
+  button = find('input.btn.btn-primary[type="submit"]')
+  button.click
+end

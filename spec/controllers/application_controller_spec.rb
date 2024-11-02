@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ApplicationController, type: :controller do
+RSpec.describe ApplicationController, type: :controller do # rubocop:disable Metrics/BlockLength
   controller do
     before_action :require_login
 

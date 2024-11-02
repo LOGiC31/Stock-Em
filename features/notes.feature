@@ -8,7 +8,7 @@ Background: items in database
 
   Given the following items exist:
   | serial_number | item_name  | category    | quality_score | currently_available | details  | created_at | updated_at |
-  | SN1           | Item One   | Furniture   | 50            | true                | ""       | 2024-10-01 | 2024-10-02 |
+  | SN1           | Item One   | Furnitures  | 50            | true                | ""       | 2024-10-01 | 2024-10-02 |
   | SN2           | Item Two   | Electronics | 75            | true                | "abc"    | 2024-10-02 | 2024-10-02 |
   
   Given the following users exist:

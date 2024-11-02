@@ -18,14 +18,9 @@
 
       <%= form_with(model: @current_user, url: user_path(@current_user), method: :patch, local: true) do |form| %>
         <div class="user-field">
-          <strong>First Name:</strong>
-          <span class="user-value"><%= @current_user.first_name %></span>
-        </div>
-
-        <div class="user-field">
-          <strong>Last Name:</strong>
-          <span class="user-value"><%= @current_user.last_name %></span>
-        </div>
+        <strong>Name:</strong>
+        <span class="user-value"><%= @current_user.first_name + " " + @current_user.last_name %></span>
+      </div>
 
         <div class="user-field">
           <strong>UIN:</strong>

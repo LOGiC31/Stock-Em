@@ -1,13 +1,6 @@
 <%= stylesheet_link_tag 'users', media: 'all', 'data-turbolinks-track': 'reload' %>
-<header>
-  <div class="header-title">Stock'Em</div>
-  <div>
-    <span class="greeting">Hello, <span id="username"><%= @current_user.first_name %></span></span>
-    <button class="icon-button user-icon">
-      <i class="fas fa-user"></i>
-    </button>
-  </div>
-</header>
+
+<div class="container-fluid">
 <h2 class="greetings">Howdy, <%= @current_user.first_name %>!</h2>
 
 <div id="user-details" class="user-details-card">
@@ -28,10 +21,7 @@
 
   <div class="user-action-links">
     <%= link_to "View Items", items_path, class: "btn-view-items" %>
-    <%= link_to "User Profile", user_profiles_path, class: "btn-profile" %>
     <%= link_to "Logout", logout_path, class: "btn-logout" %>
   </div>
 </div>
-<footer>
-  <div>The Stock'Em Team, 2024</div>
-</footer>
+</div>

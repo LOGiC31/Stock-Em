@@ -21,6 +21,8 @@ end
 Then('I should be on the {string} page') do |page_name|
   expect(current_path).to eq(items_path) if page_name == 'Items List'
   expect(current_path).to eq(new_item_path) if page_name == 'New Item'
+  expect(current_path).to eq(admin_login_path) if page_name == 'Admin Login'
+  expect(current_path).to eq(admin_dashboard_path) if page_name == 'Dashboard'
 end
 
 Then('I should see the message {string}') do |message|

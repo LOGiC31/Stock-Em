@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionsController, type: :controller do
-  describe 'POST #omniauth' do
+RSpec.describe SessionsController, type: :controller do # rubocop:disable Metrics/BlockLength
+  describe 'POST #omniauth' do # rubocop:disable Metrics/BlockLength
     let(:auth_hash) do
       {
         'uid' => '12345',
@@ -56,6 +56,20 @@ RSpec.describe SessionsController, type: :controller do
         expect(response).to redirect_to(welcome_path)
         expect(flash[:alert]).to eq('Login failed.')
       end
+    end
+  end
+  describe 'POST #logout' do
+    before do
+      session[:user_id] = 1
+      post :logout
+    end
+
+    it 'sets current_user to nil' do
+      expect(assigns(:current_user)).to be_nil
+    end
+
+    it 'redirects to the welcome path' do
+      expect(response).to redirect_to(welcome_path)
     end
   end
 end
