@@ -223,7 +223,7 @@
           <%= item.currently_available ? 'Available' : 'Not Available' %>
         </span>
         <p class="item-status">
-          <strong>Status:</strong> <%= item.status.present? ? item.status : 'No Status' %>
+          <strong>Status:</strong> <%= item.status.present? ? item.status : 'Unknown' %>
         </p>
       </div>
     <% end %>
