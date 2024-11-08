@@ -4,49 +4,107 @@
 class ItemsController < ApplicationController
   include EventLogger
   # get all the items
-  def index # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def index # rubocop:disable Metrics/AbcSize
     @items = Item.all
 
-    # if params[:query].present?
-    #   query = params[:query].downcase
-    #   @items = @items.select do |item|
-    #     item.item_name.downcase.include?(query) || item.category.downcase.include?(query)
-    #   end
-    # end
+    apply_keyword_search if params[:query].present?
+    apply_category_filter if params[:category].present?
+    apply_status_filter if params[:status].present?
+    apply_availability_filter if params[:available_only] == '1'
 
     @categories = Item.distinct.pluck(:category)
     @statuses = Item.distinct.pluck(:status)
+  end
 
-    if params[:query].present?
-      keywords = params[:query].split(' ')
+  def apply_keyword_search
+    keywords = params[:query].split(' ')
+    query_conditions = generate_query_conditions(keywords)
+    query_params = generate_query_params(keywords)
 
-      condition = <<-SQL.strip_heredoc
-        (LOWER(item_name) LIKE :keyword OR#{' '}
-        LOWER(category) LIKE :keyword OR#{' '}
-        LOWER(status) LIKE :keyword OR#{' '}
-        LOWER(CASE WHEN currently_available THEN 'available'#{' '}
-        ELSE 'not available' END) LIKE :keyword)
-      SQL
+    @items = @items.where(query_conditions, *query_params)
+  end
 
-      # Map keywords to SQL conditions and join them with 'AND'
-      query_conditions = keywords.map { condition }.join(' AND ')
+  def generate_query_conditions(keywords)
+    condition = <<-SQL.strip_heredoc
+      (LOWER(item_name) LIKE :keyword OR#{' '}
+      LOWER(category) LIKE :keyword OR#{' '}
+      LOWER(status) LIKE :keyword OR#{' '}
+      LOWER(CASE WHEN currently_available THEN 'available'#{' '}
+      ELSE 'not available' END) LIKE :keyword)
+    SQL
 
-      # Map each keyword into a hash format to be used in the query
-      query_params = keywords.flat_map { |keyword| { keyword: "%#{keyword.downcase}%" } }
+    keywords.map { condition }.join(' AND ')
+  end
 
-      # Apply the query
-      @items = @items.where(query_conditions, *query_params)
+  def generate_query_params(keywords)
+    keywords.flat_map { |keyword| { keyword: "%#{keyword.downcase}%" } }
+  end
 
-    end
+  def apply_category_filter
+    @items = @items.where(category: params[:category])
+  end
 
-    @items = @items.where(category: params[:category]) if params[:category].present?
+  def apply_status_filter
+    @items = if params[:status] == 'unknown'
+               @items.where(status: nil)
+             else
+               @items.where(status: params[:status])
+             end
+  end
 
-    @items = @items.where(status: params[:status]) if params[:status].present?
-
-    return unless params[:available_only] == '1'
-
+  def apply_availability_filter
     @items = @items.select(&:currently_available)
   end
+
+  # def index
+  #   @items = Item.all
+
+  #   # if params[:query].present?
+  #   #   query = params[:query].downcase
+  #   #   @items = @items.select do |item|
+  #   #     item.item_name.downcase.include?(query) || item.category.downcase.include?(query)
+  #   #   end
+  #   # end
+
+  #   @categories = Item.distinct.pluck(:category)
+  #   @statuses = Item.distinct.pluck(:status)
+
+  #   if params[:query].present?
+  #     keywords = params[:query].split(' ')
+
+  #     condition = <<-SQL.strip_heredoc
+  #       (LOWER(item_name) LIKE :keyword OR#{' '}
+  #       LOWER(category) LIKE :keyword OR#{' '}
+  #       LOWER(status) LIKE :keyword OR#{' '}
+  #       LOWER(CASE WHEN currently_available THEN 'available'#{' '}
+  #       ELSE 'not available' END) LIKE :keyword)
+  #     SQL
+
+  #     # Map keywords to SQL conditions and join them with 'AND'
+  #     query_conditions = keywords.map { condition }.join(' AND ')
+
+  #     # Map each keyword into a hash format to be used in the query
+  #     query_params = keywords.flat_map { |keyword| { keyword: "%#{keyword.downcase}%" } }
+
+  #     # Apply the query
+  #     @items = @items.where(query_conditions, *query_params)
+
+  #   end
+
+  #   @items = @items.where(category: params[:category]) if params[:category].present?
+
+  #   if params[:status].present?
+  #     @items = if params[:status] == 'unknown'
+  #                @items.where(status: nil)
+  #              else
+  #                @items.where(status: params[:status])
+  #              end
+  #   end
+
+  #   return unless params[:available_only] == '1'
+
+  #   @items = @items.select(&:currently_available)
+  # end
 
   # get specific item
   def show
@@ -130,8 +188,6 @@ class ItemsController < ApplicationController
     status = nil if status.blank?
     status
   end
-
-  private
 
   def item_params
     params.require(:item).permit(:item_id, :serial_number, :item_name,
