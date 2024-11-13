@@ -158,84 +158,82 @@
 </head>
 <body>
 <div class="div-main">
-<%# <div class="search-container">
-  <input type="text" placeholder="Search..." />
-  <label class="filter">
-    <input type="checkbox" /> Only show available items
-  </label>
-</div> %>
 
-<div class="search-container">
-  <%= form_with url: items_path, method: :get, local: true, class: 'search-form' , id: 'search-form' do %>
+  <div class="search-container">
+    <%= form_with url: items_path, method: :get, local: true, id: 'filterForm', class: 'search-form' do %>
 
-    <!-- Search by general query (narrower width) -->
-    <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "search-bar" %>
+      <!-- Search by general query -->
+      <%= text_field_tag :query, params[:query], placeholder: "Search...", class: "search-bar" %>
 
-    <!-- Category Filter -->
-    <label class="filter">
-      <select name="category" id="category" class="filter-dropdown category">
-        <option value="">All Categories</option>
-        <% if @categories.present? %>
-          <% @categories.each do |category| %>
-            <option value="<%= category %>" <%= 'selected' if params[:category] == category %>><%= category %></option>
-          <% end %>
-        <% end %>
-      </select>
-    </label>
-
-    <!-- Status Filter -->
-    <label class="filter">
-      <select name="status" id="status" class="filter-dropdown status">
-        <option value="">All Statuses</option>
-        <% if @statuses.present? %>
-          <% @statuses.each do |status| %>
-            <% if status.present? %>
-              <option value="<%= status %>" <%= 'selected' if params[:status] == status %>><%= status.capitalize %></option>
-            <% else %>
-              <option value="unknown" <%= 'selected' if params[:status] == 'unknown' %>>Unknown</option>
+      <!-- Category Filter -->
+      <label class="filter">
+        <select name="category" id="category" class="filter-dropdown category" onchange="submitForm()">
+          <option value="">All Categories</option>
+          <% if @categories.present? %>
+            <% @categories.each do |category| %>
+              <option value="<%= category %>" <%= 'selected' if params[:category] == category %>><%= category %></option>
             <% end %>
           <% end %>
-        <% end %>
-      </select>
-    </label>
+        </select>
+      </label>
 
-    <!-- Submit Button -->
-    <%= submit_tag "Filter", class: "btn btn-primary" %>
+      <!-- Status Filter -->
+      <label class="filter">
+        <select name="status" id="status" class="filter-dropdown status" onchange="submitForm()">
+          <option value="">All Statuses</option>
+          <% if @statuses.present? %>
+            <% @statuses.each do |status| %>
+              <% if status.present? %>
+                <option value="<%= status %>" <%= 'selected' if params[:status] == status %>><%= status.capitalize %></option>
+              <% else %>
+                <option value="unknown" <%= 'selected' if params[:status] == 'unknown' %>>Unknown</option>
+              <% end %>
+            <% end %>
+          <% end %>
+        </select>
+      </label>
 
-    <!-- Availability Filter -->
-    <label class="filter">
-      <%= check_box_tag :available_only, '1', params[:available_only] == '1', onchange: "submitForm()" %> Only show available items
-    </label>
-  <% end %>
-</div>
+      <!-- Availability Filter -->
+      <label class="filter">
+        <%= check_box_tag :available_only, '1', params[:available_only] == '1', onchange: "submitForm()" %> Only show available items
+      </label>
 
-<!-- Scrollable Card Container -->
-<div class="card-container">
-  <% @items.each do |item| %>
-    <%= link_to item_path(item), class: 'card' do %>
-      <div class="icon">
-        <i class="fas <%= icon_for_category(item.category) %>"></i>
-      </div>
-      <div class="card-content">
-        <h3 class="item-name"><%= item.item_name %></h3>
-        <p class="item-category"><%= item.category %></p>
-        <span class="availability <%= item.currently_available ? 'available' : 'not-available' %>">
-          <%= item.currently_available ? 'Available' : 'Not Available' %>
-        </span>
-        <p class="item-status">
-          <strong>Status:</strong> <%= item.status.present? ? item.status : 'Unknown' %>
-        </p>
-      </div>
     <% end %>
-  <% end %>
+  </div>
+
+  <!-- Scrollable Card Container -->
+  <div class="card-container">
+    <% @items.each do |item| %>
+      <%= link_to item_path(item), class: 'card' do %>
+        <div class="icon">
+          <i class="fas <%= icon_for_category(item.category) %>"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="item-name"><%= item.item_name %></h3>
+          <p class="item-category"><%= item.category %></p>
+          <span class="availability <%= item.currently_available ? 'available' : 'not-available' %>">
+            <%= item.currently_available ? 'Available' : 'Not Available' %>
+          </span>
+          <p class="item-status">
+            <strong>Status:</strong> <%= item.status.present? ? item.status : 'Unknown' %>
+          </p>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- New Item Button Container -->
+  <div class="button-container">
+    <%= link_to 'Create New Item', new_item_path, class: 'new-item-button' %>
+  </div>
+
 </div>
 
+<script>
+  function submitForm() {
+    document.getElementById("filterForm").submit();
+  }
+</script>
 
-
-<!-- New Item Button Container -->
-<div class="button-container">
-  <%= link_to 'Create New Item', new_item_path, class: 'new-item-button' %>
-</div>
-</div>
 </body>
 </html>
