@@ -161,12 +161,20 @@ class ItemsController < ApplicationController
 
   def destroy
     @item = Item.find(params[:id])
-    if @item.destroy
-      flash[:notice] = 'Item was successfully deleted.'
+    Rails.logger.info("Current user auth level: #{current_user.auth_level}")
+  
+    if current_user.auth_level == 2
+      if @item.destroy
+        flash[:notice] = 'Item was successfully deleted.'
+        redirect_to items_path 
+      else
+        flash[:alert] = 'Failed to delete the item.'
+        redirect_to item_path(@item) 
+      end
     else
-      flash[:alert] = 'Failed to delete the item.'
+      flash[:alert] = 'You need to be an admin to delete items.'
+      redirect_to item_path(@item) 
     end
-    redirect_to items_path
   end
 
   def set_status # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
