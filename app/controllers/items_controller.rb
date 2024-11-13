@@ -76,7 +76,10 @@ class ItemsController < ApplicationController
 
   def create
     @item = Item.new(item_params)
-    if @item.save
+    if Item.exists?(serial_number: @item.serial_number)
+      flash[:alert] = "Item already exists with this serial number."
+      render :new
+    elsif @item.save
       redirect_to items_path, notice: 'Item was successfully created.'
     else
       render :new

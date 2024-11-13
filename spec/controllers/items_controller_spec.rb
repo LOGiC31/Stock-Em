@@ -196,6 +196,29 @@ RSpec.describe ItemsController, type: :controller do # rubocop:disable Metrics/B
         expect(assigns(:item)).to be_invalid
       end
     end
+
+    context 'with duplicate item attributes' do
+      let(:duplicate_attributes) do
+        {
+          item_name: item1.item_name,
+          serial_number: item1.serial_number,
+          category: item1.category,
+          quality_score: item1.quality_score,
+          currently_available: item1.currently_available
+        }
+      end
+
+      it 'does not create a duplicate item' do
+        expect do
+          post :create, params: { item: duplicate_attributes }
+        end.not_to change(Item, :count)
+      end
+
+      it 'returns an error message for duplicate item' do
+        post :create, params: { item: duplicate_attributes }
+        expect(flash[:alert]).to eq('Item already exists with this serial number.')
+      end
+    end
   end
 
   describe 'PUT #update' do # rubocop:disable Metrics/BlockLength

@@ -51,3 +51,27 @@ Feature: Create a new item
     And I fill in the item field "Serial Number" with "1112223334"
     And I press "Create Item"
     And I should not see "Table"
+
+  Scenario: Validation error for duplicate item
+    Given I am on the home page
+    When I click on "Login with Google"
+    And I successfully authenticate via Google
+    Then I should be redirected to my user page
+    When I click on "View Items"
+    Then I should see "Create New Item"
+    And I click on "Create New Item"
+    When I fill in the item field "Item Name" with "Table"
+    And I select "Furniture" from "category"
+    And I fill in the item field "Quality Score" with "30"
+    And I select "No" from "item_currently_available"
+    And I fill in the item field "Serial Number" with "1112223334"
+    And I press "Create Item"
+    And I click on "Create New Item"
+    When I fill in the item field "Item Name" with "Chair"
+    And I select "Furniture" from "category"
+    And I fill in the item field "Quality Score" with "30"
+    And I select "No" from "item_currently_available"
+    And I fill in the item field "Serial Number" with "1112223334"
+    And I press "Create Item"
+    Then I should see "Item already exists with this serial number."
+    And I should not see "Table"
