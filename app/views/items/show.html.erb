@@ -87,6 +87,8 @@
    .item-details strong {
      color: #333;
    }
+     .item-details{
+     padding-left: 2px;}
    .availability {
      font-weight: bold;
    }
@@ -106,6 +108,7 @@
      gap: 10px;
    }
    .btn {
+     border-style: none;
      padding: 10px 15px;
      background-color: #500000;
      color: white;
@@ -113,9 +116,9 @@
      text-decoration: none;
      font-weight: bold;
      transition: background-color 0.3s;
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
    }
    .btn2 {
+      border-style: none;
      font-size: 14px;
      padding: 5px 10px;
      background-color: #9c7c08;
@@ -124,7 +127,6 @@
      font-weight: bold;
      text-decoration: none;
      transition: background-color 0.3s;
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
    }
    .btn:hover {
      background-color: #800000;
@@ -191,6 +193,45 @@
     align-items: center;
     margin-left: 0px;
   }
+   .modal {
+     display: none;
+     position: fixed;
+     z-index: 1000;
+     left: 0;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     overflow: auto;
+     background-color: rgba(0, 0, 0, 0.4);
+   }
+   .modal-content {
+     background-color: #fff;
+     margin: 10% auto;
+     padding: 20px;
+     border-radius: 10px;
+     width: 80%;
+     max-width: 600px;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+   }
+   .close-btn {
+     float: right;
+     font-size: 24px;
+     font-weight: bold;
+     cursor: pointer;
+   }
+    .editable {
+      background-color: #ebebeb;
+      border-radius: 7px;
+      padding-left: 4px;
+      width: 98%
+      }
+    .editable-label{
+    padding-left: 3px;
+    }
+    .select{
+    width: 98%;}
+    #item_category, #item_internal_status{
+    width: 99.5%;}
  </style>
 </head>
 <body>
@@ -200,72 +241,61 @@
  <h1><%= @item.item_name %></h1>
   <div class="content-wrapper">
     
-    <div class="left-column">
-      <h2>Item Details</h2>
+    <div class="left-column" style="z-index: 1">
+      <h2 style= "padding-left: 4px;">Item Details</h2>
     
       <div class="item-details">
-        <p><strong>Item ID:</strong> <%= @item.id %></p>
+        <p style="padding-left: 2px;"><strong>Item ID:</strong> <%= @item.id %></p>
         <p><strong>Serial Number:</strong> <%= @item.serial_number %></p>
+        <p style="padding-left: 2px;"><strong>Item Name:</strong> <%= @item.item_name %></p>
+        <p><strong>Category:</strong> <%= @item.category %></p>
+        <p><strong>Quality Score:</strong> <%= @item.quality_score %></p>
+        <p><strong>Status:</strong> <%= @item.status %></p>
+        <p><strong>Details:</strong> <%= @item.details %></p>
       </div>
-          <%= form_with model: @item, local: true do |f| %>
-          <div class="item-details">
-              <p class="editable-field"><strong class= "editable-label">Item Name:</strong>
-                  <span class="display"><%= @item.item_name %></span>
-                  <%= f.text_field :item_name, class: "editable" %>
-              </p>
-                <% categories = JSON.parse(File.read(Rails.root.join('app/assets/data/category.json')))['data'] %>
-                  <p class="editable-field"><strong class="editable-label">Category:</strong>
-                  <span class="display"><%= @item.category %></span>
-                  <%= f.select :category, options_for_select(categories.map { |category| [category, category] }, @item.category), {prompt: 'Select a category'}, { class: "editable", style: "display: none;" } %>
-              </p>
-              <p class="editable-field"><strong class= "editable-label">Quality Score:</strong>
-                  <span class="display"><%= @item.quality_score %></span>
-                  <%= f.number_field :quality_score, 
-                      id: 'numeric', 
-                      class: "editable",
-                      min: 0, 
-                      max: 100, 
-                      required: true, 
-                      oninput: "this.value = this.value.replace(/\\D/g, '').slice(0, 2)" %>
-              </p>
-              <p class="editable-field"><strong class="editable-label">Status:</strong>
-                  <span class="display"><%= @item.status %></span>
-                  <%= f.select :status, options_for_select([nil, 'Available', 'Damaged', 'Lost', 'Not Available'], @item.status), {}, { class: "editable", style: "display: none;", id:'item_internal_status' } %>
 
-              </p>
-              <p class="editable-field"><strong class="editable-label">Details:</strong>
-                  <span class="display"><%= @item.details %></span>
-                  <%= f.text_area :details, class: "editable" %>
-              </p>
-          </div>
-
-          <div id="action_buttons" style="display: none; margin-top: 20px;">
-            <button type="submit" id="submit_button" class="btn">Save</button>
-            <button type="button" id="cancel_button" class="btn">Cancel</button>
-          </div>
-          <% end %>
-          <div class="item-details">
-            <p><strong>Available:</strong>
-              <span class="availability" style="color: <%= @item.currently_available ? 'green' : 'red' %>;">
-                <%= @item.currently_available ? 'Yes' : 'No' %>
-              </span>
-            </p>
-          </div>
-    
-      <%= image_tag(@item.image) if @item.image.present? %>
-    
       <div class="btn-container">
           <% if @item.currently_available %>
-            <%= link_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
+            <%= button_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
           <% else %>
-            <%= link_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
+            <%= button_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
           <% end %> 
           <button id="edit_button" class='btn' >Edit</button>
             <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form'}, id:'back_button' %>
           <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id:'delete_button' %>
       </div>
     </div>
-
+    
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 style="padding-left: 4px;">Edit Item Details</h2>
+        <%= form_with model: @item, local: true do |f| %>
+          <div class="item-detail" style="padding-left: 20px; padding-top: 5px;">
+            <p class="editable-field"><strong class="editable-label">Item Name:</strong>
+              <%= f.text_field :item_name, class: "editable" %>
+            </p>
+            <% categories = JSON.parse(File.read(Rails.root.join('app/assets/data/category.json')))['data'] %>
+            <p class="editable-field"><strong class="editable-label">Category:</strong>
+              <%= f.select :category, options_for_select(categories.map { |category| [category, category] }, @item.category), { prompt: 'Select a category' }, { class: "editable" }%>
+            </p>
+            <p class="editable-field"><strong class="editable-label">Quality Score:</strong>
+              <%= f.text_field :quality_score, class: "editable" %>
+            </p>
+            <p class="editable-field"><strong class="editable-label">Status:</strong>
+              <%= f.select :status, options_for_select([nil, 'Available', 'Damaged', 'Lost', 'Not Available'], @item.status), {}, { class: "editable", id: 'item_internal_status' } %>
+            </p>
+            <p class="editable-field"><strong class="editable-label">Details:</strong>
+              <%= f.text_area :details, class: "editable" %>
+            </p>
+          </div>
+          <div class="btn-container">
+            <button type="submit" class="btn">Save</button>
+            <button type="button" id="cancel_button" class="btn">Cancel</button>
+          </div>
+        <% end %>
+      </div>
+    </div>
     <div class="right-column">
         <h2>Item History</h2>
         <div class="notes-section" style="padding-right: 10px; ">
@@ -280,15 +310,17 @@
             <%= event.details %>
           </p>
         <% end %>
-      
-
+      </div>
+      </div>
+    <div class="right-column">
+    <div style="display: flex; flex-direction: row; align-content: stretch; align-items: center">
       <h2>Notes</h2>
 
       <!-- Add in "create note" button if not writing a note already -->
       <% if !@writing_note %>
-        <%= link_to 'Create Note', item_path(id: @item.id, writing_note: true), class: 'btn2',  style: 'margin-bottom: 5px;' %>
+        <%= link_to 'Create Note', item_path(id: @item.id, writing_note: true), class: 'btn2',  style: 'margin-bottom: 5px; margin-left: 30px;' %>
       <% end %>
-      <h2>  </h2>
+      </div>
 
       <!-- Note creation form -->
       <% if @writing_note %>
@@ -315,7 +347,6 @@
           </p>
         <% end %>
     </div>
-  </div>
   </div>
   <div style="background-color: #f5f5f5;border-radius: 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;padding: 20px;">
       <h3 style="color:#500000">Update:</h3>  
@@ -379,6 +410,21 @@
     document.getElementById('action_buttons').style.display = 'none'; // Hide action buttons
     document.getElementById('edit_button').style.display = 'inline'; // Show the edit button again
     });
+      document.getElementById('edit_button').addEventListener('click', function() {
+    document.getElementById('editModal').style.display = 'block';
+  });
+
+  document.querySelector('.close-btn').addEventListener('click', function() {
+    document.getElementById('editModal').style.display = 'none';
+  });
+  document.getElementById('cancel_button').addEventListener('click', function() {
+    document.getElementById('editModal').style.display = 'none';
+  });
+  window.addEventListener('click', function(event) {
+    if (event.target == document.getElementById('editModal')) {
+      document.getElementById('editModal').style.display = 'none';
+    }
+  });
 </script>
 </body>
 </html>
