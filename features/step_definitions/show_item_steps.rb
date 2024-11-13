@@ -8,6 +8,7 @@ Given('there is an item in the database') do
     quality_score: 5,
     currently_available: true,
     image: nil,
+    status: 'Lost',
     details: 'This is a sample item for testing purposes.'
   )
 end
