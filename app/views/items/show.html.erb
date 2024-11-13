@@ -220,7 +220,14 @@
               </p>
               <p class="editable-field"><strong class= "editable-label">Quality Score:</strong>
                   <span class="display"><%= @item.quality_score %></span>
-                  <%= f.text_field :quality_score, class: "editable" %>
+                  <%= f.text_field :quality_score, 
+                    inputmode: "numeric", 
+                    class: "editable", 
+                    maxlength: 2,
+                    pattern: "\\d*", 
+                    title: "Please enter only numbers",  
+                    oninput: "this.value = this.value.replace(/\\D/g, '')" 
+                  %>
               </p>
               <p class="editable-field"><strong class="editable-label">Status:</strong>
                   <span class="display"><%= @item.status %></span>
