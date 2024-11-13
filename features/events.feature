@@ -33,19 +33,41 @@ Scenario: Checkout follows the correct UI flow
   And   I follow "Checkout"
   And   I fill in "professor" with "abcd"
   And   I fill in "teams" with "can"
-  And   I fill in "location" with "orange"
+  And   I select "EABA" from "location"
   And   I fill in "comments" with "car"
   And   I press "Publish"
   And   I should see "Checkin"
-  And   I should see "orange"
+  And   I should see "EABA"
 
 Scenario: Checkin follows the correct UI flow
   Given I am logged in
   And   I am on the details page for the item "SN2"
   And   I follow "Checkin"
   And   I fill in "professor" with "abcd"
-  And   I fill in "location" with "orange"
+  And   I select "EABB" from "location"
   And   I fill in "comments" with "car"
   And   I press "Publish"
   And   I should see "Checkout"
-  And   I should see "orange"
+  And   I should see "EABB"
+
+Scenario: Checkin fails when custom location is not specified
+  Given I am logged in
+  And   I am on the details page for the item "SN2"
+  And   I follow "Checkin"
+  And   I fill in "professor" with "abcd"
+  And   I select "Others" from "location"
+  And   I press "Publish"
+  And   I should see "Custom location can't be blank when 'Other' is selected."
+  And   I should not see "Others"
+
+Scenario: Checkout fails when custom location is not specified
+  Given I am logged in
+  And   I am on the details page for the item "SN1"
+  And   I follow "Checkout"
+  And   I fill in "professor" with "abcd"
+  And   I fill in "teams" with "can"
+  And   I select "Others" from "location"
+  And   I fill in "comments" with "car"
+  And   I press "Publish"
+  And   I should see "Custom location can't be blank when 'Other' is selected."
+  And   I should not see "Others"
