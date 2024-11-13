@@ -130,7 +130,26 @@
       <label class="required">New Location in Storage</label>
     <% end %>
 
-    <%= text_field_tag(:location) %>
+    <div>
+      <%= select_tag :location, options_for_select([['Select a location', ''], ['Zachary', 'Zachary'], ['Peterson', 'Peterson'], ['EABA', 'EABA'], ['EABB', 'EABB'], ['EABC', 'EABC'], ['Others', 'others']], params[:location]), { id: 'location_select', class: 'form-control', required: true } %>
+      <%= text_field_tag :custom_location, '', placeholder: "Enter custom location", id: 'custom_location_input', style: "display: none;", class: 'form-control' %>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const selectElement = document.getElementById("location_select");
+        const inputElement = document.getElementById("custom_location_input");
+
+        // Show the text input when 'Others' is selected
+        selectElement.addEventListener("change", function() {
+          if (selectElement.value === "others") {
+            inputElement.style.display = "inline-block";
+          } else {
+            inputElement.style.display = "none";
+          }
+        });
+      });
+    </script>
 
     <!-- Additional Comments   -->
     <label>Additional Comments</label>

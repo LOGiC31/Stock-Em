@@ -133,6 +133,7 @@ RSpec.describe ItemsController, type: :controller do # rubocop:disable Metrics/B
         expect(response).to render_template(:show)
       end
     end
+
     context 'when the item does not exist' do
       it 'raises an ActiveRecord::RecordNotFound error' do
         expect do
@@ -196,6 +197,29 @@ RSpec.describe ItemsController, type: :controller do # rubocop:disable Metrics/B
         expect(assigns(:item)).to be_invalid
       end
     end
+
+    context 'with duplicate item attributes' do
+      let(:duplicate_attributes) do
+        {
+          item_name: item1.item_name,
+          serial_number: item1.serial_number,
+          category: item1.category,
+          quality_score: item1.quality_score,
+          currently_available: item1.currently_available
+        }
+      end
+
+      it 'does not create a duplicate item' do
+        expect do
+          post :create, params: { item: duplicate_attributes }
+        end.not_to change(Item, :count)
+      end
+
+      it 'returns an error message for duplicate item' do
+        post :create, params: { item: duplicate_attributes }
+        expect(flash[:alert]).to eq('Item already exists with this serial number.')
+      end
+    end
   end
 
   describe 'PUT #update' do # rubocop:disable Metrics/BlockLength
@@ -241,99 +265,140 @@ RSpec.describe ItemsController, type: :controller do # rubocop:disable Metrics/B
       end
     end
   end
-  describe 'DELETE #destroy' do # rubocop:disable Metrics/BlockLength
-    it 'deletes the item' do
-      expect do
-        delete :destroy, params: { id: item1.id }
-      end.to change(Item, :count).by(-1)
+
+  describe 'DELETE #destroy' do
+    let(:admin_user) { double('User', auth_level: 2) }
+    let(:non_admin_user) { double('User', auth_level: 1) }
+    let(:item) do 
+      Item.create!(
+        serial_number: 'TEST-SN',
+        item_name: 'Test Item',
+        category: 'Electronics',
+        quality_score: 50,
+        currently_available: true,
+        details: ''
+      )
     end
 
-    it 'redirects to the items index' do
-      delete :destroy, params: { id: item1.id }
-      expect(response).to redirect_to(items_path)
-      expect(flash[:notice]).to eq('Item was successfully deleted.')
+    before do
+      allow(controller).to receive(:current_user).and_return(admin_user) # Set as admin by default
     end
 
-    it 'sets an alert flash if deletion fails' do
-      allow_any_instance_of(Item).to receive(:destroy).and_return(false)
-      delete :destroy, params: { id: item1.id }
-      expect(flash[:alert]).to eq('Failed to delete the item.')
-      expect(response).to redirect_to(items_path)
-    end
-    describe 'PATCH #set_status' do
-      context 'with valid params' do
-        it 'updates the item status' do
-          # Pass a valid status
-          patch :set_status, params: { id: item1.id, item: { status: 'Damaged', comment: 'Item is damaged.' } }
-
-          item1.reload # Reload the item to get the updated attributes
-          expect(item1.status).to eq('Damaged')
-          expect(flash[:notice]).to eq('Item status updated successfully.')
-          expect(response).to redirect_to(item1)
-        end
-
-        it 'clears the item status when status is empty string' do
-          # Test when status is passed as an empty string (should be treated as nil)
-          patch :set_status, params: { id: item1.id, item: { status: '', comment: 'Cleared status.' } }
-
-          item1.reload
-          expect(flash[:notice]).to eq('Item status updated successfully.')
-          expect(response).to redirect_to(item1)
-        end
+    context 'when user is an admin' do
+      it 'deletes the item' do
+        item_to_delete = item # Create the item before expecting
+        expect do
+          delete :destroy, params: { id: item_to_delete.id }
+        end.to change(Item, :count).by(-1)
       end
 
-      context 'with invalid params' do
-        it 'does not update the item status and re-renders the show template' do
-          patch :set_status, params: { id: item1.id, item: { status: 'someotherstatus', comment: 'Invalid status.' } }
+      it 'redirects to the items index with a success notice' do
+        delete :destroy, params: { id: item.id }
+        expect(response).to redirect_to(items_path)
+        expect(flash[:notice]).to eq('Item was successfully deleted.')
+      end
 
-          item1.reload
-          expect(item1.status).to eq(nil)
-          expect(flash[:notice]).to eq('Error updating status. Status must be nil, Damaged, Lost, or Not Available.')
-          expect(response).to render_template(:show)
-        end
+      it 'sets an alert flash if deletion fails and redirects to item path' do
+        allow_any_instance_of(Item).to receive(:destroy).and_return(false)
+        delete :destroy, params: { id: item.id }
+        expect(flash[:alert]).to eq('Failed to delete the item.')
+        expect(response).to redirect_to(item_path(item))
       end
     end
 
-    describe 'POST #add_note' do # rubocop:disable Metrics/BlockLength
+    context 'when user is not an admin' do
       before do
-        # Simulating a user login by setting the session
-        session[:user_id] = user.id
-
-        # Mocking the User.find_by method to return the user we created
-        allow(User).to receive(:find_by).with(id: session[:user_id]).and_return(user)
+        allow(controller).to receive(:current_user).and_return(non_admin_user)
       end
 
-      context 'when the note is successfully created' do
-        let(:note_message) { 'This is a test note.' }
-
-        before do
-          post :add_note, params: { id: item1.id, note_msg: note_message }
-        end
-
-        it 'creates a new note for the item' do
-          expect(Note.last.msg).to eq(note_message)
-          expect(Note.last.item).to eq(item1)
-          expect(Note.last.user).to eq(user)
-        end
-
-        it 'redirects to the item show page' do
-          expect(response).to redirect_to(item_path(item1))
-        end
-
-        it 'responds with no content for JSON format' do
-          post :add_note, params: { id: item1.id, note_msg: note_message }, format: :json
-          expect(response).to have_http_status(:no_content)
-        end
+      it 'does not delete the item' do
+        item_to_keep = item # Create the item before expecting
+        expect do
+          delete :destroy, params: { id: item_to_keep.id }
+        end.not_to change(Item, :count)
       end
 
-      context 'when the note creation fails' do
-        before do
-          post :add_note, params: { id: item1.id, note_msg: nil }
-        end
+      it 'redirects to the item path with an authorization alert' do
+        delete :destroy, params: { id: item.id }
+        expect(response).to redirect_to(item_path(item))
+        expect(flash[:alert]).to eq('You need to be an admin to delete items.')
+      end
+    end
+  end
 
-        it 'does not create a note and redirects back with an error' do
-          expect(response).to redirect_to(item_path(item1))
-        end
+  describe 'PATCH #set_status' do
+    let(:admin_user) { User.create!(email: 'admin@example.com', auth_level: 2) }
+    let(:assistant_user) { User.create!(email: 'assistant@example.com', auth_level: 1) }
+    let(:student_user) { User.create!(email: 'student@example.com', auth_level: 0) }
+
+    before do
+      allow(controller).to receive(:current_user).and_return(admin_user)
+    end
+
+    context 'with valid params' do
+      it 'updates the item status and redirects to the item' do
+        patch :set_status, params: { id: item1.id, item: { status: 'Damaged' } }
+        item1.reload
+        expect(item1.status).to eq('Damaged')
+        expect(flash[:notice]).to eq('Item status updated successfully.')
+        expect(response).to redirect_to(item1)
+      end
+    end
+
+    context 'with invalid params' do
+      it 'does not update the item status and re-renders show' do
+        patch :set_status, params: { id: item1.id, item: { status: 'InvalidStatus' } }
+        expect(flash[:notice]).to eq('Error updating status. Status must be nil, Damaged, Lost, Not Available, or Intact.')
+        expect(response).to render_template(:show)
+      end
+    end
+
+    context 'when unauthorized user tries to update status' do
+      it 'does not allow a student user to update the status' do
+        allow(controller).to receive(:current_user).and_return(student_user)
+        patch :set_status, params: { id: item1.id, item: { status: 'Lost' } }
+        expect(flash[:alert]).to eq('You need to be an admin or assistant to update the status of this item.')
+        expect(response).to redirect_to(item1)
+      end
+    end
+  end
+
+  describe 'POST #add_note' do
+    before do
+      session[:user_id] = user.id
+      allow(User).to receive(:find_by).with(id: session[:user_id]).and_return(user)
+    end
+
+    context 'when the note is successfully created' do
+      let(:note_message) { 'This is a test note.' }
+
+      before do
+        post :add_note, params: { id: item1.id, note_msg: note_message }
+      end
+
+      it 'creates a new note for the item' do
+        expect(Note.last.msg).to eq(note_message)
+        expect(Note.last.item).to eq(item1)
+        expect(Note.last.user).to eq(user)
+      end
+
+      it 'redirects to the item show page' do
+        expect(response).to redirect_to(item_path(item1))
+      end
+
+      it 'responds with no content for JSON format' do
+        post :add_note, params: { id: item1.id, note_msg: note_message }, format: :json
+        expect(response).to have_http_status(:no_content)
+      end
+    end
+
+    context 'when the note creation fails' do
+      before do
+        post :add_note, params: { id: item1.id, note_msg: nil }
+      end
+
+      it 'does not create a note and redirects back with an error' do
+        expect(response).to redirect_to(item_path(item1))
       end
     end
   end

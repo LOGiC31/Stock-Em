@@ -4,49 +4,107 @@
 class ItemsController < ApplicationController
   include EventLogger
   # get all the items
-  def index # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def index # rubocop:disable Metrics/AbcSize
     @items = Item.all
 
-    # if params[:query].present?
-    #   query = params[:query].downcase
-    #   @items = @items.select do |item|
-    #     item.item_name.downcase.include?(query) || item.category.downcase.include?(query)
-    #   end
-    # end
+    apply_keyword_search if params[:query].present?
+    apply_category_filter if params[:category].present?
+    apply_status_filter if params[:status].present?
+    apply_availability_filter if params[:available_only] == '1'
 
     @categories = Item.distinct.pluck(:category)
     @statuses = Item.distinct.pluck(:status)
+  end
 
-    if params[:query].present?
-      keywords = params[:query].split(' ')
+  def apply_keyword_search
+    keywords = params[:query].split(' ')
+    query_conditions = generate_query_conditions(keywords)
+    query_params = generate_query_params(keywords)
 
-      condition = <<-SQL.strip_heredoc
-        (LOWER(item_name) LIKE :keyword OR#{' '}
-        LOWER(category) LIKE :keyword OR#{' '}
-        LOWER(status) LIKE :keyword OR#{' '}
-        LOWER(CASE WHEN currently_available THEN 'available'#{' '}
-        ELSE 'not available' END) LIKE :keyword)
-      SQL
+    @items = @items.where(query_conditions, *query_params)
+  end
 
-      # Map keywords to SQL conditions and join them with 'AND'
-      query_conditions = keywords.map { condition }.join(' AND ')
+  def generate_query_conditions(keywords)
+    condition = <<-SQL.strip_heredoc
+      (LOWER(item_name) LIKE :keyword OR#{' '}
+      LOWER(category) LIKE :keyword OR#{' '}
+      LOWER(status) LIKE :keyword OR#{' '}
+      LOWER(CASE WHEN currently_available THEN 'available'#{' '}
+      ELSE 'not available' END) LIKE :keyword)
+    SQL
 
-      # Map each keyword into a hash format to be used in the query
-      query_params = keywords.flat_map { |keyword| { keyword: "%#{keyword.downcase}%" } }
+    keywords.map { condition }.join(' AND ')
+  end
 
-      # Apply the query
-      @items = @items.where(query_conditions, *query_params)
+  def generate_query_params(keywords)
+    keywords.flat_map { |keyword| { keyword: "%#{keyword.downcase}%" } }
+  end
 
-    end
+  def apply_category_filter
+    @items = @items.where(category: params[:category])
+  end
 
-    @items = @items.where(category: params[:category]) if params[:category].present?
+  def apply_status_filter
+    @items = if params[:status] == 'unknown'
+               @items.where(status: nil)
+             else
+               @items.where(status: params[:status])
+             end
+  end
 
-    @items = @items.where(status: params[:status]) if params[:status].present?
-
-    return unless params[:available_only] == '1'
-
+  def apply_availability_filter
     @items = @items.select(&:currently_available)
   end
+
+  # def index
+  #   @items = Item.all
+
+  #   # if params[:query].present?
+  #   #   query = params[:query].downcase
+  #   #   @items = @items.select do |item|
+  #   #     item.item_name.downcase.include?(query) || item.category.downcase.include?(query)
+  #   #   end
+  #   # end
+
+  #   @categories = Item.distinct.pluck(:category)
+  #   @statuses = Item.distinct.pluck(:status)
+
+  #   if params[:query].present?
+  #     keywords = params[:query].split(' ')
+
+  #     condition = <<-SQL.strip_heredoc
+  #       (LOWER(item_name) LIKE :keyword OR#{' '}
+  #       LOWER(category) LIKE :keyword OR#{' '}
+  #       LOWER(status) LIKE :keyword OR#{' '}
+  #       LOWER(CASE WHEN currently_available THEN 'available'#{' '}
+  #       ELSE 'not available' END) LIKE :keyword)
+  #     SQL
+
+  #     # Map keywords to SQL conditions and join them with 'AND'
+  #     query_conditions = keywords.map { condition }.join(' AND ')
+
+  #     # Map each keyword into a hash format to be used in the query
+  #     query_params = keywords.flat_map { |keyword| { keyword: "%#{keyword.downcase}%" } }
+
+  #     # Apply the query
+  #     @items = @items.where(query_conditions, *query_params)
+
+  #   end
+
+  #   @items = @items.where(category: params[:category]) if params[:category].present?
+
+  #   if params[:status].present?
+  #     @items = if params[:status] == 'unknown'
+  #                @items.where(status: nil)
+  #              else
+  #                @items.where(status: params[:status])
+  #              end
+  #   end
+
+  #   return unless params[:available_only] == '1'
+
+  #   @items = @items.select(&:currently_available)
+  # end
 
   # get specific item
   def show
@@ -76,7 +134,10 @@ class ItemsController < ApplicationController
 
   def create
     @item = Item.new(item_params)
-    if @item.save
+    if Item.exists?(serial_number: @item.serial_number)
+      flash[:alert] = "Item already exists with this serial number."
+      render :new
+    elsif @item.save
       redirect_to items_path, notice: 'Item was successfully created.'
     else
       render :new
@@ -103,27 +164,40 @@ class ItemsController < ApplicationController
 
   def destroy
     @item = Item.find(params[:id])
-    if @item.destroy
-      flash[:notice] = 'Item was successfully deleted.'
+    Rails.logger.info("Current user auth level: #{current_user.auth_level}")
+  
+    if current_user.auth_level == 2
+      if @item.destroy
+        flash[:notice] = 'Item was successfully deleted.'
+        redirect_to items_path 
+      else
+        flash[:alert] = 'Failed to delete the item.'
+        redirect_to item_path(@item) 
+      end
     else
-      flash[:alert] = 'Failed to delete the item.'
+      flash[:alert] = 'You need to be an admin to delete items.'
+      redirect_to item_path(@item) 
     end
-    redirect_to items_path
   end
 
   def set_status # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @item = Item.find(params[:id])
     @notes = Note.where(item_id: @item.id).order('created_at DESC')
-
+  
+    if current_user.auth_level == 0
+      flash[:alert] = 'You need to be an admin or assistant to update the status of this item.'
+      redirect_to item_path(@item) and return
+    end
+  
     valid_statuses = [nil, 'Damaged', 'Lost', 'Not Available', 'Intact']
-
     status = get_valid_status(item_params[:status])
+  
     if valid_statuses.include?(status) && @item.update(item_params)
       log_event(params[:id], 'status_update', "Status Updated to #{status}", session[:user_id])
       flash[:notice] = 'Item status updated successfully.'
       redirect_to @item
     else
-      flash[:notice] = 'Error updating status. Status must be nil, Damaged, Lost, or Not Available.'
+      flash[:notice] = 'Error updating status. Status must be nil, Damaged, Lost, Not Available, or Intact.'
       render :show
     end
   end
@@ -132,8 +206,6 @@ class ItemsController < ApplicationController
     status = nil if status.blank?
     status
   end
-
-  private
 
   def item_params
     params.require(:item).permit(:item_id, :serial_number, :item_name,
