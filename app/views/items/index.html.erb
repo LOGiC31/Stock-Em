@@ -20,11 +20,6 @@
       align-items: center;
       width: 100%; /* Make sure the form takes up the full width */
     }
-    .search-form {
-      display: flex;
-      align-items: center;
-      width: 100%; /* Make sure the form takes up the full width */
-    }
     .search-container input[type="text"] {
       padding: 10px;
       border: 2px solid #ccc;
@@ -145,6 +140,12 @@
       text-align: center; /* Center text inside the button container */
       margin: 20px 0; /* Add some vertical spacing */
     }
+    .no-items-message {
+      font-size: 18px;
+      color: #777;
+      text-align: center;
+      margin-top: 20px;
+    }
     .div-main{
       width: 100%;
       overflow: hidden;
@@ -152,7 +153,7 @@
   </style>
   <script>
     function submitForm() {
-      document.getElementById('search-form').submit();
+      document.getElementById('filterForm').submit();
     }
   </script>
 </head>
@@ -203,22 +204,26 @@
 
   <!-- Scrollable Card Container -->
   <div class="card-container">
-    <% @items.each do |item| %>
-      <%= link_to item_path(item), class: 'card' do %>
-        <div class="icon">
-          <i class="fas <%= icon_for_category(item.category) %>"></i>
-        </div>
-        <div class="card-content">
-          <h3 class="item-name"><%= item.item_name %></h3>
-          <p class="item-category"><%= item.category %></p>
-          <span class="availability <%= item.currently_available ? 'available' : 'not-available' %>">
-            <%= item.currently_available ? 'Available' : 'Not Available' %>
-          </span>
-          <p class="item-status">
-            <strong>Status:</strong> <%= item.status.present? ? item.status : 'Unknown' %>
-          </p>
-        </div>
+    <% if @items.any? %>
+      <% @items.each do |item| %>
+        <%= link_to item_path(item), class: 'card' do %>
+          <div class="icon">
+            <i class="fas <%= icon_for_category(item.category) %>"></i>
+          </div>
+          <div class="card-content">
+            <h3 class="item-name"><%= item.item_name %></h3>
+            <p class="item-category"><%= item.category %></p>
+            <span class="availability <%= item.currently_available ? 'available' : 'not-available' %>">
+              <%= item.currently_available ? 'Available' : 'Not Available' %>
+            </span>
+            <p class="item-status">
+              <strong>Status:</strong> <%= item.status.present? ? item.status : 'Unknown' %>
+            </p>
+          </div>
+        <% end %>
       <% end %>
+    <% else %>
+      <p class="no-items-message">No Result Found</p>
     <% end %>
   </div>
 
@@ -232,8 +237,3 @@
 <script>
   function submitForm() {
     document.getElementById("filterForm").submit();
-  }
-</script>
-
-</body>
-</html>
