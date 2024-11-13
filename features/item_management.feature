@@ -39,8 +39,9 @@ Feature: Item Management
     And I should see "19"
     And I should see "Item was successfully updated."
 
-  Scenario: Delete an item
+  Scenario: Delete an item with Admin Login
     Given I am logged in
+    And I am an admin user
     And I am on the item details page
     When I select "Delete"
     Then I should see "Item was successfully deleted."
