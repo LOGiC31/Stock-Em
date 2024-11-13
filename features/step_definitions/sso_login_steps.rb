@@ -18,6 +18,18 @@ When('I successfully authenticate via Google') do
   visit '/auth/google_oauth2/callback'
 end
 
+When('I am an admin user') do
+  @user = User.last
+  @user.update!(auth_level: 2)
+  puts @user.auth_level
+end
+
+When('I am an assistant user') do
+  @user = User.last
+  @user.update!(auth_level: 1)
+  puts @user.auth_level
+end
+
 When('I fail to authenticate via Google') do
   OmniAuth.config.mock_auth[:google_oauth2] = :invalid_credentials
 
