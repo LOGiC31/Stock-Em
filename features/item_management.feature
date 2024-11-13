@@ -47,6 +47,12 @@ Feature: Item Management
     Then I should see "Item was successfully deleted."
     And I should not see "Item Name" in the item list
 
+  Scenario: Delete an item with Assistant Login
+    Given I am logged in
+    And I am on the item details page
+    When I select "Delete"
+    Then I should see "You need to be an admin to delete items."
+
   Scenario: Update all item fields
     Given I am logged in
     And I am on the item details page
