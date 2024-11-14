@@ -135,22 +135,22 @@ class ItemsController < ApplicationController
   # add note to item
   def add_note # rubocop:disable Metrics/AbcSize
     @item = Item.find(params[:id])
-  
-    if current_user.auth_level == 1 || current_user.auth_level == 2  # Assuming auth_level 2 is for admins
+
+    if current_user.auth_level == 1 || current_user.auth_level == 2 # Assuming auth_level 2 is for admins
       Note.create!({
-        note_id: '',
-        item: @item,
-        msg: params[:note_msg],
-        user: User.find_by(id: session[:user_id]),
-        created_at: DateTime.now,
-        updated_at: DateTime.now
-      })
-  
+                     note_id: '',
+                     item: @item,
+                     msg: params[:note_msg],
+                     user: User.find_by(id: session[:user_id]),
+                     created_at: DateTime.now,
+                     updated_at: DateTime.now
+                   })
+
       flash[:notice] = 'Note successfully added.'
     else
       flash[:alert] = 'You need to be an admin or assistant to update the status of this item.'
     end
-  
+
     respond_to do |format|
       format.html { redirect_to item_path(@item) }
       format.json { head :no_content }

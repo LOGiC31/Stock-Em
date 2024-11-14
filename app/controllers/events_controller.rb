@@ -25,7 +25,7 @@ class EventsController < ApplicationController
       details = 'Checked out to '
 
       details += "#{params[:teams]} in " unless params[:teams].blank?
-      details += " #{location} " #"#{params[:location]} "
+      details += " #{location} " # "#{params[:location]} "
       details += "on #{time_string} "
       details += "with #{params[:professor]} as the responsible professor"
 

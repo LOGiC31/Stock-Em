@@ -269,7 +269,7 @@ RSpec.describe ItemsController, type: :controller do # rubocop:disable Metrics/B
   describe 'DELETE #destroy' do
     let(:admin_user) { double('User', auth_level: 2) }
     let(:non_admin_user) { double('User', auth_level: 1) }
-    let(:item) do 
+    let(:item) do
       Item.create!(
         serial_number: 'TEST-SN',
         item_name: 'Test Item',
@@ -396,22 +396,21 @@ RSpec.describe ItemsController, type: :controller do # rubocop:disable Metrics/B
     context 'when the user has auth level 0 and tries to create a note' do
       let(:note_message) { 'This is a restricted note attempt.' }
       let(:user) { User.create!(email: 'test@example.com', auth_level: 0) } # unauthorized user
-    
+
       before do
-        session[:user_id] = user.id  # Set unauthorized user in the session
+        session[:user_id] = user.id # Set unauthorized user in the session
         post :add_note, params: { id: item1.id, note_msg: note_message }
       end
-    
+
       it 'does not create a new note' do
         expect(Note.find_by(msg: note_message)).to be_nil
       end
-    
+
       it 'redirects to the item show page with an error message' do
         expect(response).to redirect_to(item_path(item1))
         expect(flash[:alert]).to eq('You need to be an admin or assistant to update the status of this item.')
       end
     end
-    
 
     context 'when the note creation fails' do
       before do
