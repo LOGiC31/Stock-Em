@@ -120,66 +120,76 @@ class ItemsController < ApplicationController
     render :new
   end
 
-  def create
+  def create # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    Rails.logger.info("Current user auth level: #{current_user.auth_level}")
     @item = Item.new(item_params)
-    if Item.exists?(serial_number: @item.serial_number)
-      flash[:alert] = 'Item already exists with this serial number.'
-      render :new
-    elsif @item.save
-      redirect_to items_path, notice: 'Item was successfully created.'
+    if current_user.auth_level != 0
+      if Item.exists?(serial_number: @item.serial_number)
+        flash[:alert] = 'Item already exists with this serial number.'
+        render :new
+      elsif @item.save
+        redirect_to items_path, notice: 'Item was successfully created.'
+      else
+        render :new
+      end
     else
-      render :new
+      flash[:alert] = 'You are not authorized to perform this action.'
+      redirect_to items_path
     end
   end
 
   # add note to item
   def add_note # rubocop:disable Metrics/AbcSize
     @item = Item.find(params[:id])
-
-    if current_user.auth_level == 1 || current_user.auth_level == 2 # Assuming auth_level 2 is for admins
+  
+    if current_user.auth_level == 1 || current_user.auth_level == 2  # Assuming auth_level 2 is for admins
       Note.create!({
-                     note_id: '',
-                     item: @item,
-                     msg: params[:note_msg],
-                     user: User.find_by(id: session[:user_id]),
-                     created_at: DateTime.now,
-                     updated_at: DateTime.now
-                   })
-
+        note_id: '',
+        item: @item,
+        msg: params[:note_msg],
+        user: User.find_by(id: session[:user_id]),
+        created_at: DateTime.now,
+        updated_at: DateTime.now
+      })
+  
       flash[:notice] = 'Note successfully added.'
     else
       flash[:alert] = 'You need to be an admin or assistant to update the status of this item.'
     end
-
+  
     respond_to do |format|
       format.html { redirect_to item_path(@item) }
       format.json { head :no_content }
     end
   end
 
-  def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    @item = Item.find(params[:id])
-    original_params = item_params.dup
-    if @item.update(item_params)
-      if params[:item][:status] == 'Not Available' || params[:item][:status] == 'Lost'
-        @item.update(currently_available: false) # Update available to false
-      end
-      if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
-        @item.update(currently_available: true) # Update available to false
-      end
-      log_event(params[:id], 'edit item', 'Item attributes have been changed.', session[:user_id])
-      flash[:notice] = 'Item was successfully updated.'
-    else
-      flash[:alert] = 'There was a problem updating the item.'
-      @item.update(original_params)
-    end
-    redirect_to @item
-  end
-
-  def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
     @item = Item.find(params[:id])
     Rails.logger.info("Current user auth level: #{current_user.auth_level}")
+    if current_user.auth_level == 2
+      original_params = item_params.dup
+      if @item.update(item_params)
+        if params[:item][:status] == 'Not Available' || params[:item][:status] == 'Lost'
+          @item.update(currently_available: false) # Update available to false
+        end
+        if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
+          @item.update(currently_available: true) # Update available to false
+        end
+        flash[:notice] = 'Item was successfully updated.'
+      else
+        flash[:alert] = 'There was a problem updating the item.'
+        @item.update(original_params)
+      end
+      redirect_to @item
+    else
+      flash[:alert] = 'You are not authorized to perform this action.'
+      redirect_to item_path(@item)
+    end
+  end
 
+  def destroy
+    @item = Item.find(params[:id])
+    Rails.logger.info("Current user auth level: #{current_user.auth_level}")
     if current_user.auth_level == 2
       if @item.destroy
         flash[:notice] = 'Item was successfully deleted.'
@@ -198,7 +208,7 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     @notes = Note.where(item_id: @item.id).order('created_at DESC')
 
-    if current_user.auth_level.zero?
+    if current_user.auth_level == 0
       flash[:alert] = 'You need to be an admin or assistant to update the status of this item.'
       redirect_to item_path(@item) and return
     end
