@@ -172,6 +172,7 @@ class ItemsController < ApplicationController
         if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
           @item.update(currently_available: true) # Update available to false
         end
+        log_event(params[:id], 'edit item', 'Item attributes have been changed.', session[:user_id])
         flash[:notice] = 'Item was successfully updated.'
       else
         flash[:alert] = 'There was a problem updating the item.'
