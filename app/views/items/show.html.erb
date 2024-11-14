@@ -108,7 +108,6 @@
      gap: 10px;
    }
    .btn {
-     font-size: small;
      border-style: none;
      padding: 10px 15px;
      background-color: #500000;
@@ -257,9 +256,9 @@
 
       <div class="btn-container">
           <% if @item.currently_available %>
-            <%= link_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
+            <%= button_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
           <% else %>
-            <%= link_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
+            <%= button_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
           <% end %> 
           <button id="edit_button" class='btn' >Edit</button>
             <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form'}, id:'back_button' %>
