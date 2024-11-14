@@ -3,10 +3,10 @@ Feature: Create a new item
   I want to create a new item
   So that I can add it to the inventory
 
-  Scenario: Successfully creating a new item
+  Scenario: Successfully creating a new item with Assistant Login
     Given I am on the home page
     When I click on "Login with Google"
-    And I successfully authenticate via Google
+    And I am an assistant user
     Then I should be redirected to my user page
     When I click on "View Items"
     Then I should see "Create New Item"
@@ -23,7 +23,7 @@ Feature: Create a new item
   Scenario: Attempt to create an item with missing required fields
     Given I am on the home page
     When I click on "Login with Google"
-    And I successfully authenticate via Google
+    And I am an assistant user
     Then I should be redirected to my user page
     When I click on "View Items"
     Then I should see "Create New Item"
@@ -39,7 +39,7 @@ Feature: Create a new item
   Scenario: Validation error for invalid Quality Score
     Given I am on the home page
     When I click on "Login with Google"
-    And I successfully authenticate via Google
+    And I am an assistant user
     Then I should be redirected to my user page
     When I click on "View Items"
     Then I should see "Create New Item"
@@ -55,7 +55,7 @@ Feature: Create a new item
   Scenario: Validation error for duplicate item
     Given I am on the home page
     When I click on "Login with Google"
-    And I successfully authenticate via Google
+    And I am an assistant user
     Then I should be redirected to my user page
     When I click on "View Items"
     Then I should see "Create New Item"
@@ -75,3 +75,11 @@ Feature: Create a new item
     And I press "Create Item"
     Then I should see "Item already exists with this serial number."
     And I should not see "Table"
+
+  Scenario: Attempt to create an item with insufficient authorization
+    Given I am on the home page
+    When I click on "Login with Google"
+    And I am a student user
+    Then I should be redirected to my user page
+    When I click on "View Items"
+    Then I should not see "Create New Item"

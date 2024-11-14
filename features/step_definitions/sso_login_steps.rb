@@ -30,6 +30,12 @@ When('I am an assistant user') do
   puts @user.auth_level
 end
 
+When('I am a student user') do
+  @user = User.last
+  @user.update!(auth_level: 0)
+  puts @user.auth_level
+end
+
 When('I fail to authenticate via Google') do
   OmniAuth.config.mock_auth[:google_oauth2] = :invalid_credentials
 
@@ -55,3 +61,4 @@ end
 When('I visit the items page') do
   visit '/items'
 end
+
