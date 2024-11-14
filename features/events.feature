@@ -15,20 +15,52 @@ Background: items in database
   | user_id | name      | uin      | email        | contact_no   | role           | auth_level |
   | nilid   | Mark Polo | 1314234  | mark@ex.com  | 5556667777   | student_admin  | 2          |
   
-Scenario: view an available item and see Checkout
+Scenario: view an available item and see Checkout with Admin Login
   Given I am logged in
+  And I am an admin user
   And   I am on the details page for the item "SN1"
   Then  I should see "Checkout"
   And   I should not see "Checkin"
 
-Scenario: view an unavailable item and see Checkin
+Scenario: view an available item and see Checkout with Assistant Login
   Given I am logged in
+  And I am an assistant user
+  And   I am on the details page for the item "SN1"
+  Then  I should see "Checkout"
+  And   I should not see "Checkin"
+
+Scenario: view an available item and don't see Checkout with Student Login
+  Given I am logged in
+  And I am a student user
+  And   I am on the details page for the item "SN1"
+  Then  I should not see "Checkout"
+  And   I should not see "Checkin"
+
+
+Scenario: view an unavailable item and see Checkin with Admin Login
+  Given I am logged in
+  And I am an admin user
   And   I am on the details page for the item "SN2"
   Then  I should not see "Checkout"
   And   I should see "Checkin"
 
-Scenario: Checkout follows the correct UI flow
+Scenario: view an unavailable item and see Checkin with Assistant Login
   Given I am logged in
+  And I am an assistant user
+  And   I am on the details page for the item "SN2"
+  Then  I should not see "Checkout"
+  And   I should see "Checkin"
+
+Scenario: view an unavailable item and don't see Checkin with Student Login
+  Given I am logged in
+  And I am a student user
+  And   I am on the details page for the item "SN2"
+  Then  I should not see "Checkout"
+  And   I should not see "Checkin"
+
+Scenario: Checkout follows the correct UI flow with Admin Login
+  Given I am logged in
+  And I am an admin user
   And   I am on the details page for the item "SN1"
   And   I click on "Checkout"
   And   I fill in "professor" with "abcd"
@@ -39,8 +71,9 @@ Scenario: Checkout follows the correct UI flow
   And   I should see "Checkin"
   And   I should see "EABA"
 
-Scenario: Checkin follows the correct UI flow
+Scenario: Checkin follows the correct UI flow with Admin Login
   Given I am logged in
+  And I am an admin user
   And   I am on the details page for the item "SN2"
   And   I click on "Checkin"
   And   I fill in "professor" with "abcd"
@@ -50,8 +83,9 @@ Scenario: Checkin follows the correct UI flow
   And   I should see "Checkout"
   And   I should see "EABB"
 
-Scenario: Checkin fails when custom location is not specified
+Scenario: Checkin fails when custom location is not specified with Admin Login
   Given I am logged in
+  And I am an admin user
   And   I am on the details page for the item "SN2"
   And   I click on "Checkin"
   And   I fill in "professor" with "abcd"
@@ -60,8 +94,9 @@ Scenario: Checkin fails when custom location is not specified
   And   I should see "Custom location can't be blank when 'Other' is selected."
   And   I should not see "Others"
 
-Scenario: Checkout fails when custom location is not specified
+Scenario: Checkout fails when custom location is not specified with Admin Login
   Given I am logged in
+  And I am an admin user
   And   I am on the details page for the item "SN1"
   And   I click on "Checkout"
   And   I fill in "professor" with "abcd"
