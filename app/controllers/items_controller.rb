@@ -141,22 +141,22 @@ class ItemsController < ApplicationController
   # add note to item
   def add_note # rubocop:disable Metrics/AbcSize
     @item = Item.find(params[:id])
-  
-    if current_user.auth_level == 1 || current_user.auth_level == 2  # Assuming auth_level 2 is for admins
+
+    if current_user.auth_level == 1 || current_user.auth_level == 2 # Assuming auth_level 2 is for admins
       Note.create!({
-        note_id: '',
-        item: @item,
-        msg: params[:note_msg],
-        user: User.find_by(id: session[:user_id]),
-        created_at: DateTime.now,
-        updated_at: DateTime.now
-      })
-  
+                     note_id: '',
+                     item: @item,
+                     msg: params[:note_msg],
+                     user: User.find_by(id: session[:user_id]),
+                     created_at: DateTime.now,
+                     updated_at: DateTime.now
+                   })
+
       flash[:notice] = 'Note successfully added.'
     else
       flash[:alert] = 'You need to be an admin or assistant to update the status of this item.'
     end
-  
+
     respond_to do |format|
       format.html { redirect_to item_path(@item) }
       format.json { head :no_content }
@@ -175,6 +175,7 @@ class ItemsController < ApplicationController
         if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
           @item.update(currently_available: true) # Update available to false
         end
+        log_event(params[:id], 'item_edit', 'Item attributes have been updated.', session[:user_id])
         flash[:notice] = 'Item was successfully updated.'
       else
         flash[:alert] = 'There was a problem updating the item.'
@@ -237,7 +238,6 @@ class ItemsController < ApplicationController
   end
 
   def export
-
     @evtype = params[:evtype]
     headline = "item_name\tserial_number\tcategory\tquality_score\tcurrently_available\tdetails\tstatus\tnotes\tevents"
     @output_content = headline + "\n"
@@ -246,23 +246,19 @@ class ItemsController < ApplicationController
     Item.all.each do |item|
       headline.each do |keyword|
         if keyword == 'notes'
-          all_notes = ""
+          all_notes = ''
           note_list = Note.where(item_id: item.id).order('created_at DESC')
           note_list.each_with_index do |note, index|
             all_notes += note.msg
-            if index < note_list.length - 1
-              all_notes += " | "
-            end
+            all_notes += ' | ' if index < note_list.length - 1
           end
           @output_content += all_notes + "\t"
         elsif keyword == 'events'
-          all_events = ""
+          all_events = ''
           event_list = Event.where(item_id: item.id).order('created_at DESC')
           event_list.each_with_index do |event, index|
             all_events += event.details
-            if index < event_list.length - 1
-              all_events += " | "
-            end
+            all_events += ' | ' if index < event_list.length - 1
           end
           @output_content += all_events + "\n"
         elsif keyword == 'item_name'
@@ -285,8 +281,7 @@ class ItemsController < ApplicationController
   end
 
   def import
-
-    lines = params[:to_import].sub("\r", "").split("\n")
+    lines = params[:to_import].sub("\r", '').split("\n")
 
     if lines.length > 1
       headers = lines[0].downcase.split("\t")
@@ -294,66 +289,56 @@ class ItemsController < ApplicationController
       # ensure there is a field for name
       found_name = false
       headers.each do |header|
-        if header.include? "name" or header == "item"
-          found_name = true
-        end
+        found_name = true if header.include? 'name' or header == 'item'
       end
 
       if found_name
         lines.each_with_index do |line, index|
-
           # skip header
-          if index == 0
-            next
-          end
+          next if index == 0
 
           content = line.split("\t")
-          if content.length == headers.length
+          next unless content.length == headers.length
 
-            # default values
-            name = "UNKNOWN_NAME"
-            serial_num = "UNK-" + rand(100000000000).to_s
-            category = "Electronics"
-            quality_score = 100
-            currently_available = true
-            details = ""
-            status = ""
+          # default values
+          name = 'UNKNOWN_NAME'
+          serial_num = 'UNK-' + rand(100_000_000_000).to_s
+          category = 'Electronics'
+          quality_score = 100
+          currently_available = true
+          details = ''
+          status = ''
 
-            # extract custom values
-            content.each_with_index do |item, index2|
-              if headers[index2].include? "name" or headers[index2] == "item"
-                name = item
-              elsif headers[index2].include? "ser" or headers[index2].include? "s/n"
-                serial_num = item
-              elsif headers[index2].include? "cat"
-                Item::VALID_CATEGORIES.each do |category2|
-                  if category2.downcase.include? item.strip
-                    category = category2
-                  end
-                end
-              elsif headers[index2].include? "quality"
-                quality_score = item.to_i
-              elsif headers[index2].include? "avail"
-                currently_available = (item.downcase.include? "out" or item.downcase.include? "yes" or item.downcase.include? "true")
-              elsif headers[index2].include? "detail" or headers[index2].include? "note"
-                if details.length > 0
-                  details += " | "
-                end
-                details += item
+          # extract custom values
+          content.each_with_index do |item, index2|
+            if headers[index2].include? 'name' or headers[index2] == 'item'
+              name = item
+            elsif headers[index2].include? 'ser' or headers[index2].include? 's/n'
+              serial_num = item
+            elsif headers[index2].include? 'cat'
+              Item::VALID_CATEGORIES.each do |category2|
+                category = category2 if category2.downcase.include? item.strip
               end
+            elsif headers[index2].include? 'quality'
+              quality_score = item.to_i
+            elsif headers[index2].include? 'avail'
+              currently_available = (item.downcase.include? 'out' or item.downcase.include? 'yes' or item.downcase.include? 'true')
+            elsif headers[index2].include? 'detail' or headers[index2].include? 'note'
+              details += ' | ' if details.length > 0
+              details += item
             end
-
-            # add the item
-            Item.create!(
-              item_name: name,
-              serial_number: serial_num,
-              category: category,
-              quality_score: quality_score,
-              currently_available: currently_available,
-              details: details,
-              status: status,
-            )
           end
+
+          # add the item
+          Item.create!(
+            item_name: name,
+            serial_number: serial_num,
+            category:,
+            quality_score:,
+            currently_available:,
+            details:,
+            status:
+          )
         end
       end
     end
