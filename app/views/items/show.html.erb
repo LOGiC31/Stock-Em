@@ -260,7 +260,7 @@
           <% else %>
             <%= button_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
           <% end %> 
-          <button id="edit_button" class='btn' >Edit</button>
+          <% if @current_user.auth_level == 2 %> <button id="edit_button" class='btn' >Edit</button> <% end %>
             <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form'}, id:'back_button' %>
           <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id:'delete_button' %>
       </div>
@@ -300,7 +300,7 @@
           </div>
           
           <div class="btn-container" style="display: flex; justify-content: center; margin-top: 20px;">
-            <button type="submit" class="btn" style="background-color: #500000; color: white; border: none; border-radius: 5px; padding: 10px 15px; font-size: 16px; cursor: pointer; transition: background-color 0.3s; margin-right: 10px;">Save</button>
+            <button type="submit" id="submit_button" class="btn" style="background-color: #500000; color: white; border: none; border-radius: 5px; padding: 10px 15px; font-size: 16px; cursor: pointer; transition: background-color 0.3s; margin-right: 10px;">Save</button>
             <button type="button" id="cancel_button" class="btn" style="background-color: #500000; color: white; border: none; border-radius: 5px; padding: 10px 15px; font-size: 16px; cursor: pointer; transition: background-color 0.3s;">Cancel</button>
           </div>
         <% end %>
