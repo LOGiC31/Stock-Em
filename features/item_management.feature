@@ -63,18 +63,23 @@ Feature: Item Management
     Then I should see "Item was successfully deleted."
     And I should not see "Item Name" in the item list
 
+  @javascript
   Scenario: Delete an item with Assistant Login
     Given I am logged in
+    And I am an assistant user
     And I am on the item details page
     Then I should not see "Delete"
 
+  @javascript
   Scenario: Delete an item with Student Login
     Given I am logged in
+    And I am a student user
     And I am on the item details page
     Then I should not see "Delete"
 
   Scenario: Update all item fields
     Given I am logged in
+    And I am an admin user
     And I am on the item details page
     When I select "Edit"
     And I set field "Item Name" to "New Item Name"
