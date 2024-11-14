@@ -114,9 +114,7 @@ class ItemsController < ApplicationController
   def set_status # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @item = Item.find(params[:id])
     @notes = Note.where(item_id: @item.id).order('created_at DESC')
-
-    valid_statuses = [nil, 'Damaged', 'Lost', 'Not Available', 'Intact']
-
+    valid_statuses = [nil, 'Damaged', 'Lost', 'Not Available']
     status = get_valid_status(item_params[:status])
     if valid_statuses.include?(status) && @item.update(item_params)
       log_event(params[:id], 'status_update', "Status Updated to #{status}", session[:user_id])
