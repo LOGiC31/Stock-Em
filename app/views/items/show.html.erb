@@ -328,7 +328,7 @@
       <h2>Notes</h2>
 
       <!-- Add in "create note" button if not writing a note already -->
-      <% if !@writing_note %>
+      <% if (User.find(session[:user_id]).auth_level == 2 || User.find(session[:user_id]).auth_level == 1) && !@writing_note %>
         <%= link_to 'Create Note', item_path(id: @item.id, writing_note: true), class: 'btn2',  style: 'margin-bottom: 5px; margin-left: 30px;' %>
       <% end %>
       </div>
