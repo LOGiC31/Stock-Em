@@ -262,7 +262,9 @@
           <% end %> 
           <button id="edit_button" class='btn' >Edit</button>
             <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form'}, id:'back_button' %>
-          <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id:'delete_button' %>
+          <% if User.find(session[:user_id]).auth_level == 2 %>
+            <%= button_to 'Delete', item_path(@item), method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id: 'delete_button' %>
+          <% end %>
       </div>
     </div>
     
@@ -358,23 +360,25 @@
         <% end %>
     </div>
   </div>
-  <div style="background-color: #f5f5f5;border-radius: 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;padding: 20px;">
-      <h3 style="color:#500000">Update:</h3>  
+  <% if User.find(session[:user_id]).auth_level != 0 %>
+    <div style="background-color: #f5f5f5; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px;">
+      <h3 style="color:#500000">Update:</h3>
       <div style="display:flex; justify-content:flex-start; align-items: center;">
+        <%= form_with model: @item, url: set_status_item_path(@item), class:"updateForm", method: :patch, local: true do |f| %>
+          <label for="status"><strong>Select Status:</strong></label>
+          <%= f.select :status, options_for_select(
+            [['Clear Status', nil], 'Damaged', 'Lost', 'Not Available', 'Intact'].reject { |s| s[1] == @item.status }, # Exclude the current status
+            @item.status # Pre-select the current status if it’s not nil
+          ),  {}, { style: "margin-left: 18px; padding: 10px; border-radius: 5px; border: 2px solid #ccc; background-color: #f5f5f5;", name: "item[status]" } %>
           
-          <%= form_with model: @item, url: set_status_item_path(@item), class:"updateForm", method: :patch, local: true do |f| %>
-              <label for="status"><strong>Select Status:</strong></label>
-              <%= f.select :status, options_for_select(
-                [['Clear Status', nil], 'Damaged', 'Lost', 'Not Available', 'Intact'].reject { |s| s[1] == @item.status }, # Exclude the current status
-                @item.status # Pre-select the current status if it’s not nil
-              ),  {}, { style: "margin-left: 18px; padding: 10px; border-radius: 5px; border: 2px solid #ccc; background-color: #f5f5f5;", name: "item[status]" } %>
-            
-            <div style="margin-left: 10px;">
-              <%= f.submit "Update Status", class: "btn" %>
-            </div>
-          <% end %>
+          <div style="margin-left: 10px;">
+            <%= f.submit "Update Status", class: "btn" %>
+          </div>
+        <% end %>
       </div>
     </div>
+  <% end %>
+
 </div>
 <script>
   setTimeout(function() {
