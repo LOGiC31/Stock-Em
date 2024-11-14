@@ -121,6 +121,8 @@ class ItemsController < ApplicationController
   end
 
   def create # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    Rails.logger.info("Current user auth level: #{current_user.auth_level}")
+    @item = Item.new(item_params)
     if current_user.auth_level != 0
       if Item.exists?(serial_number: @item.serial_number)
         flash[:alert] = 'Item already exists with this serial number.'
@@ -133,6 +135,7 @@ class ItemsController < ApplicationController
     else
       flash[:alert] = 'You are not authorized to perform this action.'
       redirect_to items_path
+    end
   end
 
   # add note to item
@@ -172,7 +175,6 @@ class ItemsController < ApplicationController
         if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
           @item.update(currently_available: true) # Update available to false
         end
-        log_event(params[:id], 'edit item', 'Item attributes have been changed.', session[:user_id])
         flash[:notice] = 'Item was successfully updated.'
       else
         flash[:alert] = 'There was a problem updating the item.'
