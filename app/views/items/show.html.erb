@@ -123,7 +123,6 @@
       padding: 0.5rem 1rem;
     }
    .btn {
-     font-size: small;
      border-style: none;
      padding: 10px 15px;
      background-color: #500000;
@@ -273,9 +272,9 @@
       <div class="button-container">
         <% if @current_user.auth_level == 1 || @current_user.auth_level == 2 %>
           <% if @item.currently_available %>
-            <%= link_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
+            <%= button_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
           <% else %>
-            <%= link_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
+            <%= button_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
           <% end %> 
         <% end %>
         <% if @current_user.auth_level == 2 %> 
