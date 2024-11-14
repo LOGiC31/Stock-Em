@@ -281,7 +281,9 @@
           <button id="edit_button" class='btn' >Edit</button> 
         <% end %>
         <%= button_to 'Back', items_path, method: :get, class: 'btn', form: { class: 'back-button-form'}, id:'back_button' %>
-        <%= button_to 'Delete', item_path(@item),  method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id:'delete_button' %>
+          <% if User.find(session[:user_id]).auth_level == 2 %>
+          <%= button_to 'Delete', item_path(@item), method: :delete, form: { data: { turbo_confirm: 'Are you sure?' }}, class: 'btn', id: 'delete_button' %>
+          <% end %>
       </div>
     </div>
     
