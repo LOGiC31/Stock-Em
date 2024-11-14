@@ -135,7 +135,7 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     if Item.exists?(serial_number: @item.serial_number)
-      flash[:alert] = "Item already exists with this serial number."
+      flash[:alert] = 'Item already exists with this serial number.'
       render :new
     elsif @item.save
       redirect_to items_path, notice: 'Item was successfully created.'
@@ -154,6 +154,7 @@ class ItemsController < ApplicationController
       if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
         @item.update(currently_available: true) # Update available to false
       end
+      log_event(params[:id], 'edit item', 'Item attributes have been changed.', session[:user_id])
       flash[:notice] = 'Item was successfully updated.'
     else
       flash[:alert] = 'There was a problem updating the item.'
@@ -162,36 +163,36 @@ class ItemsController < ApplicationController
     redirect_to @item
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @item = Item.find(params[:id])
     Rails.logger.info("Current user auth level: #{current_user.auth_level}")
-  
+
     if current_user.auth_level == 2
       if @item.destroy
         flash[:notice] = 'Item was successfully deleted.'
-        redirect_to items_path 
+        redirect_to items_path
       else
         flash[:alert] = 'Failed to delete the item.'
-        redirect_to item_path(@item) 
+        redirect_to item_path(@item)
       end
     else
       flash[:alert] = 'You need to be an admin to delete items.'
-      redirect_to item_path(@item) 
+      redirect_to item_path(@item)
     end
   end
 
   def set_status # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @item = Item.find(params[:id])
     @notes = Note.where(item_id: @item.id).order('created_at DESC')
-  
-    if current_user.auth_level == 0
+
+    if current_user.auth_level.zero?
       flash[:alert] = 'You need to be an admin or assistant to update the status of this item.'
       redirect_to item_path(@item) and return
     end
-  
+
     valid_statuses = [nil, 'Damaged', 'Lost', 'Not Available', 'Intact']
     status = get_valid_status(item_params[:status])
-  
+
     if valid_statuses.include?(status) && @item.update(item_params)
       log_event(params[:id], 'status_update', "Status Updated to #{status}", session[:user_id])
       flash[:notice] = 'Item status updated successfully.'

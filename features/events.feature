@@ -30,7 +30,7 @@ Scenario: view an unavailable item and see Checkin
 Scenario: Checkout follows the correct UI flow
   Given I am logged in
   And   I am on the details page for the item "SN1"
-  And   I follow "Checkout"
+  And   I click on "Checkout"
   And   I fill in "professor" with "abcd"
   And   I fill in "teams" with "can"
   And   I select "EABA" from "location"
@@ -42,7 +42,7 @@ Scenario: Checkout follows the correct UI flow
 Scenario: Checkin follows the correct UI flow
   Given I am logged in
   And   I am on the details page for the item "SN2"
-  And   I follow "Checkin"
+  And   I click on "Checkin"
   And   I fill in "professor" with "abcd"
   And   I select "EABB" from "location"
   And   I fill in "comments" with "car"
@@ -53,7 +53,7 @@ Scenario: Checkin follows the correct UI flow
 Scenario: Checkin fails when custom location is not specified
   Given I am logged in
   And   I am on the details page for the item "SN2"
-  And   I follow "Checkin"
+  And   I click on "Checkin"
   And   I fill in "professor" with "abcd"
   And   I select "Others" from "location"
   And   I press "Publish"
@@ -63,7 +63,7 @@ Scenario: Checkin fails when custom location is not specified
 Scenario: Checkout fails when custom location is not specified
   Given I am logged in
   And   I am on the details page for the item "SN1"
-  And   I follow "Checkout"
+  And   I click on "Checkout"
   And   I fill in "professor" with "abcd"
   And   I fill in "teams" with "can"
   And   I select "Others" from "location"
