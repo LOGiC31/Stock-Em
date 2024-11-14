@@ -230,6 +230,8 @@
   <!-- New Item Button Container -->
   <div class="button-container">
     <%= link_to 'Create New Item', new_item_path, class: 'new-item-button' %>
+    <%= link_to 'Import Items', export_items_path(evtype: "Import"), class: 'new-item-button' %>
+    <%= link_to 'Export Items', export_items_path(evtype: "Export"), class: 'new-item-button' %>
   </div>
 
 </div>

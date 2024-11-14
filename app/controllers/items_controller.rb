@@ -212,4 +212,130 @@ class ItemsController < ApplicationController
     params.require(:item).permit(:item_id, :serial_number, :item_name,
                                  :category, :quality_score, :currently_available, :image, :details, :status, :comment)
   end
+
+  def export
+
+    @evtype = params[:evtype]
+    headline = "item_name\tserial_number\tcategory\tquality_score\tcurrently_available\tdetails\tstatus\tnotes\tevents"
+    @output_content = headline + "\n"
+    headline = headline.split("\t")
+
+    Item.all.each do |item|
+      headline.each do |keyword|
+        if keyword == 'notes'
+          all_notes = ""
+          note_list = Note.where(item_id: item.id).order('created_at DESC')
+          note_list.each_with_index do |note, index|
+            all_notes += note.msg
+            if index < note_list.length - 1
+              all_notes += " | "
+            end
+          end
+          @output_content += all_notes + "\t"
+        elsif keyword == 'events'
+          all_events = ""
+          event_list = Event.where(item_id: item.id).order('created_at DESC')
+          event_list.each_with_index do |event, index|
+            all_events += event.details
+            if index < event_list.length - 1
+              all_events += " | "
+            end
+          end
+          @output_content += all_events + "\n"
+        elsif keyword == 'item_name'
+          @output_content += item.item_name.to_s + "\t"
+        elsif keyword == 'serial_number'
+          @output_content += item.serial_number.to_s + "\t"
+        elsif keyword == 'category'
+          @output_content += item.category.to_s + "\t"
+        elsif keyword == 'quality_score'
+          @output_content += item.quality_score.to_s + "\t"
+        elsif keyword == 'currently_available'
+          @output_content += item.currently_available.to_s + "\t"
+        elsif keyword == 'details'
+          @output_content += item.details.to_s + "\t"
+        elsif keyword == 'status'
+          @output_content += item.status.to_s + "\t"
+        end
+      end
+    end
+  end
+
+  def import
+
+    lines = params[:to_import].sub("\r", "").split("\n")
+
+    if lines.length > 1
+      headers = lines[0].downcase.split("\t")
+
+      # ensure there is a field for name
+      found_name = false
+      headers.each do |header|
+        if header.include? "name" or header == "item"
+          found_name = true
+        end
+      end
+
+      if found_name
+        lines.each_with_index do |line, index|
+
+          # skip header
+          if index == 0
+            next
+          end
+
+          content = line.split("\t")
+          if content.length == headers.length
+
+            # default values
+            name = "UNKNOWN_NAME"
+            serial_num = "UNK-" + rand(100000000000).to_s
+            category = "Electronics"
+            quality_score = 100
+            currently_available = true
+            details = ""
+            status = ""
+
+            # extract custom values
+            content.each_with_index do |item, index2|
+              if headers[index2].include? "name" or headers[index2] == "item"
+                name = item
+              elsif headers[index2].include? "ser" or headers[index2].include? "s/n"
+                serial_num = item
+              elsif headers[index2].include? "cat"
+                Item::VALID_CATEGORIES.each do |category2|
+                  if category2.downcase.include? item.strip
+                    category = category2
+                  end
+                end
+              elsif headers[index2].include? "quality"
+                quality_score = item.to_i
+              elsif headers[index2].include? "avail"
+                currently_available = (item.downcase.include? "out" or item.downcase.include? "yes" or item.downcase.include? "true")
+              elsif headers[index2].include? "detail" or headers[index2].include? "note"
+                if details.length > 0
+                  details += " | "
+                end
+                details += item
+              end
+            end
+
+            # add the item
+            Item.create!(
+              item_name: name,
+              serial_number: serial_num,
+              category: category,
+              quality_score: quality_score,
+              currently_available: currently_available,
+              details: details,
+              status: status,
+            )
+          end
+        end
+      end
+    end
+
+    index
+    render :index
+  end
 end
