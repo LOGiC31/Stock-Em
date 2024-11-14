@@ -48,24 +48,24 @@ Feature: Search and filter items
     And I should not see "Tablet"
     And I should not see "Laptop2"
 
+  @javascript 
   Scenario: Filter dropdown items by status
     Given I am logged in
     And I am on the items home page
     When I click on the status dropdown
     When I select "Lost" from the status dropdown list
-    When I click Filter
     Then I should see "Laptop1"
     And I should see "Tablet"
     And I should see "Desk"
     And I should not see "Chair"
     And I should not see "Laptop2"
 
+  @javascript 
   Scenario: Filter dropdown items by category
     Given I am logged in
     And I am on the items home page
     When I click on the category dropdown
     When I select "Electronics" from the category dropdown list
-    When I click Filter
     Then I should see "Laptop1"
     And I should see "Tablet"
     And I should see "Laptop2"
