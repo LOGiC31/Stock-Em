@@ -50,14 +50,12 @@ Feature: Item Management
   Scenario: Delete an item with Assistant Login
     Given I am logged in
     And I am on the item details page
-    When I select "Delete"
-    Then I should see "You need to be an admin to delete items."
+    Then I should not see "Delete"
 
   Scenario: Delete an item with Student Login
     Given I am logged in
     And I am on the item details page
-    When I select "Delete"
-    Then I should see "You need to be an admin to delete items."
+    Then I should not see "Delete"
 
   Scenario: Update all item fields
     Given I am logged in
