@@ -37,8 +37,9 @@ Scenario: no text box shown until create note is called
   Then  I should see "Create Note"
   And   I should not see "Publish"
 
-Scenario: adding a note follows the correct UI flow
+Scenario: adding a note follows the correct UI flow as an admin
   Given I am logged in
+  And I am an admin user
   And   I am on the details page for the item "SN2"
   And   I follow "Create Note"
   And   I fill in "note_msg" with "abcdefgh"
@@ -46,3 +47,23 @@ Scenario: adding a note follows the correct UI flow
   Then  I should see "Create Note"
   And   I should not see "Publish"
   And   I should see "abcdefgh"
+
+Scenario: adding a note follows the correct UI flow as an assistant
+  Given I am logged in
+  And I am an assistant user
+  And   I am on the details page for the item "SN2"
+  And   I follow "Create Note"
+  And   I fill in "note_msg" with "abcdefgh"
+  And   I press "Publish"
+  Then  I should see "Create Note"
+  And   I should not see "Publish"
+  And   I should see "abcdefgh"
+
+Scenario: adding a note follows the correct UI flow as a student
+  Given I am logged in
+  And   I am on the details page for the item "SN2"
+  And   I follow "Create Note"
+  And   I fill in "note_msg" with "abcdefgh"
+  And   I press "Publish"
+  Then I should see "You need to be an admin or assistant to update the status of this item."
+  And   I should not see "abcdefgh"
