@@ -17,12 +17,14 @@ Feature: be able to import and export sheets of items
 
   Scenario: Exporting the items
     Given I am logged in
+    And I am an admin user
     And   I am on the items home page
     When  I click on "Export Items"
     Then  I should see "Electronics"
 
   Scenario: Importing the items
     Given I am logged in
+    And I am an admin user
     And   I am on the items home page
     When  I click on "Import Items"
     And   I fill in "to_import" with the sample import data
