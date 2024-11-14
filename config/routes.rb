@@ -25,7 +25,7 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   get '/auth/google_oauth2/callback', to: 'sessions#omniauth'
   get '/add_note_to_item', to: 'items#add_note', as: 'add_note'
 
-  get '/create_new_event', to: 'events#new', as: 'create_event'
+  post '/create_new_event', to: 'events#new', as: 'create_event'
   get '/publish_event', to: 'events#publish_event', as: 'publish_event'
 
   get 'export_items', to: 'items#export', as: 'export_items'
