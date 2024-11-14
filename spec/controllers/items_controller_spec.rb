@@ -371,6 +371,7 @@ RSpec.describe ItemsController, type: :controller do # rubocop:disable Metrics/B
 
     context 'when the note is successfully created' do
       let(:note_message) { 'This is a test note.' }
+      let(:user) { User.create!(email: 'test@example.com', auth_level: 1) }
 
       before do
         post :add_note, params: { id: item1.id, note_msg: note_message }
@@ -391,6 +392,26 @@ RSpec.describe ItemsController, type: :controller do # rubocop:disable Metrics/B
         expect(response).to have_http_status(:no_content)
       end
     end
+
+    context 'when the user has auth level 0 and tries to create a note' do
+      let(:note_message) { 'This is a restricted note attempt.' }
+      let(:user) { User.create!(email: 'test@example.com', auth_level: 0) } # unauthorized user
+    
+      before do
+        session[:user_id] = user.id  # Set unauthorized user in the session
+        post :add_note, params: { id: item1.id, note_msg: note_message }
+      end
+    
+      it 'does not create a new note' do
+        expect(Note.find_by(msg: note_message)).to be_nil
+      end
+    
+      it 'redirects to the item show page with an error message' do
+        expect(response).to redirect_to(item_path(item1))
+        expect(flash[:alert]).to eq('You need to be an admin or assistant to update the status of this item.')
+      end
+    end
+    
 
     context 'when the note creation fails' do
       before do
