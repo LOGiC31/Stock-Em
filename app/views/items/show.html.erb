@@ -123,6 +123,7 @@
       padding: 0.5rem 1rem;
     }
    .btn {
+     font-size: small;
      border-style: none;
      padding: 10px 15px;
      background-color: #500000;
@@ -272,9 +273,9 @@
       <div class="button-container">
         <% if @current_user.auth_level == 1 || @current_user.auth_level == 2 %>
           <% if @item.currently_available %>
-            <%= button_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
+            <%= link_to 'Checkout', create_event_path(itemid: @item.id), class: 'btn' %>
           <% else %>
-            <%= button_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
+            <%= link_to 'Checkin', create_event_path(itemid: @item.id), class: 'btn' %>
           <% end %> 
         <% end %>
         <% if @current_user.auth_level == 2 %> 
@@ -346,7 +347,7 @@
       <h2>Notes</h2>
 
       <!-- Add in "create note" button if not writing a note already -->
-      <% if !@writing_note %>
+      <% if (User.find(session[:user_id]).auth_level == 2 || User.find(session[:user_id]).auth_level == 1) && !@writing_note %>
         <%= link_to 'Create Note', item_path(id: @item.id, writing_note: true), class: 'btn2',  style: 'margin-bottom: 5px; margin-left: 30px;' %>
       <% end %>
       </div>

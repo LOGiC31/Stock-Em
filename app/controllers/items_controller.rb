@@ -114,18 +114,6 @@ class ItemsController < ApplicationController
     @events = Event.where(item_id: @item.id).order('created_at DESC')
   end
 
-  # add note to item
-  def add_note # rubocop:disable Metrics/AbcSize
-    @item = Item.find(params[:id])
-    Note.create!({ note_id: '', item: @item, msg: params[:note_msg], user: User.find_by(id: session[:user_id]),
-                   created_at: DateTime.now, updated_at: DateTime.now })
-
-    respond_to do |format|
-      format.html { redirect_to item_path(@item) }
-      format.json { head :no_content }
-    end
-  end
-
   # create new item
   def new
     @item = Item.new
