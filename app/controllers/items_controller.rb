@@ -188,7 +188,7 @@ class ItemsController < ApplicationController
     end
   end
 
-  def destroy
+  def destroy # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @item = Item.find(params[:id])
     Rails.logger.info("Current user auth level: #{current_user.auth_level}")
     if current_user.auth_level == 2
@@ -237,7 +237,7 @@ class ItemsController < ApplicationController
                                  :category, :quality_score, :currently_available, :image, :details, :status, :comment)
   end
 
-  def export
+  def export # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
     @evtype = params[:evtype]
     headline = "item_name\tserial_number\tcategory\tquality_score\tcurrently_available\tdetails\tstatus\tnotes\tevents"
     @output_content = "#{headline}\n"
@@ -281,7 +281,7 @@ class ItemsController < ApplicationController
     end
   end
 
-  def import
+  def import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
     lines = params[:to_import].sub("\r", '').split("\n")
 
     if lines.length > 1
