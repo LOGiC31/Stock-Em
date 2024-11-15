@@ -61,4 +61,3 @@ end
 When('I visit the items page') do
   visit '/items'
 end
-

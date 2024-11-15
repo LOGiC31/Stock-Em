@@ -209,7 +209,7 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     @notes = Note.where(item_id: @item.id).order('created_at DESC')
 
-    if current_user.auth_level == 0
+    if current_user.auth_level.zero?
       flash[:alert] = 'You need to be an admin or assistant to update the status of this item.'
       redirect_to item_path(@item) and return
     end
@@ -240,41 +240,42 @@ class ItemsController < ApplicationController
   def export
     @evtype = params[:evtype]
     headline = "item_name\tserial_number\tcategory\tquality_score\tcurrently_available\tdetails\tstatus\tnotes\tevents"
-    @output_content = headline + "\n"
+    @output_content = "#{headline}\n"
     headline = headline.split("\t")
 
     Item.all.each do |item|
       headline.each do |keyword|
-        if keyword == 'notes'
+        case keyword
+        when 'notes'
           all_notes = ''
           note_list = Note.where(item_id: item.id).order('created_at DESC')
           note_list.each_with_index do |note, index|
             all_notes += note.msg
             all_notes += ' | ' if index < note_list.length - 1
           end
-          @output_content += all_notes + "\t"
-        elsif keyword == 'events'
+          @output_content += "#{all_notes}\t"
+        when 'events'
           all_events = ''
           event_list = Event.where(item_id: item.id).order('created_at DESC')
           event_list.each_with_index do |event, index|
             all_events += event.details
             all_events += ' | ' if index < event_list.length - 1
           end
-          @output_content += all_events + "\n"
-        elsif keyword == 'item_name'
-          @output_content += item.item_name.to_s + "\t"
-        elsif keyword == 'serial_number'
-          @output_content += item.serial_number.to_s + "\t"
-        elsif keyword == 'category'
-          @output_content += item.category.to_s + "\t"
-        elsif keyword == 'quality_score'
-          @output_content += item.quality_score.to_s + "\t"
-        elsif keyword == 'currently_available'
-          @output_content += item.currently_available.to_s + "\t"
-        elsif keyword == 'details'
-          @output_content += item.details.to_s + "\t"
-        elsif keyword == 'status'
-          @output_content += item.status.to_s + "\t"
+          @output_content += "#{all_events}\n"
+        when 'item_name'
+          @output_content += "#{item.item_name}\t"
+        when 'serial_number'
+          @output_content += "#{item.serial_number}\t"
+        when 'category'
+          @output_content += "#{item.category}\t"
+        when 'quality_score'
+          @output_content += "#{item.quality_score}\t"
+        when 'currently_available'
+          @output_content += "#{item.currently_available}\t"
+        when 'details'
+          @output_content += "#{item.details}\t"
+        when 'status'
+          @output_content += "#{item.status}\t"
         end
       end
     end
@@ -289,20 +290,20 @@ class ItemsController < ApplicationController
       # ensure there is a field for name
       found_name = false
       headers.each do |header|
-        found_name = true if header.include? 'name' or header == 'item'
+        found_name = true if header.include?('name') || (header == 'item')
       end
 
       if found_name
         lines.each_with_index do |line, index|
           # skip header
-          next if index == 0
+          next if index.zero?
 
           content = line.split("\t")
           next unless content.length == headers.length
 
           # default values
           name = 'UNKNOWN_NAME'
-          serial_num = 'UNK-' + rand(100_000_000_000).to_s
+          serial_num = "UNK-#{rand(100_000_000_000)}"
           category = 'Electronics'
           quality_score = 100
           currently_available = true
@@ -311,9 +312,9 @@ class ItemsController < ApplicationController
 
           # extract custom values
           content.each_with_index do |item, index2|
-            if headers[index2].include? 'name' or headers[index2] == 'item'
+            if headers[index2].include?('name') || (headers[index2] == 'item')
               name = item
-            elsif headers[index2].include? 'ser' or headers[index2].include? 's/n'
+            elsif headers[index2].include?('ser') || headers[index2].include?('s/n')
               serial_num = item
             elsif headers[index2].include? 'cat'
               Item::VALID_CATEGORIES.each do |category2|
@@ -323,8 +324,8 @@ class ItemsController < ApplicationController
               quality_score = item.to_i
             elsif headers[index2].include? 'avail'
               currently_available = (item.downcase.include? 'out' or item.downcase.include? 'yes' or item.downcase.include? 'true')
-            elsif headers[index2].include? 'detail' or headers[index2].include? 'note'
-              details += ' | ' if details.length > 0
+            elsif headers[index2].include?('detail') || headers[index2].include?('note')
+              details += ' | ' if details.length.positive?
               details += item
             end
           end

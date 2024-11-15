@@ -28,5 +28,5 @@ When('I search for {string} and filter by availability') do |query|
 end
 
 When('I fill in {string} with the sample import data') do |box|
-  fill_in box, with: File.read("features/support/sample_import.txt")
+  fill_in box, with: File.read('features/support/sample_import.txt')
 end
