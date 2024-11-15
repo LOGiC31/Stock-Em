@@ -5,7 +5,7 @@
 require 'rails_helper'
 
 RSpec.describe ItemsController, type: :controller do # rubocop:disable Metrics/BlockLength
-  let!(:user) { User.create!(email: 'test@example.com') }
+  let!(:user) { User.create!(email: 'test@example.com', auth_level: 2) }
 
   let!(:item1) do
     Item.create!(
