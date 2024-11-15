@@ -10,6 +10,7 @@ Feature: Search and filter items
     | SN3            | Tablet    | Electronics  | lost        | 0             | false               | "comfy!" | 2024-10-02  | 2024-10-03  |
     | SN4            | Laptop2   | Electronics  | damaged     | 55            | false               | ""       | 2024-10-01  | 2024-10-02  |
     | SN5            | Desk      | Furnitures    | lost        | 60            | true                | "study"  | 2024-10-03  | 2024-10-04  |
+    | SN6            | Desk      | Furnitures    |         | 60            | true                | "study"  | 2024-10-03  | 2024-10-04  |
 
 
   Scenario: Search items by name
@@ -59,6 +60,13 @@ Feature: Search and filter items
     And I should see "Desk"
     And I should not see "Chair"
     And I should not see "Laptop2"
+
+  @javascript 
+  Scenario: Filter dropdown items by unknown status
+    Given I am logged in
+    And I am on the items home page
+    When I click on the status dropdown
+    When I select "Unknown" from the status dropdown list
 
   @javascript 
   Scenario: Filter dropdown items by category
