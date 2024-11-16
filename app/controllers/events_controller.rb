@@ -2,12 +2,12 @@
 
 # Contains logic for web pages which display item(s)
 class EventsController < ApplicationController
-  def publish_event # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def publish_event # rubocop:disable Metrics/AbcSize, Metrics/MethodLength,Metrics/PerceivedComplexity
     details = ''
     time_string = Time.now.strftime('%Y-%m-%d %H:%M:%S')
 
     # Custom location logic
-    location = params[:location].presence || 'Unknown Location' # Default to 'Unknown Location' if no location is provided
+    location = params[:location].presence || 'Unknown Location' # Default to 'Unknown Location' if no location is provided # rubocop:disable Layout/LineLength
     # Check if 'Other' is selected and apply custom location logic
     if params[:location] == 'others'
       if params[:custom_location].blank?

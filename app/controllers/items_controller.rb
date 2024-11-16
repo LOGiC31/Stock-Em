@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Contains logic for web pages which display item(s)
-class ItemsController < ApplicationController
+class ItemsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include EventLogger
   # get all the items
   def index # rubocop:disable Metrics/AbcSize
@@ -139,7 +139,7 @@ class ItemsController < ApplicationController
   end
 
   # add note to item
-  def add_note # rubocop:disable Metrics/AbcSize
+  def add_note # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @item = Item.find(params[:id])
 
     if current_user.auth_level == 1 || current_user.auth_level == 2 # Assuming auth_level 2 is for admins
@@ -237,14 +237,14 @@ class ItemsController < ApplicationController
                                  :category, :quality_score, :currently_available, :image, :details, :status, :comment)
   end
 
-  def export # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
+  def export # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
     @evtype = params[:evtype]
     headline = "item_name\tserial_number\tcategory\tquality_score\tcurrently_available\tdetails\tstatus\tnotes\tevents"
     @output_content = "#{headline}\n"
     headline = headline.split("\t")
 
-    Item.all.each do |item|
-      headline.each do |keyword|
+    Item.all.each do |item| # rubocop:disable Metrics/BlockLength
+      headline.each do |keyword| # rubocop:disable Metrics/BlockLength
         case keyword
         when 'notes'
           all_notes = ''
@@ -281,7 +281,7 @@ class ItemsController < ApplicationController
     end
   end
 
-  def import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
+  def import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
     lines = params[:to_import].sub("\r", '').split("\n")
 
     if lines.length > 1
@@ -294,7 +294,7 @@ class ItemsController < ApplicationController
       end
 
       if found_name
-        lines.each_with_index do |line, index|
+        lines.each_with_index do |line, index| # rubocop:disable Metrics/BlockLength
           # skip header
           next if index.zero?
 
@@ -323,7 +323,7 @@ class ItemsController < ApplicationController
             elsif headers[index2].include? 'quality'
               quality_score = item.to_i
             elsif headers[index2].include? 'avail'
-              currently_available = (item.downcase.include? 'out' or item.downcase.include? 'yes' or item.downcase.include? 'true')
+              currently_available = (item.downcase.include? 'out' or item.downcase.include? 'yes' or item.downcase.include? 'true') # rubocop:disable Layout/LineLength
             elsif headers[index2].include?('detail') || headers[index2].include?('note')
               details += ' | ' if details.length.positive?
               details += item
