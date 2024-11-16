@@ -21,7 +21,7 @@
       align-items: center;
       background-color: #500000;
       color: white;
-      padding: 15px 20px;
+      padding: 12px 20px;
     }
     .header-title {
       font-size: 30px; 
@@ -32,8 +32,8 @@
       margin-right: 10px; 
     }
     .form-container {
-      margin: 20px auto;
-      padding: 20px;
+      margin: 15px auto;
+      padding: 15px;
       background-color: #fff;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -44,31 +44,32 @@
     }
     label {
       font-size: 16px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
     .required:after {
       content: " *";
       color: red;
     }
     input[type="text"], input[type="number"], textarea, select {
-      padding: 10px;
+      padding: 8px;
       border: 2px solid #ccc;
       border-radius: 5px;
       width: 100%;
-      margin-top: 5px;
+      margin-top: 4px;
       transition: border-color 0.3s;
       box-sizing: border-box;
-      margin-bottom: 5%;
+      margin-bottom: 3%;
     }
     input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
       border-color: #500000;
       outline: none;
-      margin-bottom: 5%;
+      margin-bottom: 3%;
     }
     .button-container {
       display: flex;
       justify-content: center;
-      margin-top: 20px;
+      margin-top: 15px;
+      margin-bottom: 10px;
     }
     .submit-button {
       background-color: #500000;
@@ -87,15 +88,18 @@
       font-size: 20px; 
       color: white; 
     }
-
-    /* Style for disabled option */
     select option:disabled {
-      color: #aaa; /* Gray color for disabled options */
+      color: #aaa;
     }
-
-    /* Prevent resizing of the textarea */
     textarea {
-      resize: none; /* Disable resizing */
+      resize: none;
+    }
+    h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      text-align: center; /* Center the heading */
+      color: #500000; /* Added to match theme */
+      font-size: 24px; /* Slightly larger */
     }
   </style>
 </head>
@@ -120,8 +124,6 @@
    <label for="item_name" class="required">Item Name</label>
 <%= form.text_field :item_name, id: 'item_name', required: true, minlength: 3, maxlength: 50 %>
 
-
-
 <% categories = JSON.parse(File.read(Rails.root.join('app/assets/data/category.json')))['data'] %>
 <label for="category" class="required">Category</label>
 <%= form.select :category, options_for_select(categories.map { |category| [category, category] }, @item.category), { prompt: 'Select a category' }, { id: 'category', required: true } %>
@@ -135,7 +137,7 @@
 <label for="serial_number" class="required">Serial Number</label>
 <%= form.text_field :serial_number, id: 'serial_number', required: true %>
 
-<label for="details" >Details</label>
+<label for="details">Details</label>
 <%= form.text_field :details, id: 'details', required: false %>
 
 <div class="button-container">
@@ -143,8 +145,6 @@
 </div>
 
   <% end %>
-
-
 </div>
 </div>
 </body>
