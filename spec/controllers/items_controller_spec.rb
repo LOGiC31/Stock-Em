@@ -422,4 +422,80 @@ RSpec.describe ItemsController, type: :controller do # rubocop:disable Metrics/B
       end
     end
   end
+
+  describe 'POST #import' do # rubocop:disable Metrics/BlockLength
+    let(:file_content) do
+      "name\tserial\tcat\tquality\tavail\tdetail\n" \
+      "Laptop\tSN100\tElectronics\t80\tyes\tHas warranty\n" \
+      "Phone\tSN101\tElectronics\t90\ttrue\tNew model"
+    end
+
+    before do
+      allow(controller).to receive(:current_user).and_return(user)
+    end
+
+    context 'with valid data' do
+      it 'creates items from the input file' do
+        expect do
+          post :import, params: { to_import: file_content }
+        end.to change(Item, :count).by(2)
+
+        new_item = Item.find_by(serial_number: 'SN100')
+        expect(new_item.item_name).to eq('Laptop')
+        expect(new_item.category).to eq('Electronics')
+        expect(new_item.quality_score).to eq(80)
+        expect(new_item.currently_available).to eq(true)
+        expect(new_item.details).to eq('Has warranty')
+      end
+    end
+
+    context 'when no name column is found' do
+      let(:file_content_without_name) do
+        "serial\tcat\tquality\tavail\tdetail\n" \
+        "SN200\tElectronics\t70\tyes\tOld model"
+      end
+
+      it 'does not create any items' do
+        expect do
+          post :import, params: { to_import: file_content_without_name }
+        end.not_to change(Item, :count)
+      end
+    end
+
+    context 'when rows have invalid data' do
+      let(:file_content_invalid_row) do
+        "name\tserial\tcat\tquality\tavail\tdetail\n" \
+        "Laptop\tSN300\tElectronics\tinvalid\ttrue\tSome details"
+      end
+
+      it 'skips invalid rows and processes valid rows' do
+        expect do
+          post :import, params: { to_import: file_content_invalid_row }
+        end.to change(Item, :count).by(1)
+
+        valid_item = Item.find_by(serial_number: 'SN300')
+        expect(valid_item.quality_score).to eq(0) # default value
+      end
+    end
+
+    context 'with an empty file' do
+      let(:empty_content) { '' }
+
+      it 'does not create any items' do
+        expect do
+          post :import, params: { to_import: empty_content }
+        end.not_to change(Item, :count)
+      end
+    end
+  end
+  describe 'GET #export' do
+    it 'exports items with correct formatting' do
+      get :export, params: { evtype: 'all' }
+
+      expect(assigns(:output_content)).to include("item_name\tserial_number\tcategory\tquality_score\tcurrently_available\tdetails\tstatus\tnotes\tevents") # rubocop:disable Layout/LineLength
+      expect(assigns(:output_content)).to include("#{item1.item_name}\t#{item1.serial_number}\t#{item1.category}\t#{item1.quality_score}\t#{item1.currently_available}\t#{item1.details}\t#{item1.status}") # rubocop:disable Layout/LineLength
+      expect(assigns(:output_content)).to include("#{item2.item_name}\t#{item2.serial_number}\t#{item2.category}")
+      expect(response).to have_http_status(:success)
+    end
+  end
 end
