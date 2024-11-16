@@ -43,6 +43,9 @@ Feature: Login as admin
     And I should see "Users"
     And I should see "random TA"
     When I edit the user’s role to "Student"
-    And I click "Save"
+    And I press "Save"
+    Then I should see "Student"
+    And I click on "Logout"
+    Then I should be on the 'Admin Login' page
 
 
