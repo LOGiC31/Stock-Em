@@ -348,28 +348,28 @@
         <%= form_with model: @item, local: true do |f| %>
           <div class="item-detail" style="padding-left: 20px; padding-top: 5px;">
             <p class="editable-field">
-              <label for="item_name" class="editable-label" style="font-size: 16px; margin-top: 10px; display: block;"><strong>Item Name:</strong></label>
+              <label for="item_name" class="editable-label" style="font-size: 16px; margin-top: 10px; display: flex;"><strong>Item Name:</strong></label>
               <%= f.text_field :item_name, class: "editable", style: "padding: 10px; border: 2px solid #ccc; border-radius: 5px; width: 100%; margin-top: 5px; margin-bottom: 5%; box-sizing: border-box;" %>
             </p>
             
             <% categories = JSON.parse(File.read(Rails.root.join('app/assets/data/category.json')))['data'] %>
             <p class="editable-field">
-              <label for="category" class="editable-label" style="font-size: 16px; margin-top: 10px; display: block;"><strong>Category:</strong></label>
+              <label for="category" class="editable-label" style="font-size: 16px; margin-top: 10px; display: flex;"><strong>Category:</strong></label>
               <%= f.select :category, options_for_select(categories.map { |category| [category, category] }, @item.category), { prompt: 'Select a category' }, { class: "editable", style: "padding: 10px; border: 2px solid #ccc; border-radius: 5px; width: 100%; margin-top: 5px; margin-bottom: 5%; box-sizing: border-box;" } %>
             </p>
             
             <p class="editable-field">
-              <label for="quality_score" class="editable-label" style="font-size: 16px; margin-top: 10px; display: block;"><strong>Quality Score:</strong></label>
+              <label for="quality_score" class="editable-label" style="font-size: 16px; margin-top: 10px; display: flex;"><strong>Quality Score:</strong></label>
               <%= f.text_field :quality_score, class: "editable", style: "padding: 10px; border: 2px solid #ccc; border-radius: 5px; width: 100%; margin-top: 5px; margin-bottom: 5%; box-sizing: border-box;" %>
             </p>
             
             <p class="editable-field">
-              <label for="status" class="editable-label" style="font-size: 16px; margin-top: 10px; display: block;"><strong>Status:</strong></label>
+              <label for="status" class="editable-label" style="font-size: 16px; margin-top: 10px; display: flex;"><strong>Status:</strong></label>
               <%= f.select :status, options_for_select([nil, 'Available', 'Damaged', 'Lost', 'Not Available'], @item.status), {}, { class: "editable", id: 'item_internal_status', style: "padding: 10px; border: 2px solid #ccc; border-radius: 5px; width: 100%; margin-top: 5px; margin-bottom: 5%; box-sizing: border-box;" } %>
             </p>
             
             <p class="editable-field">
-              <label for="details" class="editable-label" style="font-size: 16px; margin-top: 10px; display: block;"><strong>Details:</strong></label>
+              <label for="details" class="editable-label" style="font-size: 16px; margin-top: 10px; display: flex;"><strong>Details:</strong></label>
               <%= f.text_area :details, class: "editable", style: "padding: 10px; border: 2px solid #ccc; border-radius: 5px; width: 100%; margin-top: 5px; margin-bottom: 5%; box-sizing: border-box; resize: none;" %>
             </p>
           </div>
