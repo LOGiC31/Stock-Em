@@ -10,6 +10,8 @@
       flex-direction: column;
       box-sizing: border-box;
       flex: 1;
+      overflow-y: scroll;
+      max-height: 90%;
     }
     table {
       width: 100%;
@@ -42,7 +44,8 @@
     }
   </style>
 
-<div class="form-container">
+<div style="width:100%;padding-left:20px;padding-right:20px;max-height:95%;">
+  <div class="form-container">
     <h2>Users</h2>
     <table>
       <thead>
@@ -82,9 +85,10 @@
         <% end %>
       </tbody>
     </table>
-    <div style="display:flex;justify-content:center;">
-        <%= button_to 'Logout', admin_logout_path, method: :delete, data: { confirm: 'Are you sure you want to log out?' }, class: 'logout-button' %>
-    </div>
+  </div>
+  <div style="display:flex;justify-content:center;">
+      <%= button_to 'Logout', admin_logout_path, method: :delete, data: { confirm: 'Are you sure you want to log out?' }, class: 'logout-button' %>
+  </div>
 </div>
 
 <script>

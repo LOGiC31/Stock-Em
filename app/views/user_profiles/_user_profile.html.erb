@@ -24,7 +24,14 @@
 
         <div class="user-field">
           <strong>UIN:</strong>
-          <%= form.text_field :uin, class: "user-value same-size", pattern: "\\d*", title: "Please enter only numbers" %>
+          <%= form.text_field :uin, 
+            inputmode: "numeric", 
+            class: "user-value same-size", 
+            maxlength: 8,
+            pattern: "\\d*", 
+            title: "Please enter only numbers",  
+            oninput: "this.value = this.value.replace(/\\D/g, '')" 
+          %>
         </div>
 
         <div class="user-field">
@@ -34,7 +41,15 @@
 
         <div class="user-field">
           <strong>Contact No:</strong>
-          <%= form.text_field :contact_no, class: "user-value same-size", pattern: "\\d*", title: "Please enter only numbers" %>
+          <%= form.text_field :contact_no, 
+            inputmode: "numeric", 
+            class: "user-value same-size", 
+            maxlength: 10,
+            pattern: "\\d*", 
+            title: "Please enter only numbers",  
+            oninput: "this.value = this.value.replace(/\\D/g, '')" 
+          %>
+        </div>
         </div>
 
         <div class="user-field">

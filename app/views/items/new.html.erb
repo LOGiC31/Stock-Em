@@ -129,7 +129,12 @@
 <%= form.select :category, options_for_select(categories.map { |category| [category, category] }, @item.category), { prompt: 'Select a category' }, { id: 'category', required: true } %>
 
 <label for="quality_score" class="required">Quality Score</label>
-<%= form.number_field :quality_score, id: 'quality_score', min: 0, max: 100, required: true %>
+<%= form.number_field :quality_score, 
+    id: 'quality_score', 
+    min: 0, 
+    max: 100, 
+    required: true, 
+    oninput: "this.value = this.value.replace(/\\D/g, '').slice(0, 2)" %>
 
 <label for="currently_available" class="required">Currently Available</label>
 <%= form.select :currently_available, options_for_select([['Select availability', ''], ['Yes', true], ['No', false]], @item.currently_available), id: 'currently_available', required: true %>

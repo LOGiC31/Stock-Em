@@ -2,6 +2,10 @@
 
 # Contains everything Item-related
 class Item < ApplicationRecord
+  has_many :notes, dependent: :destroy
+
+  has_many :events, dependent: :destroy
+
   VALID_CATEGORIES = ['Mobile Devices',
                       'Development Boards and Kits',
                       'Sensors and Modules',

@@ -42,6 +42,20 @@
     z-index: 1000;
     opacity: 1;
     transition: opacity 0.5s ease-out;
+    animation: fadeOutMessage 4s forwards;
+  }
+
+  @keyframes fadeOutMessage {
+    0% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 0.5; 
+    }
+    100% {
+      opacity: 0;
+      display: none; 
+    }
   }
   
   .flash-success {

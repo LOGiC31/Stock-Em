@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create New Item - Stock'Em</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+          background-color: #f8f8f8;
+      }
+      header, footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #500000;
+          color: white;
+          padding: 15px 20px;
+      }
+      .header-title {
+          font-size: 30px;
+          font-weight: bold;
+      }
+      .greeting {
+          font-size: 20px;
+          margin-right: 10px;
+      }
+      .form-container {
+          margin: 20px auto;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          max-width: 600px;
+          display: flex;
+          flex-direction: column;
+          box-sizing: border-box;
+      }
+      label {
+          font-size: 16px;
+          margin-top: 10px;
+      }
+      .required:after {
+          content: " *";
+          color: red;
+      }
+      input[type="text"], input[type="number"], textarea, select {
+          padding: 10px;
+          border: 2px solid #ccc;
+          border-radius: 5px;
+          width: 100%;
+          margin-top: 5px;
+          transition: border-color 0.3s;
+          box-sizing: border-box;
+          margin-bottom: 5%;
+      }
+      input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+          border-color: #500000;
+          outline: none;
+          margin-bottom: 5%;
+      }
+      .button-container {
+          display: flex;
+          justify-content: center;
+          margin-top: 20px;
+      }
+      .submit-button {
+          background-color: #500000;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          padding: 10px 15px;
+          font-size: 16px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+      }
+      .submit-button:hover {
+          background-color: #700000;
+      }
+      .user-icon {
+          font-size: 20px;
+          color: white;
+      }
+
+      /* Style for disabled option */
+      select option:disabled {
+          color: #aaa; /* Gray color for disabled options */
+      }
+
+      /* Prevent resizing of the textarea */
+      textarea {
+          resize: none; /* Disable resizing */
+      }
+  </style>
+</head>
+<body>
+<div>
+  <div class="form-container">
+    <% if @evtype == "Export" %>
+      <h2>Export Items</h2>
+      <p>Copy the content below into a TSV file that can then be imported into other spreadsheets.</p>
+    <% else %>
+      <h2>Import Items</h2>
+      <p>Copy-Paste a TSV file of item data into the box below.</p>
+    <% end %>
+
+    <%= form_tag(import_items_path, method: "get") do |form| %>
+
+      <% if @evtype == "Export" %>
+        <%= text_area_tag(:to_import, @output_content) %>
+      <% else %>
+        <%= text_area_tag(:to_import) %>
+      <% end %>
+
+      <% if @evtype == "Import" %>
+      <div class="button-container">
+          <input type="submit" value="Add Items" class="submit-button">
+      </div>
+      <% end %>
+
+      <div class="button-container">
+        <%= link_to 'Back', items_path, class: 'btn' %>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>
+</body>
+</html>
+
+
+
+
+
