@@ -6,8 +6,8 @@ Team Working Agreement
 Time and Location of Scrum Events
 - We will have three official SCRUM meeting times:
   - Monday, after SWE class  (in person)
-  - Wednesday, after SWE class  (in person)
-  - Friday, around 5:00 pm  (virtual)
+  - Wednesday, after Customer Meeting (virtually)
+  - Friday, around 5:00 pm  (virtual, only if needed)
 
 Definition of Done
 - A SCRUM is considered done once we have met the following requirements:
@@ -38,9 +38,12 @@ Team Philosophy
   - Given that most of us are all still learning the language and therefore have different experience boosts in
     certain areas, we will always reach out if we're stuck on a bug for > 1 hour, and will be happy to assist
     our peers with debugging / implementation in the case that a story is more challenging than expected.
+- To account for potential issues with merging everyone's code together, we will ensure that our features are
+  code-complete two days prior to the sprint deadline.  This gives ample time to fix RuboCop or other merge issues.
 
 Documentation and Artifacts
 - We will store relevant documentation such as Sprint Plans and other related items in the documentation/Fall2024 folder
   in the GitHub
 - Relevant tickets will be stored on GitHub as well withing the GitHub backlog
 - The GitHub backlog will be publicly available to the professor, T.A., and customer
+- Premature sprint planning docs will be stored in our shared drive while they are in development.
