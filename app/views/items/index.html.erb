@@ -228,11 +228,15 @@
   </div>
 
 <% if @current_user.auth_level != 0 %>
-  <div class="button-container">
-    <%= link_to 'Create New Item', new_item_path, class: 'new-item-button' %>
-    <%= link_to 'Import Items', export_items_path(evtype: "Import"), class: 'new-item-button' %>
-    <%= link_to 'Export Items', export_items_path(evtype: "Export"), class: 'new-item-button' %>
-  </div>
+    <%= form_tag({:controller => "items", :action => 'import'}, {:multipart => true}) do %>
+      <div class="button-container">
+        <%= link_to 'Create New Item', new_item_path, class: 'new-item-button' %>
+        <%= link_to 'Export Items', export_items_path(format: 'csv', evtype: "Export"), class: 'new-item-button' %>
+        <%= file_field_tag :file, :onchange => 'this.form.submit()', class: 'new-item-button', :id => "import-item" %>
+      </div>
+
+    <% end %>
+
 <% end %>
 
 </div>

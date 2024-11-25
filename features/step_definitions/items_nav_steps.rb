@@ -23,3 +23,9 @@ end
 Then('I should be on the home page') do
   expect(page).to have_current_path(items_path)
 end
+
+When('I throw in a file') do
+  page.attach_file('features/support/sample_import.csv') do
+    page.find('import-item').click
+  end
+end

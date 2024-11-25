@@ -17,6 +17,11 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
       patch :update_auth_level
     end
   end
+  resources :items do
+    collection do
+      post :import
+    end
+  end
 
   root 'welcome#index'
   get 'welcome/index', to: 'welcome#index', as: 'welcome'
@@ -29,7 +34,6 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   get '/publish_event', to: 'events#publish_event', as: 'publish_event'
 
   get 'export_items', to: 'items#export', as: 'export_items'
-  get 'import_items', to: 'items#import', as: 'import_items'
 
   get 'admin/login', to: 'admin_sessions#new', as: 'admin_login'
   post 'admin/login', to: 'admin_sessions#create'

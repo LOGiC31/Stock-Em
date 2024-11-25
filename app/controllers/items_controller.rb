@@ -238,110 +238,36 @@ class ItemsController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def export # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
-    @evtype = params[:evtype]
-    headline = "item_name\tserial_number\tcategory\tquality_score\tcurrently_available\tdetails\tstatus\tnotes\tevents"
-    @output_content = "#{headline}\n"
-    headline = headline.split("\t")
-
-    Item.all.each do |item| # rubocop:disable Metrics/BlockLength
-      headline.each do |keyword| # rubocop:disable Metrics/BlockLength
-        case keyword
-        when 'notes'
-          all_notes = ''
-          note_list = Note.where(item_id: item.id).order('created_at DESC')
-          note_list.each_with_index do |note, index|
-            all_notes += note.msg
-            all_notes += ' | ' if index < note_list.length - 1
-          end
-          @output_content += "#{all_notes}\t"
-        when 'events'
-          all_events = ''
-          event_list = Event.where(item_id: item.id).order('created_at DESC')
-          event_list.each_with_index do |event, index|
-            all_events += event.details
-            all_events += ' | ' if index < event_list.length - 1
-          end
-          @output_content += "#{all_events}\n"
-        when 'item_name'
-          @output_content += "#{item.item_name}\t"
-        when 'serial_number'
-          @output_content += "#{item.serial_number}\t"
-        when 'category'
-          @output_content += "#{item.category}\t"
-        when 'quality_score'
-          @output_content += "#{item.quality_score}\t"
-        when 'currently_available'
-          @output_content += "#{item.currently_available}\t"
-        when 'details'
-          @output_content += "#{item.details}\t"
-        when 'status'
-          @output_content += "#{item.status}\t"
-        end
-      end
+    respond_to do |format|
+      format.html
+      format.csv { send_data Item.to_csv, filename: "items-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"}
     end
   end
 
   def import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
-    lines = params[:to_import].sub("\r", '').split("\n")
+    return redirect_to request.referer, notice: 'No file added' if params[:file].nil?
+    return redirect_to request.referer, notice: 'Only CSV files allowed' unless params[:file].content_type == 'text/csv'
 
-    if lines.length > 1
-      headers = lines[0].downcase.split("\t")
+    opened_file = File.open(params[:file])
+    options = { headers: true, col_sep: ',' }
+    csv = CSV.parse(opened_file, **options)
+    csv.each do |row|
 
-      # ensure there is a field for name
-      found_name = false
-      headers.each do |header|
-        found_name = true if header.include?('name') || (header == 'item')
-      end
+      item_hash = {:serial_number => ""}
+      item_hash[:serial_number] = row['serial_number']
+      item_hash[:item_name] = row['item_name']
+      item_hash[:category] = row['category']
+      item_hash[:currently_available] = true
+      item_hash[:details] = row['details']
+      item_hash[:quality_score] = 100
 
-      if found_name
-        lines.each_with_index do |line, index| # rubocop:disable Metrics/BlockLength
-          # skip header
-          next if index.zero?
+      puts "==================="
+      puts row.to_hash
+      puts "==================="
 
-          content = line.split("\t")
-          next unless content.length == headers.length
-
-          # default values
-          name = 'UNKNOWN_NAME'
-          serial_num = "UNK-#{rand(100_000_000_000)}"
-          category = 'Electronics'
-          quality_score = 100
-          currently_available = true
-          details = ''
-          status = ''
-
-          # extract custom values
-          content.each_with_index do |item, index2|
-            if headers[index2].include?('name') || (headers[index2] == 'item')
-              name = item
-            elsif headers[index2].include?('ser') || headers[index2].include?('s/n')
-              serial_num = item
-            elsif headers[index2].include? 'cat'
-              Item::VALID_CATEGORIES.each do |category2|
-                category = category2 if category2.downcase.include? item.strip
-              end
-            elsif headers[index2].include? 'quality'
-              quality_score = item.to_i
-            elsif headers[index2].include? 'avail'
-              currently_available = (item.downcase.include? 'out' or item.downcase.include? 'yes' or item.downcase.include? 'true') # rubocop:disable Layout/LineLength
-            elsif headers[index2].include?('detail') || headers[index2].include?('note')
-              details += ' | ' if details.length.positive?
-              details += item
-            end
-          end
-
-          # add the item
-          Item.create!(
-            item_name: name,
-            serial_number: serial_num,
-            category:,
-            quality_score:,
-            currently_available:,
-            details:,
-            status:
-          )
-        end
-      end
+      Item.find_or_create_by!(item_hash)
+      # for performance, you could create a separate job to import each user
+      # CsvImportJob.perform_later(user_hash)
     end
 
     index
