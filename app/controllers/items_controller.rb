@@ -173,7 +173,7 @@ class ItemsController < ApplicationController # rubocop:disable Metrics/ClassLen
           @item.update(currently_available: false) # Update available to false
         end
         if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
-          @item.update(currently_available: true) # Update available to false
+          @item.update(currently_available: true) # Update available to true
         end
         log_event(params[:id], 'item_edit', 'Item attributes have been updated.', session[:user_id])
         flash[:notice] = 'Item was successfully updated.'
@@ -218,6 +218,14 @@ class ItemsController < ApplicationController # rubocop:disable Metrics/ClassLen
     status = get_valid_status(item_params[:status])
 
     if valid_statuses.include?(status) && @item.update(item_params)
+      # Update currently_available based on the new status
+      case status
+      when 'Not Available', 'Lost'
+        @item.update(currently_available: false)
+      when 'Damaged', 'Intact'
+        @item.update(currently_available: true)
+      end
+
       log_event(params[:id], 'status_update', "Status Updated to #{status}", session[:user_id])
       flash[:notice] = 'Item status updated successfully.'
       redirect_to @item
