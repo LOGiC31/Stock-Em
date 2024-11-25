@@ -7,8 +7,7 @@ Code Climate Report : https://codeclimate.com/github/LOGiC31/Stock-Em
 Capstone Inventory Management System - A smart way of managing your inventories.
 
 
-
-1. **How to get started with development  **
+**How to get started with development?**
 1. Clone the repo using https or ssh
    git clone <https://github.com/LOGiC31/Stock-Em.git>
 
@@ -34,7 +33,7 @@ Capstone Inventory Management System - A smart way of managing your inventories.
 1. Run *rails db:migrate*
 1. Run *rails db:seed*
 1. Run *rails server*
-1. **How to run the tests**
+**How to run the tests?**
 1. Ensure Test Dependencies Are Installed:
    *bundle install*
 
@@ -50,7 +49,7 @@ Capstone Inventory Management System - A smart way of managing your inventories.
 
 1. View Test Coverage :
    Open the *open coverage/index.html* file in your browser:
-1. **How to get the application deployed**
+**How to get the application deployed**
 
 - **Login into your heroku(using CLI):**
 
