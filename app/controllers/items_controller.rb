@@ -173,7 +173,7 @@ class ItemsController < ApplicationController # rubocop:disable Metrics/ClassLen
           @item.update(currently_available: false) # Update available to false
         end
         if params[:item][:status] == 'Damaged' || params[:item][:status] == 'Available'
-          @item.update(currently_available: true) # Update available to false
+          @item.update(currently_available: true) # Update available to true
         end
         log_event(params[:id], 'item_edit', 'Item attributes have been updated.', session[:user_id])
         flash[:notice] = 'Item was successfully updated.'
@@ -208,16 +208,24 @@ class ItemsController < ApplicationController # rubocop:disable Metrics/ClassLen
   def set_status # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @item = Item.find(params[:id])
     @notes = Note.where(item_id: @item.id).order('created_at DESC')
-
+  
     if current_user.auth_level.zero?
       flash[:alert] = 'You need to be an admin or assistant to update the status of this item.'
       redirect_to item_path(@item) and return
     end
-
+  
     valid_statuses = [nil, 'Damaged', 'Lost', 'Not Available', 'Intact']
     status = get_valid_status(item_params[:status])
-
+  
     if valid_statuses.include?(status) && @item.update(item_params)
+      # Update currently_available based on the new status
+      case status
+      when 'Not Available', 'Lost'
+        @item.update(currently_available: false)
+      when 'Damaged', 'Intact'
+        @item.update(currently_available: true)
+      end
+  
       log_event(params[:id], 'status_update', "Status Updated to #{status}", session[:user_id])
       flash[:notice] = 'Item status updated successfully.'
       redirect_to @item
@@ -226,6 +234,7 @@ class ItemsController < ApplicationController # rubocop:disable Metrics/ClassLen
       render :show
     end
   end
+  
 
   def get_valid_status(status)
     status = nil if status.blank?
