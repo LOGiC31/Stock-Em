@@ -237,14 +237,14 @@ class ItemsController < ApplicationController # rubocop:disable Metrics/ClassLen
                                  :category, :quality_score, :currently_available, :image, :details, :status, :comment)
   end
 
-  def export # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
+  def export
     respond_to do |format|
       format.html
-      format.csv { send_data Item.to_csv, filename: "items-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"}
+      format.csv { send_data Item.to_csv, filename: "items-#{DateTime.now.strftime('%d%m%Y%H%M')}.csv" }
     end
   end
 
-  def import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity,Metrics/CyclomaticComplexity
+  def import # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     return redirect_to request.referer, notice: 'No file added' if params[:file].nil?
     return redirect_to request.referer, notice: 'Only CSV files allowed' unless params[:file].content_type == 'text/csv'
 
@@ -252,8 +252,7 @@ class ItemsController < ApplicationController # rubocop:disable Metrics/ClassLen
     options = { headers: true, col_sep: ',' }
     csv = CSV.parse(opened_file, **options)
     csv.each do |row|
-
-      item_hash = {:serial_number => ""}
+      item_hash = { serial_number: '' }
       item_hash[:serial_number] = row['serial_number']
       item_hash[:item_name] = row['item_name']
       item_hash[:category] = row['category']
@@ -261,9 +260,9 @@ class ItemsController < ApplicationController # rubocop:disable Metrics/ClassLen
       item_hash[:details] = row['details']
       item_hash[:quality_score] = 100
 
-      puts "==================="
+      puts '==================='
       puts row.to_hash
-      puts "==================="
+      puts '==================='
 
       Item.find_or_create_by!(item_hash)
       # for performance, you could create a separate job to import each user
