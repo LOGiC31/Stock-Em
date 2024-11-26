@@ -26,4 +26,5 @@ Feature: be able to import and export sheets of items
     Given I am logged in
     And I am an admin user
     And   I am on the items home page
-    When  I throw in a file
+    When  I add and submit a file
+    Then  I should see "Item Three"
